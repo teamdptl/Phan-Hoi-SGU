@@ -96,3 +96,14 @@ Người kiểm tra
 - Xem danh sách các báo hỏng được giao cho nhân viên
 - Đánh giá báo hỏng được giao
 - Tạo đánh giá phòng
+
+
+List source taiwlind có thể copy:
+
+- https://www.tailbits.com/components
+- https://shuffle.dev/components/tailwind/all/ecommerce-orders
+- https://www.hyperui.dev/components/application-ui
+- https://www.tailwindawesome.com/
+- https://github.com/cruip/tailwind-landing-page-template?tab=readme-ov-file
+- https://componentland.com/
+- https://demo.filamentphp.com/
