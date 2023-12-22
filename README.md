@@ -1,15 +1,15 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://ttcntt.sgu.edu.vn/wp-content/uploads/2018/11/SGU-LOGO.png" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<a href="https://github.com/laravel/framework/actions"><img src="https://cloud.z.com/vn/wp-content/uploads/2022/12/image4-18.jpg" alt="Laravel"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://thebitecode.com/wp-content/uploads/2021/03/inertia.png" alt="Inertia"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" alt="React"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/2560px-Tailwind_CSS_Logo.svg.png" alt="Tailwind"></a>
 </p>
 
-## About Laravel
+## Về dự án này
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Đây là dự án để xây dựng một ứng dụng cung cấp việc phản hồi giữa sinh viên và nhà trường. Tạo điều kiện cho nhà trường có thể khắc phục các sự cố nhanh nhất
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
