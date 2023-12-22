@@ -1,66 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://ttcntt.sgu.edu.vn/wp-content/uploads/2018/11/SGU-LOGO.png" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://ttcntt.sgu.edu.vn/wp-content/uploads/2018/11/SGU-LOGO.png" width="200" alt="Laravel Logo"></a></p>
+<h3  align="center">Phản hồi SGU</h3>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://cloud.z.com/vn/wp-content/uploads/2022/12/image4-18.jpg" alt="Laravel"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://thebitecode.com/wp-content/uploads/2021/03/inertia.png" alt="Inertia"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" alt="React"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/2560px-Tailwind_CSS_Logo.svg.png" alt="Tailwind"></a>
-</p>
+<p>Được xây dựng bằng</p>
+<table>
+  <tr>
+    <td valign="center">
+        <img src="https://media.licdn.com/dms/image/D5612AQGfmy6NPGnt1w/article-cover_image-shrink_600_2000/0/1677779939155?e=2147483647&v=beta&t=sVIWSwY1JeDEVkYJtAl8PSRy_4TSOaolndjmzIUZxuk" width="200"                    alt="Laravel">
+    </td>
+    <td valign="center">
+        <img src="https://avatars.githubusercontent.com/u/47703742?s=280&v=4" width="100" alt="Inertia">
+    </td>
+    <td valign="center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" width="100" alt="React">
+    </td>
+    <td valign="center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/2560px-Tailwind_CSS_Logo.svg.png" width="100" alt="Tailwind">
+    </td>
+  </tr>
+</table>
 
 ## Về dự án này
 
 Đây là dự án để xây dựng một ứng dụng cung cấp việc phản hồi giữa sinh viên và nhà trường. Tạo điều kiện cho nhà trường có thể khắc phục các sự cố nhanh nhất
+- Quản lý thiết bị
+    
+    Các thông tin của thiết bị: Tên, Mô tả, Hình ảnh, Tình trạng
+    
+    Các thông tin thể loại của thiết bị: Tên thể loại, Mô tả, Ảnh đại diện
+    
+    Các chức năng:
+    
+    - Thêm, sửa, xóa, tìm kiếm thiết bị
+    - Thêm, sửa, xóa thể loại của thiết bị
+    - Xem danh sách các thiết bị thuộc thể loại
+- Quản lý phòng
+    
+    Các thông tin của phòng: Cơ sở, Phòng, Chức năng, QRCode, Các thiết bị trong phòng, Đánh giá, Báo hỏng của phòng
+    
+    Các chức năng: 
+    
+    - Thêm, sửa, xóa, tìm kiếm phòng phòng
+    - Thêm, sửa, xóa các thiết bị bên trong phòng
+    - Tạo mã QRCode
+- Quản lý báo hỏng
+    
+    Các thông tin của báo hỏng: Thiết bị hỏng, Phòng, Mô tả, Thời gian tạo, Trạng thái
+    
+    Các chức năng:
+    
+    - Phân công báo hỏng
+    - Xem log phân công báo hỏng
+    - Bỏ qua báo hỏng
+    - Lọc báo hỏng theo loại thiết bị
+    - Xóa báo hỏng
+    - Xem danh sách báo hỏng
+    - Xem danh sách báo hỏng của phòng
+- Quản lý đánh giá
+    
+    Các thông tin của đánh giá: Phòng, Số Điểm, Nội dung đánh giá
+    
+    Các chức năng:
+    
+    - Xem đánh giá của phòng
+    - Xem danh sách đánh giá
+- Quản lý người dùng
+    - Thêm, sửa, xóa, tìm kiếm người dùng
+    - Xem danh sách đã báo cáo của người dùng
+    - Xem việc đã làm của người dùng
+- Thống kê
+    - Thống kê thiết bị hư hỏng nhiều nhất trong phòng
+    - Thống kê loại thiết bị dễ bị hỏng nhất
+    - Thống kê các phòng có báo hỏng, đánh giá thấp nhất
+    - Danh sách nhân viên bị khiếu nại
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Người dùng:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Tạo báo hỏng
+    
+    Thông tin báo hỏng bao gồm: Thiết bị hỏng, Phòng, Mô tả, Thời gian tạo, Trạng thái
+    
+- Tạo đánh giá phòng
+    
+    Thông tin của đánh giá: Phòng, Số Điểm, Nội dung đánh giá
+    
+- Xem các đánh giá hoặc báo hỏng đã gửi
 
-## Learning Laravel
+Người thực hiện:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Xem danh sách báo hỏng được giao
+- Báo cáo hoàn thành báo hỏng được giao
+- Xem danh sách các công việc đã hoàn thành
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Người kiểm tra
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Xem danh sách các báo hỏng được giao cho nhân viên
+- Đánh giá báo hỏng được giao
+- Tạo đánh giá phòng
