@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('review', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('reply_media', function (Blueprint $table) {
+            $table->foreignId('reply_id')->references('id')->on('reply');
+            $table->foreignId('media_id')->constrained();
+            $table->primary(['reply_id', 'media_id']);
         });
     }
 
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('review');
+        Schema::dropIfExists('reply_media');
     }
 };

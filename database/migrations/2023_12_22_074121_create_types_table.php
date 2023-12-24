@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reply', function (Blueprint $table) {
+        Schema::create('types', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
-            $table->foreignId('users_id')->constrained();
-            $table->foreignId('reports_id')->constrained();
+            $table->string("name");
+            $table->string("description")->nullable();
+            $table->string("icon")->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reply');
+        Schema::dropIfExists('types');
     }
 };

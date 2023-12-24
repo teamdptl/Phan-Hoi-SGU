@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('assignment', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('worker_id')->references('id')->on('users');
+            $table->foreignId('manager_id')->references('id')->on('users');
+            $table->foreignId('reports_id')->constrained();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

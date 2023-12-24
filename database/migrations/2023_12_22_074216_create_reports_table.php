@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reply', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
-            $table->foreignId('users_id')->constrained();
-            $table->foreignId('reports_id')->constrained();
+            $table->string('other')->nullable();
+            $table->text('description')->nullable();
+            $table->json('location')->nullable();
+            $table->set('status', ['complete', 'sent', 'process', 'ignore']);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reply');
+        Schema::dropIfExists('reports');
     }
 };

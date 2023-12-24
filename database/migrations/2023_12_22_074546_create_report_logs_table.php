@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report', function (Blueprint $table) {
+        Schema::create('report_logs', function (Blueprint $table) {
             $table->id();
+            $table->string('content');
+            $table->set('status', ['complete', 'sent', 'process', 'ignore']);
+            $table->foreignId('author_id')->references('id')->on('users');
+            $table->foreignId('reports_id')->constrained();
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report');
+        Schema::dropIfExists('report_logs');
     }
 };
