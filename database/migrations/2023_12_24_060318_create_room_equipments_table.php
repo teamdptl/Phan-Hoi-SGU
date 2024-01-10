@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('room_equipment', function (Blueprint $table) {
+        Schema::create('room_equipments', function (Blueprint $table) {
             $table->foreignId('rooms_id')->constrained();
             $table->foreignId('equipments_id')->constrained();
+            $table->set('status', ['Đang sử dụng', 'Hư hỏng']);
             $table->primary(['rooms_id', 'equipments_id']);
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room_equipment');
+        Schema::dropIfExists('room_equipments');
     }
 };
