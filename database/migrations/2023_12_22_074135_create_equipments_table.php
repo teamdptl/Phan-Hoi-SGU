@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("description")->nullable();
             $table->string("icon")->nullable();
-            $table->foreignId('types_id');
+            $table->foreignId('types_id')->constrained();
             $table->timestamps();
         });
     }

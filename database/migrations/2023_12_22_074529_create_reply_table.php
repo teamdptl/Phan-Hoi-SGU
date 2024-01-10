@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reply', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
+            $table->string('content'); // Nội dung hoàn thành
             $table->foreignId('users_id')->constrained();
             $table->foreignId('reports_id')->constrained();
             $table->timestamps();

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('assignment', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('worker_id')->references('id')->on('users');
-            $table->foreignId('manager_id')->references('id')->on('users');
+            $table->foreignId('worker_id')->references('id')->on('users'); // Nhân viên thực hiện
+            $table->foreignId('manager_id')->references('id')->on('users'); // Admin giao việc
             $table->foreignId('reports_id')->constrained();
-            $table->text('note')->nullable();
+            $table->text('note')->nullable(); // Nội dung ghi chú
             $table->timestamps();
         });
     }

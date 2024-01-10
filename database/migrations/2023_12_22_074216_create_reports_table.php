@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->string('other')->nullable();
-            $table->text('description')->nullable();
-            $table->json('location')->nullable();
-            $table->set('status', ['complete', 'sent', 'process', 'ignore']);
+            $table->string('other')->nullable(); // Thiết bị khác
+            $table->text('description')->nullable(); // Mô tả
+            $table->json('location')->nullable(); // Vị trí báo cáo (Hiện tại không cần)
+            $table->set('status', ['complete', 'sent', 'process', 'ignore']); // Trạng thái
             $table->timestamps();
         });
     }

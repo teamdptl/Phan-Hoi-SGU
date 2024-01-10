@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->string('path');
-            $table->boolean('is_local')->default(true);
+            $table->string('path'); // Đường dẫn cục bộ
+            $table->boolean('is_local')->default(true); // Lưu ở trong máy hay không
             $table->timestamps();
         });
     }

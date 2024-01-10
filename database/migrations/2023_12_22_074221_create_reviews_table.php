@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->integer('rating');
-            $table->string('y_kien')->nullable();
+            $table->integer('rating'); // Số điểm đánh giá 1 - 5
+            $table->string('y_kien')->nullable(); // Nội dung ý kiến
             $table->foreignId('rooms_id')->constrained();
             $table->timestamps();
         });

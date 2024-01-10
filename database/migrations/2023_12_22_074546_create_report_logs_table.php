@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('report_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
+            $table->string('content'); // Nội dung log
             $table->set('status', ['complete', 'sent', 'process', 'ignore']);
             $table->foreignId('author_id')->references('id')->on('users');
             $table->foreignId('reports_id')->constrained();
