@@ -8,6 +8,10 @@ use Inertia\Inertia;
 class TestController extends Controller
 {
     public function index(){
-        return Inertia::render('Test');
+        // Lấy danh sách phòng bằng laravel và trả về
+
+        return Inertia::render('Test', [
+            "rooms" => [],
+        ]);
     }
 }
