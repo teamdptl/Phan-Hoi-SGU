@@ -14,4 +14,8 @@ class TestController extends Controller
             "rooms" => [],
         ]);
     }
+
+    public function adminLayout(){
+        return Inertia::render('Admin/Dashboard', []);
+    }
 }

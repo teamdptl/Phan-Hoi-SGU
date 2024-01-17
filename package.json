@@ -20,6 +20,7 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
+        "@heroicons/react": "^2.1.1",
         "@tremor/react": "^3.12.1"
     }
 }

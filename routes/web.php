@@ -30,6 +30,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
+Route::get('/admin', [\App\Http\Controllers\TestController::class, 'adminLayout']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

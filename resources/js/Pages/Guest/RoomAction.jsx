@@ -1,10 +1,11 @@
 import AppLayout from "@/Layouts/AppLayout.jsx";
 import {Button, Card, Divider, Flex, Text, Title} from "@tremor/react";
-import {Link} from "@inertiajs/react";
+import {Head, Link} from "@inertiajs/react";
 
 export default function RoomAction() {
     return <>
         <AppLayout>
+            <Head title={"Phòng ABCD"}/>
             <div className={"min-h-64"}>
                 <div className={"max-w-6xl mx-auto my-4 relative"}>
                     <img src={"/img/banner.jpg"} className={"h-48 md:h-64 lg:h-96 w-11/12 mx-auto object-cover object-top rounded-lg"}

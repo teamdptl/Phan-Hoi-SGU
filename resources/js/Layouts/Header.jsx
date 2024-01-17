@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {Link} from "@inertiajs/react";
 
 export default function Header(){
     const [navToggle, setNavToggle] = useState(false);
@@ -12,9 +13,9 @@ export default function Header(){
             <div className="px-6 mx-auto max-w-7xl lg:px-8">
                 <nav className="flex items-center justify-between h-20 lg:h-20">
                     <div className="flex-shrink-0">
-                        <a href="#" title="" className="flex">
+                        <Link href="/" title="" className="flex">
                             <img className="w-auto h-14 lg:h-16" src="/logo.png" alt="" />
-                        </a>
+                        </Link>
                     </div>
 
                     <button type="button" className="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100"
@@ -37,7 +38,7 @@ export default function Header(){
                         <a href="#" title="" className="text-base font-semibold text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Liên hệ </a>
                     </div>
 
-                    <a href="#" title="" className="items-center justify-center hidden px-4 py-2 ml-10 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md lg:inline-flex hover:bg-blue-700 focus:bg-blue-700" role="button"> Đăng nhập </a>
+                    <Link href="/login" title="" className="items-center justify-center hidden px-4 py-2 ml-10 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md lg:inline-flex hover:bg-blue-700 focus:bg-blue-700" role="button"> Đăng nhập </Link>
                 </nav>
 
                 {navToggle &&
@@ -51,7 +52,7 @@ export default function Header(){
                         </div>
 
                         <div className="px-6 mt-6">
-                            <a href="#" title="" className="inline-flex justify-center px-4 py-2 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md tems-center hover:bg-blue-700 focus:bg-blue-700" role="button"> Đăng nhập </a>
+                            <Link href="/login" title="" className="inline-flex justify-center px-4 py-2 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md tems-center hover:bg-blue-700 focus:bg-blue-700" role="button"> Đăng nhập </Link>
                         </div>
                     </nav>
                 }
