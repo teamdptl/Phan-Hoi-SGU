@@ -13,7 +13,7 @@ export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
-        remember: false,
+        remember: true,
     });
 
     useEffect(() => {
@@ -32,12 +32,12 @@ export default function Login({ status, canResetPassword }) {
         <AppLayout>
             <Head title="Đăng nhập" />
             {/*<div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">*/}
-            <Flex justifyContent={"center"} alignItems={"center"}>
-                <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <Flex justifyContent={"center"} alignItems={"center"} flexDirection={"col"}>
+                <div className="w-full sm:max-w-md my-12 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                     {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
                     <form onSubmit={submit}>
                         <div>
-                            <InputLabel htmlFor="email" value="Tên đăng nhập" />
+                            <InputLabel htmlFor="email" value="Email của bạn" />
 
                             <TextInput
                                 id="email"
@@ -76,11 +76,11 @@ export default function Login({ status, canResetPassword }) {
                                     checked={data.remember}
                                     onChange={(e) => setData('remember', e.target.checked)}
                                 />
-                                <span className="ms-2 text-sm text-gray-600">Remember me</span>
+                                <span className="ms-2 text-sm text-gray-600">Lưu đăng nhập</span>
                             </label>
                         </div>
 
-                        <div className="flex items-center justify-end mt-4 space-x-2">
+                        <div className="flex items-center justify-end mt-4 space-x-4">
                             {canResetPassword && (
                                 <Link
                                     href={route('password.request')}

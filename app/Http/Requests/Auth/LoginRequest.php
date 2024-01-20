@@ -33,6 +33,22 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Get the message for request error
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Vui lòng điền email',
+            'email.string' => 'Email không được chứa số',
+            'email.email' => 'Email không đúng định dạng',
+            'password.required' => 'Vui lòng điền mật khẩu',
+            'password.string' => 'Mật khẩu không đúng định dạng',
+        ];
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -45,7 +61,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'password' => trans('auth.failed'),
             ]);
         }
 
