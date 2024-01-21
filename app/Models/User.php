@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -42,4 +44,39 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function roles() : BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_role' , 'users_id', 'roles_id');
+    }
+
+    public function reports() : HasMany
+    {
+        return $this->hasMany(Report::class, 'users_id', 'id');
+    }
+
+    public function reviews() : HasMany
+    {
+        return $this->hasMany(Review::class, 'users_id', 'id');
+    }
+
+    // Relation này dùng cho nhân viên kỹ thuật, lấy các assignment được giao
+    public function jobs() : HasMany
+    {
+        return $this->hasMany(Assignment::class, 'worker_id', 'id');
+    }
+
+    // Relation này dùng cho nhân viên kỹ thuật, lấy các phản hồi đã hoàn thành
+    public function replies() : HasMany
+    {
+        return $this->hasMany(Reply::class, 'users_id', 'id');
+    }
+
+    // Relation này dùng cho manager, lấy assignment đã giao
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(Assignment::class, 'manager_id', 'id');
+    }
+
+
 }

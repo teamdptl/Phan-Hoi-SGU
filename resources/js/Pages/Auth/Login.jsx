@@ -32,12 +32,16 @@ export default function Login({ status, canResetPassword }) {
         <AppLayout>
             <Head title="Đăng nhập" />
             {/*<div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">*/}
-            <Flex justifyContent={"center"} alignItems={"center"} flexDirection={"col"}>
-                <div className="w-full sm:max-w-md my-12 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <Flex justifyContent={"center"} alignItems={"center"} flexDirection={"col"} className={"bg-[url('/img/background.jpg')] bg-no-repeat bg-cover px-4"}>
+                <div className="w-full sm:max-w-md my-12 px-6 py-4 bg-white shadow-md overflow-hidden rounded-lg">
+                    <div className="mb-4 text-sm text-gray-600 flex flex-col items-center">
+                        <p className={"text-lg font-medium mb-2 text-blue-500"}>Đăng nhập tài khoản</p>
+                        <p className={"px-2 text-center"}>Dành cho nhân viên kỹ thuật và quản lý</p>
+                    </div>
                     {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-                    <form onSubmit={submit}>
+                    <form onSubmit={submit} className={"w-full max-w-md mx-auto"}>
                         <div>
-                            <InputLabel htmlFor="email" value="Email của bạn" />
+                            <InputLabel htmlFor="email" value="Email của bạn"/>
 
                             <TextInput
                                 id="email"
@@ -50,11 +54,11 @@ export default function Login({ status, canResetPassword }) {
                                 onChange={(e) => setData('email', e.target.value)}
                             />
 
-                            <InputError message={errors.email} className="mt-2" />
+                            <InputError message={errors.email} className="mt-2"/>
                         </div>
 
                         <div className="mt-4">
-                            <InputLabel htmlFor="password" value="Mật khẩu" />
+                            <InputLabel htmlFor="password" value="Mật khẩu"/>
 
                             <TextInput
                                 id="password"
@@ -66,7 +70,7 @@ export default function Login({ status, canResetPassword }) {
                                 onChange={(e) => setData('password', e.target.value)}
                             />
 
-                            <InputError message={errors.password} className="mt-2" />
+                            <InputError message={errors.password} className="mt-2"/>
                         </div>
 
                         <div className="block mt-4">

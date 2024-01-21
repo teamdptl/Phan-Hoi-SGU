@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable(); // Mô tả
             $table->json('location')->nullable(); // Vị trí báo cáo (Hiện tại không cần)
             $table->set('status', ['complete', 'sent', 'process', 'ignore']); // Trạng thái
+            $table->foreignId('rooms_id')->constrained();
+            $table->foreignId('users_id')->nullable()->default(null)->constrained();
             $table->timestamps();
         });
     }

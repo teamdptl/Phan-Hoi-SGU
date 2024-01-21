@@ -30,7 +30,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
-Route::get('/admin', [\App\Http\Controllers\TestController::class, 'adminLayout']);
+
+// Admin
+Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
+Route::get('/admin/room', [\App\Http\Controllers\Admin\RoomController::class, 'index']);
+Route::get('/admin/equipment', [\App\Http\Controllers\Admin\EquipmentController::class, 'index']);
+Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index']);
+Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
+Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

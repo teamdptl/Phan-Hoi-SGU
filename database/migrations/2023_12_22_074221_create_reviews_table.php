@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('rating'); // Số điểm đánh giá 1 - 5
             $table->string('y_kien')->nullable(); // Nội dung ý kiến
             $table->foreignId('rooms_id')->constrained();
+            $table->foreignId('users_id')->nullable()->default(null)->constrained();
             $table->timestamps();
         });
     }

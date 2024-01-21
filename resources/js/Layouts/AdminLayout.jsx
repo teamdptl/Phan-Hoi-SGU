@@ -1,20 +1,20 @@
-import {Button, Divider, Flex, TextInput} from "@tremor/react";
-import {BellIcon, MagnifyingGlassIcon} from '@heroicons/react/24/solid'
+import {Button, Divider, Flex, Grid, TextInput} from "@tremor/react";
+import {MagnifyingGlassIcon, UserCircleIcon} from '@heroicons/react/24/solid'
 import {
     ArrowLeftStartOnRectangleIcon, Bars3Icon,
     ChartBarIcon,
     ChatBubbleBottomCenterTextIcon,
     Squares2X2Icon, StarIcon,
-    TvIcon,
-    UserIcon, WrenchIcon
+    TvIcon, WrenchIcon, UserIcon, ChevronDownIcon,
+    BellIcon, AdjustmentsHorizontalIcon
 } from '@heroicons/react/24/outline'
 import Dropdown from "@/Components/Dropdown.jsx";
 import {useEffect, useState} from "react";
+import {Link, router} from "@inertiajs/react";
 
 export default function AdminLayout({children}){
-    const [activeTab, setActiveTab] = useState('/admin/dashboard');
+    const [activeTab, setActiveTab] = useState(location.href);
     const [isCollapseMenu, setCollapseMenu] = useState(false);
-
     useEffect(() => {
         const value = localStorage.getItem('isCollapseMenu');
         if (value){
@@ -30,34 +30,34 @@ export default function AdminLayout({children}){
             href: '/admin/dashboard'
         },
         {
-            icon: <Squares2X2Icon className="h-4 w-4 text-black"/>,
-            activeIcon: <Squares2X2Icon className="h-4 w-4 text-white"/>,
-            name: 'Phòng',
-            href: '/admin/rooms'
-        },
-        {
-            icon: <TvIcon className="h-4 w-4 text-black"/>,
-            activeIcon: <TvIcon className="h-4 w-4 text-white"/>,
-            name: 'Thiết bị',
-            href: '/admin/equipments'
-        },
-        {
-            icon: <UserIcon className="h-4 w-4 text-black"/>,
-            activeIcon: <UserIcon className="h-4 w-4 text-white"/>,
-            name: 'Người dùng',
-            href: '/admin/users'
-        },
-        {
             icon: <ChatBubbleBottomCenterTextIcon className="h-4 w-4 text-black"/>,
             activeIcon: <ChatBubbleBottomCenterTextIcon className="h-4 w-4 text-white"/>,
             name: 'Báo hỏng',
-            href: '/admin/reports'
+            href: '/admin/report'
         },
         {
             icon: <StarIcon className="h-4 w-4 text-black"/>,
             activeIcon: <StarIcon className="h-4 w-4 text-white"/>,
             name: 'Đánh giá',
-            href: '/admin/reviews'
+            href: '/admin/review'
+        },
+        {
+            icon: <Squares2X2Icon className="h-4 w-4 text-black"/>,
+            activeIcon: <Squares2X2Icon className="h-4 w-4 text-white"/>,
+            name: 'Phòng',
+            href: '/admin/room'
+        },
+        {
+            icon: <TvIcon className="h-4 w-4 text-black"/>,
+            activeIcon: <TvIcon className="h-4 w-4 text-white"/>,
+            name: 'Thiết bị',
+            href: '/admin/equipment'
+        },
+        {
+            icon: <UserIcon className="h-4 w-4 text-black"/>,
+            activeIcon: <UserIcon className="h-4 w-4 text-white"/>,
+            name: 'Người dùng',
+            href: '/admin/user'
         },
     ])
 
@@ -79,26 +79,31 @@ export default function AdminLayout({children}){
                     {
                         listTab.map(({ icon, activeIcon, name, href }) => (
                             <>
-                                <div className={"h-10 flex items-center flex-nowrap"}>
-                                    {activeTab === href &&
-                                        (
-                                            <>
-                                                <div className="bg-blue-500 w-1.5 h-full rounded-r-lg"></div>
-                                                <div className={"bg-blue-500 w-full mx-4 py-2 px-4 text-white rounded-lg flex items-center gap-2"}>
-                                                    {activeIcon}
-                                                    {name}
-                                                </div>
-                                            </>
-                                        )
-                                    }
+                                <Link href={href}>
+                                    <div className={"h-10 flex select-none items-center flex-nowrap"}>
+                                        {activeTab.includes(href)  &&
+                                            (
+                                                <>
+                                                    <div className="bg-blue-500 w-1.5 h-full rounded-r-lg"></div>
+                                                    <div
+                                                        className={"bg-blue-500 w-full mx-4 py-2 px-4 text-white rounded-lg flex items-center gap-2"}>
+                                                        {activeIcon}
+                                                        {name}
+                                                    </div>
+                                                </>
+                                            )
+                                        }
 
-                                    {activeTab !== href && (
-                                        <div className={"w-full mx-4 py-2 px-4 flex items-center gap-2 hover:bg-blue-50 rounded-lg"}>
-                                            {icon}
-                                            {name}
-                                        </div>
-                                    )}
-                                </div>
+                                        {!activeTab.includes(href) && (
+                                            <div
+                                                className={"w-full mx-4 py-2 px-4 flex items-center gap-2 hover:bg-blue-50 rounded-lg"}>
+                                                {icon}
+                                                {name}
+                                            </div>
+                                        )}
+                                    </div>
+                                </Link>
+
                             </>
                         ))
 
@@ -114,6 +119,18 @@ export default function AdminLayout({children}){
                     </div>
                     <div className={"h-10 flex items-center flex-nowrap"}>
                         <div className={"w-full mx-4 py-2 px-4 flex items-center gap-2 hover:bg-blue-50 rounded-lg"}>
+                            <AdjustmentsHorizontalIcon className="h-4 w-4 text-black"/>
+                            Tài khoản
+                        </div>
+                    </div>
+                    <div className={"h-10 flex items-center flex-nowrap"}>
+                        <div className={"w-full mx-4 py-2 px-4 flex items-center gap-2 hover:bg-blue-50 rounded-lg"}>
+                            <BellIcon className="h-4 w-4 text-black"/>
+                            Thông báo
+                        </div>
+                    </div>
+                    <div className={"h-10 flex items-center flex-nowrap"}>
+                        <div className={"w-full mx-4 py-2 px-4 flex items-center gap-2 hover:bg-blue-50 rounded-lg"}>
                             <ArrowLeftStartOnRectangleIcon className="h-4 w-4 text-black"/>
                             Đăng xuất
                         </div>
@@ -121,18 +138,28 @@ export default function AdminLayout({children}){
                 </div>
 
             </nav>
-            <div className={"w-full"}>
-                <header className={"flex justify-between my-2"}>
+            <div className={"w-full bg-gray-50"}>
+                <header className={"bg-white justify-between py-2 px-4 hidden lg:flex"}>
                     <div className={"space-x-4 flex items-center"}>
                         <Button icon={Bars3Icon} variant={"light"} color={"black"} onClick={collapseMenu}></Button>
-                        <TextInput className={"w-64"} icon={MagnifyingGlassIcon} placeholder="Tìm kiếm chức năng" />
-                        <Button icon={MagnifyingGlassIcon} size="xs">Tìm kiếm</Button>
+                        <TextInput className={"w-64"} icon={MagnifyingGlassIcon} placeholder="Tìm kiếm chức năng"/>
                     </div>
                     <div className={"flex items-center justify-center space-x-4 mr-2"}>
-                        <BellIcon className="h-4 w-4 text-blue-600"/>
+                        <BellIcon className="h-6 w-6 text-blue-600 cursor-pointer"/>
                         <Dropdown className={"w-12"}>
                             <Dropdown.Trigger>
-                                Duy Huỳnh
+                                <Flex className={"gap-1 border-gray-100 cursor-pointer px-2 rounded-lg"}>
+                                    <UserCircleIcon class={"h-12 w-12 text-gray-500"}/>
+                                    <Flex flexDirection={"col"} justifyContent={"start"} alignItems={"start"}>
+                                        <p>
+                                            Huỳnh Khánh Duy
+                                        </p>
+                                        <p className={"text-xs"}>
+                                            Quản trị viên
+                                        </p>
+                                    </Flex>
+                                    <ChevronDownIcon className={"h-6 w-6"}/>
+                                </Flex>
                             </Dropdown.Trigger>
                             <Dropdown.Content>
                                 <Dropdown.Link>Đổi mật khẩu</Dropdown.Link>
@@ -141,7 +168,8 @@ export default function AdminLayout({children}){
                         </Dropdown>
                     </div>
                 </header>
-                <content>
+                {/*<content className={"w-full h-full"}>*/}
+                <content className={""}>
                     {children}
                 </content>
             </div>

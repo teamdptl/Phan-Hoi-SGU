@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report_room_equipments', function (Blueprint $table) {
-            $table->foreignId('rooms_id')->references('rooms_id')->on('room_equipments');
-            $table->foreignId('equipments_id')->references('equipments_id')->on('room_equipments');
+        Schema::create('report_equipments', function (Blueprint $table) {
+            $table->foreignId('equipments_id')->constrained();
             $table->foreignId('reports_id')->constrained();
-            $table->primary(['reports_id', 'equipments_id', 'rooms_id']);
+            $table->primary(['reports_id', 'equipments_id']);
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report_room_equipments');
+        Schema::dropIfExists('report_equipments');
     }
 };
