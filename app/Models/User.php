@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -44,6 +45,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function isAdmin(){
+        return $this->roles->contains('id', RoleEnum::ADMIN);
+    }
+
+    public function isWorker(){
+        return $this->roles->contains('id', RoleEnum::WORKER);
+    }
+
+    public function isInspector(){
+        return $this->roles->contains('id', RoleEnum::INSPECTOR);
+    }
 
     public function roles() : BelongsToMany
     {
