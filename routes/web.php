@@ -34,6 +34,7 @@ Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
 // Admin
 Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
 Route::get('/admin/room', [\App\Http\Controllers\Admin\RoomController::class, 'index']);
+Route::get('/admin/room/add', [\App\Http\Controllers\Admin\RoomController::class, 'addRoom']);
 Route::get('/admin/equipment', [\App\Http\Controllers\Admin\EquipmentController::class, 'index']);
 Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index']);
 Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
@@ -43,6 +44,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Admin middleware
+    Route::middleware('admin')->group(function(){
+
+    });
+
+    // Worker middleware
+    Route::middleware('worker')->group(function(){
+
+    });
+
+    Route::middleware('inspector')->group(function(){
+
+    });
 });
 
 require __DIR__.'/auth.php';

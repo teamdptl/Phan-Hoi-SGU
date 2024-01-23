@@ -13,7 +13,7 @@ class RoomController extends Controller
     }
 
     public function addRoom(){
-
+        return Inertia::render('Admin/CURD/RoomUpdate');
     }
 
     public function editRoom(){
