@@ -16,7 +16,7 @@ import {QRCodeCanvas} from "qrcode.react";
 
 export default function () {
     return <>
-        <AdminLayout>
+        <AdminLayout title={"Thêm thiết bị"}>
                 <div className={"mb-4"}>
                     <Button icon={ArrowUturnLeftIcon} variant={"light"} className={"mb-4"}>Trở về</Button>
                     <Title>Thêm thiết bị</Title>

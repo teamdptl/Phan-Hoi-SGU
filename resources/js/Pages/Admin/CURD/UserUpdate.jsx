@@ -5,7 +5,7 @@ import {ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
 
 export default function ({roles}){
     return <>
-        <AdminLayout>
+        <AdminLayout title={"Thêm người dùng"}>
                 <div className={"mb-4"}>
                     <Button icon={ArrowUturnLeftIcon} variant={"light"} className={"mb-4"}>Trở về</Button>
                     <Title>Thêm người dùng</Title>

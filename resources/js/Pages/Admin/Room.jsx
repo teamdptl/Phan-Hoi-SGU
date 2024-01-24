@@ -43,7 +43,7 @@ const transactions = [
 
 export default function Room(){
     return <>
-        <AdminLayout>
+        <AdminLayout title={"Quản lý phòng"}>
                 <Flex justifyContent={"between"} className={"mb-4"}>
                     <Title>Quản lý phòng</Title>
                 </Flex>
