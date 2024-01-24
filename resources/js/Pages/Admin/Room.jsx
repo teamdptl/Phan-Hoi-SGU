@@ -44,28 +44,24 @@ const transactions = [
 export default function Room(){
     return <>
         <AdminLayout>
-            <Head>
-                <title>Quản lý phòng</title>
-            </Head>
-            <div className={"p-5"}>
                 <Flex justifyContent={"between"} className={"mb-4"}>
                     <Title>Quản lý phòng</Title>
                 </Flex>
                     <section className="bg-gray-50 dark:bg-gray-900 antialiased">
-                        <div className="mx-auto max-w-screen-xl">
+                        <div className="mx-auto max-w-screen-7xl">
                             {/* Start coding here */}
                             <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                                 <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-                                    <div className="w-full md:w-1/2 flex space-x-4">
-                                        <TextInput icon={MagnifyingGlassIcon} className={"w-full md:max-w-96"} placeholder="Tìm kiếm phòng"/>
-                                        <Button icon={ChevronDownIcon} variant={"secondary"}>Cơ sở</Button>
-                                        <Button>Tìm kiếm</Button>
+                                    <div className="w-full md:w-1/2 flex items-center space-x-1 md:space-x-2 lg:space-x-3">
+                                        <TextInput icon={MagnifyingGlassIcon} className={"md:max-w-64 min-w-24"} placeholder="Tìm phòng"/>
+                                        <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Cơ sở</Button>
+                                        <Button size={"xs"}>Tìm kiếm</Button>
                                     </div>
                                     <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                                        <Button icon={PlusIcon}>Thêm phòng</Button>
-                                        <div className="flex items-center space-x-3 w-full md:w-auto">
-                                            <Button icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
-                                            <Button icon={BarsArrowDownIcon} variant={"secondary"}>Sắp xếp</Button>
+                                        <Button size={"xs"} icon={PlusIcon}>Thêm phòng</Button>
+                                        <div className="flex items-center space-x-1 md:space-x-2 lg:space-x-3 w-full md:w-auto">
+                                            <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
+                                            <Button size={"xs"} icon={BarsArrowDownIcon} variant={"secondary"}>Sắp xếp</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -109,9 +105,9 @@ export default function Room(){
                                             <td className="px-4 py-3 truncate">
                                                 12 chưa xử lý
                                             </td>
-                                            <td className="px-4 py-3 flex items-center justify-center space-x-3">
-                                                <Button icon={PencilIcon} variant={"secondary"} color={"yellow"}>Sửa</Button>
-                                                <Button icon={TrashIcon} variant={"secondary"} color={"red"}>Xóa</Button>
+                                            <td className="px-4 py-3 flex items-center justify-center space-x-4">
+                                                <Button size={"xs"} icon={PencilIcon} variant={"light"} color={"yellow"}>Sửa</Button>
+                                                <Button size={"xs"} icon={TrashIcon} color={"red"} variant={"light"}>Xóa</Button>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -221,7 +217,6 @@ export default function Room(){
                         </div>
                     </section>
                 {/* End block */}
-            </div>
         </AdminLayout>
     </>
 }

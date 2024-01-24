@@ -11,4 +11,8 @@ class EquipmentController extends Controller
     public function index(){
         return Inertia::render('Admin/Equipment');
     }
+
+    public function addEquipment(){
+        return Inertia::render('Admin/CURD/EquipmentUpdate');
+    }
 }

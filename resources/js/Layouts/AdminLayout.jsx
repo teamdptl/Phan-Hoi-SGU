@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline'
 import Dropdown from "@/Components/Dropdown.jsx";
 import {useEffect, useState} from "react";
-import {Link, router} from "@inertiajs/react";
+import {Head, Link, router} from "@inertiajs/react";
 
 export default function AdminLayout({children}){
     const [activeTab, setActiveTab] = useState(location.href);
@@ -69,8 +69,8 @@ export default function AdminLayout({children}){
 
 
     return <>
-        <div className={"flex"}>
-            <nav className={"flex-initial w-60 h-screen"}>
+        <div className={"flex relative"}>
+            <nav className={"flex-none w-60 h-screen lg:block lg:relative lg:shadow-md bg-white fixed top-0 left-0 z-10 shadow-lg hidden"}>
                 <div className={"space-x-1 font-medium text-xl flex justify-center py-6"}>
                     <span className={"text-blue-600 "}>SGU</span>
                     <span>Phản hồi</span>
@@ -138,19 +138,19 @@ export default function AdminLayout({children}){
                 </div>
 
             </nav>
-            <div className={"w-full bg-gray-50"}>
-                <header className={"bg-white justify-between py-2 px-4 hidden lg:flex"}>
+            <div className={"w-full h-screen bg-gray-50"}>
+                <header className={"bg-white justify-between py-2 px-4 flex space-x-2 shadow-sm"}>
                     <div className={"space-x-4 flex items-center"}>
-                        <Button icon={Bars3Icon} variant={"light"} color={"black"} onClick={collapseMenu}></Button>
-                        <TextInput className={"w-64"} icon={MagnifyingGlassIcon} placeholder="Tìm kiếm chức năng"/>
+                        <Button className={"inline-flex lg:hidden"} icon={Bars3Icon} variant={"light"} color={"gray"} onClick={collapseMenu}></Button>
+                        <TextInput className={"max-w-64"} icon={MagnifyingGlassIcon} placeholder="Tìm kiếm chức năng"/>
                     </div>
                     <div className={"flex items-center justify-center space-x-4 mr-2"}>
                         <BellIcon className="h-6 w-6 text-blue-600 cursor-pointer"/>
                         <Dropdown className={"w-12"}>
                             <Dropdown.Trigger>
                                 <Flex className={"gap-1 border-gray-100 cursor-pointer px-2 rounded-lg"}>
-                                    <UserCircleIcon class={"h-12 w-12 text-gray-500"}/>
-                                    <Flex flexDirection={"col"} justifyContent={"start"} alignItems={"start"}>
+                                    <UserCircleIcon class={"h-10 w-10 md:h-12 md:w-12 text-gray-500"}/>
+                                    <Flex className={"hidden md:flex"} flexDirection={"col"} justifyContent={"start"} alignItems={"start"}>
                                         <p>
                                             Huỳnh Khánh Duy
                                         </p>
@@ -158,7 +158,7 @@ export default function AdminLayout({children}){
                                             Quản trị viên
                                         </p>
                                     </Flex>
-                                    <ChevronDownIcon className={"h-6 w-6"}/>
+                                    <ChevronDownIcon className={"h-4 w-4 md:h-6 md:w-6"}/>
                                 </Flex>
                             </Dropdown.Trigger>
                             <Dropdown.Content>
@@ -170,7 +170,13 @@ export default function AdminLayout({children}){
                 </header>
                 {/*<content className={"w-full h-full"}>*/}
                 <content className={""}>
-                    {children}
+                    <Head>
+                        <title>Quản lý phòng</title>
+                    </Head>
+                    <div className={"p-4 md:p-5"}>
+                        {children}
+                    </div>
+
                 </content>
             </div>
         </div>

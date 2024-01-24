@@ -12,10 +12,6 @@ import {QRCodeCanvas} from "qrcode.react";
 export default function (){
     return <>
         <AdminLayout>
-            <Head>
-                <title>Thêm phòng</title>
-            </Head>
-            <div className={"p-5"}>
                 <div className={"mb-4"}>
                     <Button icon={ArrowUturnLeftIcon} variant={"light"} className={"mb-4"}>Trở về</Button>
                     <Title>Thêm phòng</Title>
@@ -43,7 +39,7 @@ export default function (){
                                         <SelectItem value="Phòng hành chính">
                                             Phòng hành chính
                                         </SelectItem>
-                                        <SelectItem value="Phòng hành chính">
+                                        <SelectItem value="Phòng vệ sinh">
                                             Phòng vệ sinh
                                         </SelectItem>
                                     </Select>
@@ -100,7 +96,6 @@ export default function (){
                         </form>
                     </div>
                 </section>
-            </div>
         </AdminLayout>
     </>
 }
