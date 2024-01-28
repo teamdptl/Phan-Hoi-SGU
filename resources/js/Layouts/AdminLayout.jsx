@@ -29,12 +29,12 @@ export default function AdminLayout({children, title}){
             name: 'Báo hỏng',
             href: '/admin/report'
         },
-        {
-            icon: <StarIcon className="h-4 w-4 text-black"/>,
-            activeIcon: <StarIcon className="h-4 w-4 text-white"/>,
-            name: 'Đánh giá',
-            href: '/admin/review'
-        },
+        // {
+        //     icon: <StarIcon className="h-4 w-4 text-black"/>,
+        //     activeIcon: <StarIcon className="h-4 w-4 text-white"/>,
+        //     name: 'Đánh giá',
+        //     href: '/admin/review'
+        // },
         {
             icon: <Squares2X2Icon className="h-4 w-4 text-black"/>,
             activeIcon: <Squares2X2Icon className="h-4 w-4 text-white"/>,

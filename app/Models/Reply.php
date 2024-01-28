@@ -11,6 +11,7 @@ class Reply extends Model
 {
     use HasFactory;
 
+    protected $table = 'reply';
     protected $fillable = ['content'];
 
     public function media() : BelongsToMany

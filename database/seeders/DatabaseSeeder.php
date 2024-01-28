@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Enums\RoleEnum;
 use App\Models\Role;
+use App\Models\Type;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -40,6 +41,30 @@ class DatabaseSeeder extends Seeder
             'name' => 'Người giám sát',
             'description' => 'Người thực hiện giám sát các công việc thi hành của nhân viên sửa chữa',
             'icon' => '',
+        ]);
+
+        Type::create([
+            'name' => 'Thiết bị điện tử (máy tính, máy chiếu, loa, micro)',
+            'description' => 'Thiết bị điện tử (máy tính, máy chiếu, loa, micro)',
+            'icon' => 'default_equipment.png',
+        ]);
+
+        Type::create([
+            'name' => 'Thiết bị văn phòng (máy in, bút viết, bàn ghế)',
+            'description' => 'Thiết bị văn phòng (máy in, bút viết, bàn ghế)',
+            'icon' => 'default_equipment.png',
+        ]);
+
+        Type::create([
+            'name' => 'Thiết bị chiếu sáng và giám sát (đèn, camera)',
+            'description' => 'Thiết bị chiếu sáng và giám sát (đèn, camera)',
+            'icon' => 'default_equipment.png',
+        ]);
+
+        Type::create([
+            'name' => 'Thiết bị làm lạnh, làm mát (máy lạnh, máy quạt)',
+            'description' => 'Thiết bị làm lạnh, làm mát (máy lạnh, máy quạt)',
+            'icon' => 'default_equipment.png',
         ]);
     }
 }
