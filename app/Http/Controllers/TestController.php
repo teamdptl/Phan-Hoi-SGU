@@ -10,7 +10,7 @@ class TestController extends Controller
     public function index(){
         // Lấy danh sách phòng bằng laravel và trả về
 
-        return Inertia::render('Test', [
+        return Inertia::render('Guest/RoomAction', [
             "rooms" => [],
         ]);
     }

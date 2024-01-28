@@ -16,7 +16,7 @@ export default function RoomAction() {
                     <Text>Bạn đang ở phòng</Text>
                     <Title className={"mt-2"}>C.A401</Title>
                     <Flex justifyContent={"center"} className={"space-x-8 mt-8"} >
-                        <Link href={"/gui-bao-hong"}>
+                        <Link href={"/gui-bao-hong"} method="get">
                             <Card className={"w-32 h-32 bg-[#EFF7FE] ring-0 p-4"}>
                                 <div className={"flex justify-center items-center flex-col"}>
                                     <img src={"/icons/warning.png"} alt={"Warning icon"} className={"w-16 h-16 object-cover"}/>
