@@ -43,6 +43,9 @@ Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'i
 Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
 Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
 
+// Guests
+Route::get('/ratings/create', [\App\Http\Controllers\Guest\RatingController::class, 'index']);
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
