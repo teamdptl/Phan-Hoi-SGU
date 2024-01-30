@@ -17,6 +17,11 @@ class Report extends Model
     // Location dùng locate bằng gps (sẽ làm sau)
     protected $fillable = ['other', 'description'];
 
+    protected $attributes = [
+        // 'rooms_id' => '1', 
+        'status' => 'sent'
+    ];
+
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class, 'users_id', 'id');

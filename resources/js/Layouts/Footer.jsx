@@ -75,10 +75,6 @@ export default function Footer(){
                             </li>
 
                             <li>
-                                <a href="#" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Trần Gia Lâm </a>
-                            </li>
-
-                            <li>
                                 <a href="#" title="" className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"> Võ Minh Tuấn </a>
                             </li>
 

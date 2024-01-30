@@ -30,6 +30,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
+Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index']);
+Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
+
 
 // Admin
 Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
