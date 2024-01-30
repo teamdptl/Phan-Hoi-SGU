@@ -1,5 +1,5 @@
 import AdminLayout from "@/Layouts/AdminLayout.jsx";
-import {Head, Link, router, useForm, usePage} from "@inertiajs/react";
+import {Head, Link, useForm, usePage} from "@inertiajs/react";
 import {
     Button,
     Flex,
@@ -11,9 +11,7 @@ import {
     TextInput,
     Title
 } from "@tremor/react";
-import {ArrowDownTrayIcon, ArrowPathRoundedSquareIcon, ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
-import {QRCodeCanvas} from "qrcode.react";
-import {useEffect} from "react";
+import { ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
 import InputError from "@/Components/InputError.jsx";
 
 export default function ({types}) {
@@ -27,18 +25,16 @@ export default function ({types}) {
 
     const submitForm = (e) => {
         e.preventDefault();
-        router.post('', data, {
-            forceFormData: true
-        });
+        post('', { forceFormData: true });
     }
 
     return <>
-        <AdminLayout title={"Cập nhật thiết bị"}>
+        <AdminLayout title={"Thêm thiết bị"}>
                 <div className={"mb-4"}>
                     <Link href={"/admin/equipment"}>
                         <Button icon={ArrowUturnLeftIcon} variant={"light"} className={"mb-4"}>Trở về</Button>
                     </Link>
-                    <Title>Cập nhật thiết bị</Title>
+                    <Title>Thêm thiết bị</Title>
                 </div>
                 <div
                     className="mx-auto max-w-screen-xl bg-white p-4 sm:p-5 sm:rounded-lg dark:bg-gray-800 overflow-hidden shadow-lg">

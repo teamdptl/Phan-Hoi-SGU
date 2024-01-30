@@ -29,17 +29,42 @@ class EquipmentController extends Controller
 
     public function addEquipment(){
         $types = Type::all();
+        return Inertia::render('Admin/CURD/EquipmentSave', [
+            'types' => $types,
+        ]);
+    }
+
+    public function updateEquipment(){
+        $types = Type::all();
         return Inertia::render('Admin/CURD/EquipmentUpdate', [
             'types' => $types,
         ]);
     }
 
+    public function infoEquipment(string $id){
+        $equipment = Equipment::find($id);
+        if ($equipment){
+            $types = Type::all();
+            return Inertia::render('Admin/CURD/EquipmentInfo', [
+                'types' => $types,
+                'equipment' => $equipment,
+                'roomHave' => $equipment->rooms->map(function ($item){
+                    return $item->only(["name"]);
+                }),
+            ]);
+        }
+        return redirect('admin.equipment');
+    }
+
     public function storeNewEquipment(CreateEquipmentRequest $request){
         $file = $request->file('icon');
-        $path = $request->file('icon')->storeAs(
-            'icons', 'typeIcon_'.Str::uuid().'.'.$file->extension()
-        );
-
+        $path = '/logo.png';
+        if ($file != null){
+            $path = $request->file('icon')->storeAs(
+                'equipment', 'equipmentIcon_'.Str::uuid().'.'.$file->extension()
+            );
+            $path = '/storage/'.$path;
+        }
         $data = $request->validationData();
         $data['icon'] = $path;
 

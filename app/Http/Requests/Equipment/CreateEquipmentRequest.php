@@ -24,8 +24,8 @@ class CreateEquipmentRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:250'],
-            'description' => ['string', 'max:250'],
-            'icon' => [File::image()->max(20*1024)],
+            'description' => ['nullable', 'string', 'max:250'],
+            'icon' => ['nullable', File::image()->max(20*1024)],
             'type' => ['required', 'exists:types,id']
         ];
     }

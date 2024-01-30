@@ -11,6 +11,7 @@ import {
 import Dropdown from "@/Components/Dropdown.jsx";
 import {useEffect, useState} from "react";
 import {Head, Link, router} from "@inertiajs/react";
+import DialogProvider from "@/Components/DialogProvider.jsx";
 
 export default function AdminLayout({children, title}){
     const [activeTab, setActiveTab] = useState(location.href);
@@ -182,7 +183,9 @@ export default function AdminLayout({children, title}){
                         <title>Quản lý phòng</title>
                     </Head>
                     <div className={"p-4 md:p-5"}>
-                        {children}
+                        <DialogProvider>
+                            {children}
+                        </DialogProvider>
                     </div>
 
                 </content>

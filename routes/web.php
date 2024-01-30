@@ -38,6 +38,8 @@ Route::get('/admin/room/add', [\App\Http\Controllers\Admin\RoomController::class
 Route::get('/admin/room/info', [\App\Http\Controllers\Admin\RoomController::class, 'roomInfo']);
 Route::get('/admin/equipment', [\App\Http\Controllers\Admin\EquipmentController::class, 'index'])->name('admin.equipment');
 Route::get('/admin/equipment/add', [\App\Http\Controllers\Admin\EquipmentController::class, 'addEquipment']);
+Route::get('/admin/equipment/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'infoEquipment']);
+Route::get('/admin/equipment/update/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'updateEquipment']);
 Route::post('/admin/equipment/add', [\App\Http\Controllers\Admin\EquipmentController::class, 'storeNewEquipment']);
 Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index']);
 Route::get('/admin/user/add', [\App\Http\Controllers\Admin\UserController::class, 'addUser']);
