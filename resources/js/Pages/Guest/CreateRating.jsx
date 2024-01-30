@@ -1,10 +1,11 @@
 import AppLayout from "@/Layouts/AppLayout";
 import { Button } from "@tremor/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import ReCAPTCHA from "react-google-recaptcha";
+import axios from "axios";
 
 
 
@@ -28,10 +29,43 @@ const labels = {
   function onChange(value) {
     console.log("Captcha value:", value);
   }
+
+  function verifyCallback(recaptchaToken) {
+    // Here you will get the final recaptchaToken!!! 
+    console.log(recaptchaToken, "<= your recaptcha token")
+ }
   
 export default function CreateRating(){
     const [value, setValue] = useState(2)
     const [hover, setHover] = useState(-1)
+    const key = "6Ld17l0pAAAAANV-XzcvvPBMGY202eCmxDyjduik"
+    const captchaRef = useRef(null)
+    function submitRating() {
+        // e.preventDefault();
+        const token = captchaRef.current.getValue();
+        console.log(token, "<= your recaptcha token")
+        const secretKey = "6Ld17l0pAAAAAJNhNbKjDPx15ze-xd-_LxqgkI5O"
+        const url = `http://localhost:8000/guest/rating/create`
+        
+        fetch(url,
+            {
+                method: 'POST',
+                data:{
+                    token: token,
+                    secretKey: secretKey
+                }
+            }
+        ).then(res => {
+            console.log(res)
+            return res;
+        })
+        .then((json) => console.log(json))
+        .catch(err => console.error(err));
+        console.log(`https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`)
+        captchaRef.current.reset();
+
+    }
+
 
     return (
         <AppLayout>
@@ -75,12 +109,12 @@ export default function CreateRating(){
                     <div class="w-full items-start mt-5 mb-10">
                         <p class="italic font-sans text-sm w-fit">Xác nhận bạn không phải robot*</p>
                         <ReCAPTCHA
-                            sitekey="6Lf5AFwpAAAAAF9hezX2iNCsdlhN5pYwrlM9pTHP"
-                            onChange={onChange}
+                            sitekey={key}
+                            ref={captchaRef}
                         />
                     </div>
 
-                    <Button>Đánh giá</Button>
+                    <Button onClick={submitRating}>Đánh giá</Button>
                     
                 </div>
             </div>

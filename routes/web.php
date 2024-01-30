@@ -41,7 +41,8 @@ Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class
 Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
 
 // Guests
-Route::get('/ratings/create', [\App\Http\Controllers\Guest\RatingController::class, 'index']);
+Route::get('/guest/rating', [\App\Http\Controllers\Guest\RatingController::class, 'index']);
+Route::post('/guest/rating/create', [\App\Http\Controllers\Guest\RatingController::class, 'create']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
