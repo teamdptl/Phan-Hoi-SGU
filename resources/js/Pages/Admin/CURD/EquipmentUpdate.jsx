@@ -16,13 +16,13 @@ import {QRCodeCanvas} from "qrcode.react";
 import {useEffect} from "react";
 import InputError from "@/Components/InputError.jsx";
 
-export default function ({types}) {
+export default function ({types, equipment}) {
     const { errors } = usePage().props;
-    const { data, setData, post, processing } = useForm({
-        name: '',
-        description: '',
+    const { data, setData, processing } = useForm({
+        name: equipment.name,
+        description: equipment.description,
         icon: null,
-        type: ''
+        type: equipment.types_id
     })
 
     const submitForm = (e) => {
@@ -92,7 +92,7 @@ export default function ({types}) {
                             </div>
                         </div>
                         <Flex justifyContent={"end"} className={"mt-4 lg:mt-16 space-x-4"}>
-                            <Button disabled={processing}>Thêm thiết bị</Button>
+                            <Button disabled={processing}>Cập nhật</Button>
                             <Link href={"/admin/equipment"}>
                                 <Button variant={"secondary"}>Hủy</Button>
                             </Link>

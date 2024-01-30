@@ -10,19 +10,25 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use function Laravel\Prompts\search;
 
 class EquipmentController extends Controller
 {
     public function index(Request $request){
-        $paginator = Equipment::where('name', 'like', '%'.$request->input('search', '').'%')
+        $paginator = Equipment::with('type')->where('name', 'like', '%'.$request->input('search', '').'%')
             ->orWhere('description', 'like', '%'.$request->input('search', '').'%')->paginate(20);
+        $items = $paginator->items();
+        $currentPage = $paginator->currentPage();
+//        if ($currentPage != 1 && count($items) == 0){
+//            return redirect()->route('admin.equipment');
+//        }
         return Inertia::render('Admin/Equipment',[
-            'equipments' => $paginator->items(),
+            'equipments' => $items,
             'total' => $paginator->total(),
             'from' => $paginator->firstItem(),
             'to' => $paginator->lastItem(),
             'lastPage' => $paginator->lastPage(),
-            'currentPage' => $paginator->currentPage(),
+            'currentPage' => $currentPage,
             'search' => $request->input('search', '')
         ]);
     }
@@ -34,10 +40,12 @@ class EquipmentController extends Controller
         ]);
     }
 
-    public function updateEquipment(){
+    public function updateEquipment(string $id){
         $types = Type::all();
+        $equipment = Equipment::find($id);
         return Inertia::render('Admin/CURD/EquipmentUpdate', [
             'types' => $types,
+            'equipment' => $equipment
         ]);
     }
 
@@ -73,5 +81,47 @@ class EquipmentController extends Controller
             $type->equipments()->create($data);
             return to_route('admin.equipment');
         }
+    }
+
+    public function updateEquipmentData(CreateEquipmentRequest $request, string $id){
+        $equipment = Equipment::find($id);
+
+        // Lưu hình ảnh mới
+        $file = $request->file('icon');
+        $path = $equipment->icon;
+        if ($file != null){
+            $path = $request->file('icon')->storeAs(
+                'equipment', 'equipmentIcon_'.Str::uuid().'.'.$file->extension()
+            );
+            $path = '/storage/'.$path;
+        }
+
+        // Cập nhật thông tin
+        $equipment->icon = $path;
+        $equipment->name = $request->get('name');
+        $equipment->description = $request->get('description');
+        $equipment->type()->dissociate(); // Gỡ khóa ngoại
+
+        $type = Type::find($request->get('type'));
+        if ($type){
+            $type->equipments()->save($equipment);
+            return to_route('admin.equipment');
+        }
+    }
+
+    public function removeEquipment(string $id){
+        $equip = Equipment::find($id);
+        if ($equip){
+            $equip->delete();
+            return back()->with('message', 'Xóa thành công');
+        }
+        return back()->with('error', 'Xóa thất bại');
+    }
+
+    public function removeListEquipment(Request $request){
+        $itemIds = $request->input('items');
+        Equipment::whereIn('id', $itemIds)->delete();
+        // Redirect or respond as needed
+        return redirect()->back()->with('message', 'Xóa thành công');
     }
 }

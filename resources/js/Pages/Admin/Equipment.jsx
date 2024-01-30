@@ -3,24 +3,50 @@ import {Button, Flex, TextInput, Title} from "@tremor/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/solid/index.js";
 import {
     ArrowDownTrayIcon, ArrowUpTrayIcon,
-    BarsArrowDownIcon,
     ChevronDownIcon, EyeIcon,
     PencilIcon,
     PlusIcon,
-    TrashIcon, XCircleIcon, XMarkIcon
+    TrashIcon, XMarkIcon
 } from "@heroicons/react/24/outline/index.js";
 import Checkbox from "@/Components/Checkbox.jsx";
 import {Pagination} from "@mui/material";
-import {Link, router} from "@inertiajs/react";
-import {useContext, useState} from "react";
+import {Link, router, usePage} from "@inertiajs/react";
+import {useContext, useEffect, useState} from "react";
 import Dropdown from "@/Components/Dropdown.jsx";
-import {DialogContext} from "@/Components/DialogProvider.jsx";
+import Swal from "sweetalert2";
 
 export default function ({equipments, from, to, total, lastPage, currentPage, search}){
+    const { message, error } = usePage().props.flash;
     const [inputVal, setInputVal] = useState(search);
     const [checkBoxes, setCheckboxes] = useState([]);
     const [allChecked, setAllChecked] = useState(false);
-    // const {openDialog, closeDialog} = useContext(DialogContext);
+
+    useEffect(() => {
+        if (message){
+            Swal.fire({
+                text: message,
+                title: "Thành công",
+                icon: "success"
+            })
+        }
+    }, [message]);
+
+    useEffect(() => {
+        if (error){
+            Swal.fire({
+                text: error,
+                title: "Thất bại",
+                icon: "error"
+            })
+        }
+    }, [error]);
+
+    useEffect(() => {
+        // Khắc phục lỗi khi xóa trang có 1 items
+        if (equipments.length === 0 && currentPage !== 1){
+            router.get('', {search: search , page: 1});
+        }
+    }, [equipments, currentPage]);
 
     const searchData = (searchText) => {
         router.get('', {search: searchText , page: 1});
@@ -42,15 +68,46 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
     }
 
     const deleteConfirm = (id, header, content) => {
-        // const onConfirm = () => {
-        //     router.delete(route('admin.equipment') + `/${id}`);
-        // }
-        //
-        // const onClose = () => {
-        //     closeDialog();
-        // }
-        //
-        // openDialog(header, content, onConfirm, onClose);
+        Swal.fire({
+            title: header,
+            text: content,
+            icon: "question",
+            showDenyButton: true,
+            confirmButtonText: "Có",
+            denyButtonText: "Không"
+        }).then((result) => {
+            if (result.isConfirmed){
+                router.delete(route('admin.equipment') + `/${id}`);
+            }
+        })
+    }
+
+    const deleteMutipleConfirm = () => {
+        Swal.fire({
+            title: "Xóa thiết bị",
+            text: "Bạn có muốn xóa các thiết bị đã chọn ?",
+            icon: "question",
+            showDenyButton: true,
+            confirmButtonText: "Có",
+            denyButtonText: "Không"
+        }).then((result) => {
+            if (result.isConfirmed){
+                if (checkBoxes.length === 0){
+                    Swal.fire({
+                        text: "Bạn chưa chọn bất kì thiết bị nào để xóa",
+                        title: "Không thể thực hiện",
+                        icon: "warning"
+                    })
+                    return;
+                }
+                router.visit(route('admin.equipment') + `/list`, {
+                    data: {
+                        items: checkBoxes,
+                    },
+                    method: 'delete'
+                });
+            }
+        })
     }
 
     return <>
@@ -90,7 +147,7 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
                                         <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
                                     </Dropdown.Trigger>
                                     <Dropdown.Content>
-                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} preserveState>
+                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={deleteMutipleConfirm} preserveState>
                                             <TrashIcon className={"h-4 w-4"}/>
                                             <p>Xóa thiết bị đã chọn</p>
                                         </Dropdown.Link>
@@ -152,17 +209,18 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
                                         <td className="px-4 py-3 truncate">{equip.name}</td>
                                         <td className="px-4 py-3 text-ellipsis">{equip.description}</td>
                                         <td className="px-4 py-3 truncate">
-                                            Thiết bị gia dụng
+                                            {equip.type.name}
                                         </td>
                                         <td className="px-4 py-3 flex items-center justify-center space-x-4">
                                             <Link href={route('admin.equipment')+`/${equip.id}`}>
                                                 <Button size={"xs"} icon={EyeIcon} variant={"light"}>Chi tiết</Button>
                                             </Link>
-
-                                            <Button size={"xs"} icon={PencilIcon} variant={"light"}
-                                                    color={"yellow"}>Sửa</Button>
+                                            <Link href={route('admin.equipment')+`/update/${equip.id}`}>
+                                                <Button size={"xs"} icon={PencilIcon} variant={"light"}
+                                                        color={"yellow"}>Sửa</Button>
+                                            </Link>
                                             <Button size={"xs"} icon={TrashIcon} color={"red"}
-                                                    onClick={() => deleteConfirm(equip.id, 'Xóa thiết bị', 'Bạn có muốn xóa thiết bị '+equip.name+' hay không?')}
+                                                    onClick={() => deleteConfirm(equip.id, 'Xóa thiết bị', 'Bạn có muốn xóa thiết bị '+equip.name+' ?')}
                                                     variant={"light"}>Xóa</Button>
                                         </td>
                                     </tr>
