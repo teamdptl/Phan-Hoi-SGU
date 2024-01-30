@@ -9,5 +9,6 @@ class Media extends Model
 {
     use HasFactory;
 
+    protected $table = 'media';
     protected $fillable = ['path', 'is_local'];
 }

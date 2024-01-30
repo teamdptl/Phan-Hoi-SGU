@@ -11,6 +11,7 @@ class Type extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'description', 'icon'];
+    protected $table = 'types';
 
     public function equipments() : HasMany
     {

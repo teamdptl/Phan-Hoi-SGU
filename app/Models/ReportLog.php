@@ -11,6 +11,7 @@ class ReportLog extends Model
     use HasFactory;
 
     protected $fillable = ['content'];
+    protected $table = 'report_logs';
 
     public function user() : BelongsTo
     {

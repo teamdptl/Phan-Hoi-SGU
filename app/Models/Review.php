@@ -11,6 +11,7 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = ['rating', 'y_kien'];
+    protected $table = 'reviews';
 
     public function user() : BelongsTo
     {

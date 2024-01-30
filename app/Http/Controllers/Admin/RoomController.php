@@ -25,6 +25,6 @@ class RoomController extends Controller
     }
 
     public function roomInfo(){
-
+        return Inertia::render('Admin/CURD/RoomDetail');
     }
 }
