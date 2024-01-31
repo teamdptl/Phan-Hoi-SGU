@@ -45,7 +45,7 @@ Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class
 
 // Guests
 Route::get('/guest/rating', [\App\Http\Controllers\Guest\RatingController::class, 'index']);
-Route::post('/guest/rating/create', [\App\Http\Controllers\Guest\RatingController::class, 'create']);
+Route::post('/guest/rating/create', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

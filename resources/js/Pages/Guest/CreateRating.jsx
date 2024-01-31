@@ -1,12 +1,14 @@
 import AppLayout from "@/Layouts/AppLayout";
-import { Button } from "@tremor/react";
+import { Button, Textarea } from "@tremor/react";
 import { useRef, useState } from "react";
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
-import ReCAPTCHA from "react-google-recaptcha";
-import axios from "axios";
-
+import { router, useForm } from "@inertiajs/react";
+import { FaCircleCheck } from "react-icons/fa6";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import Modal from "@/Components/Modal";
+import MyCaptcha from "@/Components/MyCaptcha";
 
 
 const labels = {
@@ -26,48 +28,47 @@ const labels = {
     return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
   }
 
-  function onChange(value) {
-    console.log("Captcha value:", value);
-  }
-
-  function verifyCallback(recaptchaToken) {
-    // Here you will get the final recaptchaToken!!! 
-    console.log(recaptchaToken, "<= your recaptcha token")
- }
   
 export default function CreateRating(){
-    const [value, setValue] = useState(2)
-    const [hover, setHover] = useState(-1)
+    const [value, setValue] = useState(2) //Lưu giá trị (số sao) được người dùng đánh giá
+    const [hover, setHover] = useState(-1) //Giá trị sao tạm để tạo hiệu ứng khi người dùng hover
+    const [text, setText] = useState('') //Chứa nội dung mà người dùng đánh giá
+    const [disable, setDisable] = useState(true) //Dùng để cho phép người dùng có thể click vào button gửi đánh giá
     const key = "6Ld17l0pAAAAANV-XzcvvPBMGY202eCmxDyjduik"
+    const [token, setToken] = useState('')//Lưu token được trả về từ google recaptcha
+    const [modal, setModal] = useState(false) //Dùng để tắt mở modal thông báo cho người dùng
+    const [sendSuccess, setSendSuccess] = useState() //Lưu trạng thái khi gửi đánh giá
     const captchaRef = useRef(null)
+
+
+    //Xử lý và gửi dữ liệu xuống server
     function submitRating() {
         // e.preventDefault();
-        const token = captchaRef.current.getValue();
-        console.log(token, "<= your recaptcha token")
-        const secretKey = "6Ld17l0pAAAAAJNhNbKjDPx15ze-xd-_LxqgkI5O"
-        const url = `http://localhost:8000/guest/rating/create`
-        
-        fetch(url,
-            {
-                method: 'POST',
-                data:{
-                    token: token,
-                    secretKey: secretKey
+        // const token = captchaRef.current.getValue();
+        const url = '/guest/rating/create'
+        router.post(url, {'token': token, 'star': value, 'text': text}, {
+            onSuccess: (data) => {
+                console.log(data)
+                setModal(true)
+                if(data.props.success){
+                    setSendSuccess(true)
+                }else{
+                    setSendSuccess(false)
+                    captchaRef.current.reset();
+                    setDisable(true)
                 }
+                
+            },
+            onError: (err) => {
+                alert("Server Internal Error!")
             }
-        ).then(res => {
-            console.log(res)
-            return res;
-        })
-        .then((json) => console.log(json))
-        .catch(err => console.error(err));
-        console.log(`https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`)
-        captchaRef.current.reset();
+        });
 
     }
 
 
     return (
+        <>
         <AppLayout>
             <div class="md:flex xl:px-32 md:px-8 md:py-5">
                 <div class="relative md:w-7/12 lg:w-2/3">
@@ -104,20 +105,60 @@ export default function CreateRating(){
                     </div>
                     <div class="w-full items-start mt-5">
                         <p>Mô tả chi tiết</p>
-                        <textarea class="w-full" rows={3}></textarea>
+                        <Textarea value={text} onChange={(e) => setText(e.target.value)} class="rounded-xl w-full" rows={3}></Textarea>
                     </div>
                     <div class="w-full items-start mt-5 mb-10">
                         <p class="italic font-sans text-sm w-fit">Xác nhận bạn không phải robot*</p>
-                        <ReCAPTCHA
-                            sitekey={key}
-                            ref={captchaRef}
-                        />
+                        <MyCaptcha captchaRef={captchaRef} setToken={setToken} setDisableButton={setDisable} />
                     </div>
 
-                    <Button onClick={submitRating}>Đánh giá</Button>
+                    <Button disabled={disable} onClick={submitRating}>Đánh giá</Button>
                     
                 </div>
+                <Modal show={modal} onClose={() => setModal(false)} maxWidth="xl">
+                    <div class="px-5 py-4 sm:py-8 flex flex-col justify-start items-center">
+                        
+                        {sendSuccess ? (
+                            <>
+                                <FaCircleCheck class="size-16 text-green-600"/>
+                            </>
+                        ):(
+                            <>
+                                <IoMdCloseCircleOutline class="size-16 text-red-600"/>
+                            </>
+                        )}
+                        
+                        <div class="flex flex-col justify-center items-center">{sendSuccess ? 
+                            (<>
+                                <p class="font-bold mt-2">Đã gửi đánh giá của bạn!</p>
+                            </>)
+                            : 
+                            (<>
+                                <p class="font-bold">Không thể gửi đánh giá :(((</p>
+                                <p class="mt-4">Mã xác thực của bạn đã hết hạn!<br/> Hãy check vào ô để xác nhận không phải người máy</p>
+                            </>)}</div>       
+                        
+                        
+                        <div class="w-full pt-8 flex justify-center items-center">
+                            {
+                                sendSuccess ? (
+                                    <>
+                                        <button class="px-10 font-bold hover:opacity-30 text-white bg-green-600 py-2 rounded-lg">Đi xem</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button class="px-10 font-bold hover:opacity-30 text-white bg-green-600 py-2 rounded-lg">Đồng ý</button>
+                                    </>
+                                )
+                            }
+                        </div>
+                    </div>
+                    
+                </Modal>
+
             </div>
         </AppLayout>
+        </>
+
     )
 }
