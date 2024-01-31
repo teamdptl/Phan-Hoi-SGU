@@ -11,7 +11,8 @@ class Equipment extends Model
 {
     use HasFactory;
 
-    public $fillable = ['name', 'description', 'icon'];
+    protected $table = 'equipments';
+    protected $fillable = ['name', 'description', 'icon'];
 
     public function reports() : BelongsToMany
     {

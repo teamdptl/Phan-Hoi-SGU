@@ -6,10 +6,6 @@ import {Head} from "@inertiajs/react";
 export default function Dashboard(){
     return <>
         <AdminLayout>
-            <Head>
-                <title>Bảng điều khiển</title>
-            </Head>
-            <div className={"p-5"}>
                 <Title>Bảng điều khiển</Title>
                 <TabGroup className="mt-4">
                     <TabList>
@@ -55,8 +51,6 @@ export default function Dashboard(){
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>
-            </div>
-
         </AdminLayout>
     </>
 }

@@ -16,6 +16,7 @@ class Report extends Model
     // Other có nghĩa là thiết bị khác
     // Location dùng locate bằng gps (sẽ làm sau)
     protected $fillable = ['other', 'description'];
+    protected $table = 'reports';
 
     protected $attributes = [
         // 'rooms_id' => '1', 

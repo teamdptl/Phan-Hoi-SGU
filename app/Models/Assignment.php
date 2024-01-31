@@ -10,6 +10,7 @@ class Assignment extends Model
 {
     use HasFactory;
 
+    protected $table = 'assignment';
     protected $fillable = ['note', 'worker_id', 'manager_id', 'reports_id'];
 
     public function report() : BelongsTo
