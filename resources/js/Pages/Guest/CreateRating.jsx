@@ -4,11 +4,11 @@ import { useRef, useState } from "react";
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
-import { router, useForm } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoMdCloseCircleOutline } from "react-icons/io";
-import Modal from "@/Components/Modal";
 import MyCaptcha from "@/Components/MyCaptcha";
+import AlertModal from "@/Components/AlertModal";
 
 
 const labels = {
@@ -36,31 +36,89 @@ export default function CreateRating(){
     const [disable, setDisable] = useState(true) //Dùng để cho phép người dùng có thể click vào button gửi đánh giá
     const key = "6Ld17l0pAAAAANV-XzcvvPBMGY202eCmxDyjduik"
     const [token, setToken] = useState('')//Lưu token được trả về từ google recaptcha
-    const [modal, setModal] = useState(false) //Dùng để tắt mở modal thông báo cho người dùng
     const [sendSuccess, setSendSuccess] = useState() //Lưu trạng thái khi gửi đánh giá
     const captchaRef = useRef(null)
 
-
+    //Các biến dùng cho Modal để hiển thị thống báo cho người dùng
+    const [modal, setModal] = useState(false) //Dùng để tắt mở modal thông báo cho người dùng
+    const [icon, setIcon] = useState(<div></div>)
+    const [titleContent, setTitleContent] = useState('')
+    const [description, setDescription] = useState('')
+    const [buttons, setButtons] = useState(<button></button>)
     //Xử lý và gửi dữ liệu xuống server
     function submitRating() {
-        // e.preventDefault();
-        // const token = captchaRef.current.getValue();
+        
         const url = '/guest/rating/create'
-        router.post(url, {'token': token, 'star': value, 'text': text}, {
+        router.post(url, {'token': token, 'rating': value, 'y_kien': text, 'rooms_id': 2}, {
             onSuccess: (data) => {
                 console.log(data)
-                setModal(true)
                 if(data.props.success){
-                    setSendSuccess(true)
+                    setIcon(<FaCircleCheck class="size-16 text-green-600"/>)
+                    setTitleContent("Thành công!")
+                    setDescription("Đã gửi đánh giá của bạn!")
+                    setButtons(
+                    <>
+                        <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Đi xem</button>
+                    </>)
                 }else{
-                    setSendSuccess(false)
+                    setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
+                    setTitleContent("Thất bại!")
+                    setDescription("Hãy check vào captcha để xác thực!")
+                    setButtons(
+                        <>
+                            <button onClick={() => setModal(false)} class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Được</button>
+                        </>
+                    )
                     captchaRef.current.reset();
                     setDisable(true)
                 }
-                
+                setModal(true)
             },
             onError: (err) => {
-                alert("Server Internal Error!")
+                console.log(err)
+                if(err.y_kien !== undefined){
+                    setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
+                    setTitleContent("Thất bại!")
+                    setDescription(err.y_kien)
+                    setButtons(
+                        <>
+                            <button onClick={() => setModal(false)} class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Được</button>
+                        </>
+                    )
+                }else{
+                    if(err.rating !== undefined){
+                        setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
+                        setTitleContent("Thất bại!")
+                        setDescription(err.rating)
+                        setButtons(
+                            <>
+                                <button onClick={() => setModal(false)} class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Được</button>
+                            </>
+                        )
+                    }else{
+                        if(err.token !== undefined){
+                            setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
+                            setTitleContent("Thất bại!")
+                            setDescription(err.token)
+                            setButtons(
+                                <>
+                                    <button onClick={() => setModal(false)} class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Được</button>
+                                </>
+                            )
+                        }else{
+                            setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
+                            setTitleContent("Thất bại!")
+                            setDescription("Server internal error")
+                            setButtons(
+                                <>
+                                    <button onClick={() => setModal(false)} class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Được</button>
+                                </>
+                            )
+                        }
+                        
+                    }
+                }
+                setModal(true)
             }
         });
 
@@ -72,7 +130,7 @@ export default function CreateRating(){
         <AppLayout>
             <div class="md:flex xl:px-32 md:px-8 md:py-5">
                 <div class="relative md:w-7/12 lg:w-2/3">
-                    <img src="/img/classroom.jpg"></img>
+                    <img class="object-cover h-full" src="/img/classroom.jpg"></img>
                     <div class="absolute top-0 left-0 bottom-0 right-0 justify-center items-center flex">
                         <div class="text-white font-bold text-2xl w-fit">
                             <p>Phòng C.E403</p>
@@ -115,46 +173,7 @@ export default function CreateRating(){
                     <Button disabled={disable} onClick={submitRating}>Đánh giá</Button>
                     
                 </div>
-                <Modal show={modal} onClose={() => setModal(false)} maxWidth="xl">
-                    <div class="px-5 py-4 sm:py-8 flex flex-col justify-start items-center">
-                        
-                        {sendSuccess ? (
-                            <>
-                                <FaCircleCheck class="size-16 text-green-600"/>
-                            </>
-                        ):(
-                            <>
-                                <IoMdCloseCircleOutline class="size-16 text-red-600"/>
-                            </>
-                        )}
-                        
-                        <div class="flex flex-col justify-center items-center">{sendSuccess ? 
-                            (<>
-                                <p class="font-bold mt-2">Đã gửi đánh giá của bạn!</p>
-                            </>)
-                            : 
-                            (<>
-                                <p class="font-bold">Không thể gửi đánh giá :(((</p>
-                                <p class="mt-4">Mã xác thực của bạn đã hết hạn!<br/> Hãy check vào ô để xác nhận không phải người máy</p>
-                            </>)}</div>       
-                        
-                        
-                        <div class="w-full pt-8 flex justify-center items-center">
-                            {
-                                sendSuccess ? (
-                                    <>
-                                        <button class="px-10 font-bold hover:opacity-30 text-white bg-green-600 py-2 rounded-lg">Đi xem</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button class="px-10 font-bold hover:opacity-30 text-white bg-green-600 py-2 rounded-lg">Đồng ý</button>
-                                    </>
-                                )
-                            }
-                        </div>
-                    </div>
-                    
-                </Modal>
+                <AlertModal isOpen={modal} onClose={() => setModal(false)} icon={icon} contentTitle={titleContent} description={description} button={buttons}/>
 
             </div>
         </AppLayout>
