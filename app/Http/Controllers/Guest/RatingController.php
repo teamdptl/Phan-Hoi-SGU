@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Rating\RatingRequest;
+use App\Models\Review;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use HTTPRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class RatingController extends Controller{
@@ -14,9 +15,22 @@ class RatingController extends Controller{
         return Inertia::render('Guest/CreateRating');
     }
 
-    public function checkWithCaptcha(Request $request){       
-        $url = 'https://www.google.com/recaptcha/api/siteverify?secret='. $request->input('secretKey') .'&response='. $request->input('token');
+    public function checkWithCaptcha(RatingRequest $request){      
+        $validated = $request->validated();
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=6Ld17l0pAAAAAJNhNbKjDPx15ze-xd-_LxqgkI5O&response='. $request->input('token');
         $response = Http::post($url);
-        return response("Hello");
+        $success = json_decode($response)->success;
+        if($success){
+            // dd($validated);
+            $rating = DB::table('reviews')->insert(
+                [
+                    'rating' => $validated['rating'],
+                    'y_kien' => $validated['y_kien'],
+                    'rooms_id' => $validated['rooms_id'],
+                ]
+                );
+        }
+        return Inertia::render('Guest/CreateRating', ['success' => $success]);
+        // return $success;
     }
 }
