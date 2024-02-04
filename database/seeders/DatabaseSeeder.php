@@ -6,7 +6,12 @@ namespace Database\Seeders;
 use App\Enums\RoleEnum;
 use App\Models\Role;
 use App\Models\Type;
+use App\Models\User;
+
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,10 +28,10 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         Role::create([
-           'id' => RoleEnum::ADMIN,
-           'name' => 'Quản trị viên',
-           'description' => 'Người thực hiện quản lý website',
-           'icon' => '',
+            'id' => RoleEnum::ADMIN,
+            'name' => 'Quản trị viên',
+            'description' => 'Người thực hiện quản lý website',
+            'icon' => '',
         ]);
 
         Role::create([
@@ -66,5 +71,18 @@ class DatabaseSeeder extends Seeder
             'description' => 'Thiết bị làm lạnh, làm mát (máy lạnh, máy quạt)',
             'icon' => 'default_equipment.png',
         ]);
+
+        for ($i = 0; $i < 10; $i++) { 
+            User::create([
+                'name' => Str::random(10),
+                'email' => Str::random(10) . '@example.com',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'),
+                'status' => rand(0, 1),
+                'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }
