@@ -259,7 +259,7 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
                                             {total} thiết bị
                                         </span>
                                     </span>
-                        {lastPage > 1 && (
+                        {lastPage > 1 && (  
                             <div className="inline-flex items-stretch -space-x-px">
                                 <Pagination onChange={(e, num) => {
                                     changePage(num)

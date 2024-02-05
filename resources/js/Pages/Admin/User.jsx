@@ -1,16 +1,55 @@
 import AdminLayout from "@/Layouts/AdminLayout.jsx";
 import {Flex, TextInput, Title, Button} from "@tremor/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/solid/index.js";
+import {Pagination} from "@mui/material";
+import { router, usePage} from "@inertiajs/react";
+
+import {useContext, useEffect, useState} from "react";
+
 import {
     BarsArrowDownIcon,
     ChevronDownIcon,
     PencilIcon,
     PlusIcon,
-    TrashIcon
+    TrashIcon,
+    XMarkIcon
 } from "@heroicons/react/24/outline/index.js";
+import { Link } from '@inertiajs/react';
+
+
 import Checkbox from "@/Components/Checkbox.jsx";
 
-export default function (){
+export default function ({users, from, to, total, lastPage, currentPage, search}) {
+    const [inputVal, setInputVal] = useState(search);
+    
+    
+    useEffect(() => {
+        // Khắc phục lỗi khi xóa trang có 1 items
+        if (users.length === 0 && currentPage !== 1){
+            router.get('', {search: search , page: 1});
+        }
+    }, [users, currentPage]);
+
+    useEffect(() => {
+        console.log("users", users);
+        console.log("total", total); 
+        console.log("from", from);
+        console.log("to", to);
+        console.log("lastPage", lastPage);
+        console.log("currentPage", currentPage);
+        console.log("search", search);
+
+    }, [users]);
+
+    const changePage = (pageNum) => {
+        router.get('', {search: search, page: pageNum});
+
+    }
+
+    const searchData = (searchText) => {
+        router.get('', {search: searchText , page: 1});
+    }
+    
     return <>
         <AdminLayout>
             <Flex justifyContent={"between"} className={"mb-4"}>
@@ -22,13 +61,27 @@ export default function (){
                     <div
                         className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                         <div className="w-full md:w-1/2 flex items-center space-x-1 md:space-x-2 lg:space-x-3">
-                            <TextInput icon={MagnifyingGlassIcon} className={"md:max-w-64 min-w-24"}
-                                       placeholder="Tìm người dùng"/>
-                            <Button size={"xs"}>Tìm kiếm</Button>
+                        <div className={"relative"}>
+                                <TextInput icon={MagnifyingGlassIcon} className={"md:max-w-64 min-w-24 pr-2"} value={inputVal}
+                                           placeholder="Tìm người dùng" onChange={(e) => {
+                                    setInputVal(e.target.value)
+                                }}
+                                />
+                                {
+                                    search && (
+                                        <Button onClick={() => searchData("")} className={"absolute right-2 top-1/2 -translate-y-1/2"} icon={XMarkIcon} size={"xs"} variant={"light"} color={"gray"}/>
+                                    )
+                                }
+                            </div>
+
+                            <Button onClick={() => searchData(inputVal)} size={"xs"}>Tìm kiếm</Button>
+
                         </div>
                         <div
                             className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                            <Link href={"/admin/user/add"} method="get">
                             <Button size={"xs"} icon={PlusIcon}>Thêm người dùng</Button>
+                            </Link>
                             <div className="flex items-center space-x-1 md:space-x-2 lg:space-x-3 w-full md:w-auto">
                                 <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
                                 <Button size={"xs"} icon={BarsArrowDownIcon} variant={"secondary"}>Sắp xếp</Button>
@@ -62,19 +115,21 @@ export default function (){
                             </tr>
                             </thead>
                             <tbody>
-                            <tr className="border-b dark:border-gray-700 cursor-pointer">
+                                {
+                                users.length > 0 && users.map(user => (
+                                <tr className="border-b dark:border-gray-700 cursor-pointer">
                                 <td className={"pl-4"}>
                                     <Checkbox/>
                                 </td>
                                 <th
                                     scope="row"
                                     className="truncate px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Huỳnh Khánh Duy
+                                    {user.name}
                                 </th>
-                                <td className="px-4 py-3 truncate">Quản trị viên</td>
-                                <td className="px-4 py-3 truncate">huykhaduy@gmail.com</td>
+                                <td className="px-4 py-3 truncate">{user.roles[0].name}</td>
+                                <td className="px-4 py-3 truncate">{user.email}</td>
                                 <td className="px-4 py-3 truncate">
-                                    Hoạt động
+                                {user.status ? 'Hoạt động' : 'Không hoạt động'}
                                 </td>
                                 <td className="px-4 py-3 flex items-center justify-center space-x-4">
                                     <Button size={"xs"} icon={PencilIcon} variant={"light"}
@@ -82,6 +137,19 @@ export default function (){
                                     <Button size={"xs"} icon={TrashIcon} color={"red"} variant={"light"}>Xóa</Button>
                                 </td>
                             </tr>
+                             ))
+                                }
+                             {
+                                users.length === 0 && (
+                                    <>
+                                        <tr>
+                                            <td colSpan={6} className={"text-center py-2"}>
+                                                Không tìm thấy người dùng nào
+                                            </td>
+                                        </tr>
+                                    </>
+                                )
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -91,99 +159,27 @@ export default function (){
                     >
                                      <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                         Hiển thị {" "}
+                                        {
+                                             from !== null && to !== null && (
+                                                 <>
+                                                      <span className="font-semibold text-gray-900 dark:text-white">
+                                                        {from} - {to} {" "}
+                                                      </span>
+                                                     trong {" "}
+                                                 </>
+                                             )
+                                         }
                                          <span className="font-semibold text-gray-900 dark:text-white">
-                                            1 - 10 {" "}
-                                        </span>
-                                            của {" "}
-                                         <span className="font-semibold text-gray-900 dark:text-white">
-                                            1000
+                                            {total} người dùng
                                         </span>
                                     </span>
-                        <ul className="inline-flex items-stretch -space-x-px">
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                >
-                                    <span className="sr-only">Previous</span>
-                                    <svg
-                                        className="w-5 h-5"
-                                        aria-hidden="true"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                >
-                                    1
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                >
-                                    2
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    aria-current="page"
-                                    className="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                                >
-                                    3
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                >
-                                    ...
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                >
-                                    100
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                >
-                                    <span className="sr-only">Next</span>
-                                    <svg
-                                        className="w-5 h-5"
-                                        aria-hidden="true"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </a>
-                            </li>
-                        </ul>
+                                    {lastPage > 1 && (
+                            <div className="inline-flex items-stretch -space-x-px">
+                                <Pagination onChange={(e, num) => {
+                                    changePage(num)
+                                }} page={currentPage} count={lastPage} color="primary"/>
+                            </div>
+                        )}
                     </nav>
                 </div>
             </div>
