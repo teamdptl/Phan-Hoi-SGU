@@ -50,11 +50,12 @@ Route::delete('/admin/equipment/list', [\App\Http\Controllers\Admin\EquipmentCon
 Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index']);
 Route::get('/admin/user/add', [\App\Http\Controllers\Admin\UserController::class, 'addUser']);
 Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
+Route::post('/admin/report/filters', [\App\Http\Controllers\Admin\ReportController::class, 'filterReports']);
 Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
 
 // Guests
 Route::get('/guest/rating', [\App\Http\Controllers\Guest\RatingController::class, 'index']);
-Route::post('/guest/rating/create', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
+Route::post('/guest/rating', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

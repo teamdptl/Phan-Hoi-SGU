@@ -19,7 +19,7 @@ class Report extends Model
     protected $table = 'reports';
 
     protected $attributes = [
-        // 'rooms_id' => '1', 
+        'rooms_id' => '1', 
         'status' => 'sent'
     ];
 
