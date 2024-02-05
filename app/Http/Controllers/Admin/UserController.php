@@ -52,14 +52,15 @@ class UserController extends Controller
     {
         $data = $request->validationData();
 
+
+
         // Tạo một user mới
         $user = new User();
-        $user->name = $data['name'];
-        $user->email = $data['email'];
+        $user->fill($data);
         $user->password = Hash::make($data['password']); // Hash password
         $user->remember_token = Str::random(10);
-        $user->email_verified_at = now(); 
-        $user->status = '1'; 
+        $user->email_verified_at = now();
+        $user->status = '1';
         $user->save();
 
         // Lấy role từ dữ liệu request và gán cho user
