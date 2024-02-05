@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Http\Requests\User\CreateUserRequest;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 
 
@@ -23,7 +25,7 @@ class UserController extends Controller
         $items = $paginator->items();
         $currentPage = $paginator->currentPage();
 
-      
+
         return Inertia::render(
             'Admin/User',
             [
@@ -48,6 +50,23 @@ class UserController extends Controller
 
     public function storeNewUser(CreateUserRequest $request)
     {
+        $data = $request->validationData();
+
+        // Tạo một user mới
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']); // Hash password
+        $user->remember_token = Str::random(10);
+        $user->email_verified_at = now(); 
+        $user->status = '1'; 
+        $user->save();
+
+        // Lấy role từ dữ liệu request và gán cho user
+        $role = Role::where('id', $data['role'])->first();
+        if ($role) {
+            $user->roles()->attach($role->id);
+        }
 
 
         return to_route('admin.user');
