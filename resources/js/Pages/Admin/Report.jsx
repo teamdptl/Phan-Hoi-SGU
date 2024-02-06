@@ -9,7 +9,17 @@ import DropDownList from "@/Components/DropDownList";
 import { useState } from "react";
 import '../../../css/home.css'
 import { ChartBarIcon } from "@heroicons/react/24/outline";
-export default function (){
+
+const getDateFormatted = (date, plusDay = 0, plusMonth = 0, plusYear = 0) =>{
+    const fullYear = date.getFullYear() + plusYear;
+    const month = date.getMonth() + 1 + plusMonth;
+    const day = date.getDate() + plusDay;
+    return fullYear + "-" + month + "-" + day
+}
+export default function ({listReport}){
+    console.log(listReport)
+    const firstDate = new Date('1970-01-01')
+    const currentDate = new Date()
     const lastMonthDate = new Date(new Date().setMonth(new Date().getMonth() - 1))
     const [facility, setFacility] = useState('all')
     const [searchText, setSearchText] = useState('')
@@ -17,7 +27,7 @@ export default function (){
     const [arrange, setArrange] = useState('increase')
     const [datePicker, setDatePicker] = useState({
         from: lastMonthDate,
-        to: new Date(),
+        to: currentDate,
       });
 
 
@@ -45,13 +55,13 @@ export default function (){
     ])
 
     const handleFilter = () => {
-        console.log(facility, searchText, actions, datePicker, arrange)
+        console.log(facility, searchText, actions, arrange)
         router.post('/admin/report/filters',{
             facility: facility,
             searchText: searchText,
             actions: actions,
-            from: datePicker.from,
-            to: datePicker.to,
+            from: getDateFormatted(datePicker.from || firstDate),
+            to: getDateFormatted(datePicker.to || new Date(), 1),
             arrange: arrange,
         })
     }
@@ -121,10 +131,13 @@ export default function (){
                                         ]}/>
                         </div>
                     </div>
-                    <div className={"grid grid-cols-1 gap-4 p-4 pt-2 md:grid-cols-2 lg:grid-cols-2"}>
-                        <ReportItem/>
-                        <ReportItem/>
-                        <ReportItem/>
+                    <div className={"grid grid-cols-1 gap-4 p-4 pt-2 md:grid-cols-2 lg:grid-cols-2 min-h-40"}>
+                        {
+                            listReport === undefined ? 'Chưa có báo cáo nào' : 
+                            listReport.map((item, index) =>{
+                                return <ReportItem report={item}/>
+                            })
+                        }
                     </div>
                 </div>
             </div>

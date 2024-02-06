@@ -12,22 +12,24 @@ use Inertia\Inertia;
 class ReportController extends Controller
 {
     public function index(){
-        return Inertia::render('Admin/Report');
+        $currentDateTimeString = date('Y-m-d');
+        $lastMonthDateTimeString = date('Y-m-d',strtotime($currentDateTimeString .'-1 month'));
+        // dd($lastMonthDateTimeString);
+        $reports = Report::with('room', 'equipments', 'media')->where('created_at', '>=', $lastMonthDateTimeString)->get();
+        return Inertia::render('Admin/Report', [
+            'listReport' => $reports
+        ]);
     }
 
     public function filterReports(Request $request){
-        $request->validate([
-            'from' =>'required',
-            'to' =>'required',
-        ]);
 
         $searchText = $request->input('searchText');
-        $from = $request->input('from');
-        $to = $request->input('to');
+        $from = $request->input('from') ?? '1970-01-01';
+        $to = $request->input('to') ?? '';
         $facility = $request->input('facility');
         $arrange = $request->input('arrange');
 
-        $reports = Report::where(function($query) use ($searchText){
+        $reports = Report::with('room', 'equipments', 'media')->where(function($query) use ($searchText){
                             $query->whereHas('equipments', function ($query) use ($searchText){
                                 $query->where('name', 'like','%'. $searchText .'%');
                             })
@@ -37,8 +39,11 @@ class ReportController extends Controller
                                 $query->where('name', 'like','%'. $searchText.'%');
                             });
                         })
-                        ->where('created_at', '>=', $from)
-                        ->where('created_at', '<=', $to);
+                        ->where('created_at', '>=', $from);
+        if($to != ''){
+            $reports = $reports->where('created_at', '<=', $to);
+        }
+
         if($facility != 'all'){
             $reports = $reports->whereHas('room', function ($query) use($facility){
                 $query->where('facility', $facility);
@@ -52,6 +57,9 @@ class ReportController extends Controller
         }
                        
         $reports = $reports->get();
-        dd($reports);
+        // dd($reports);
+        return Inertia::render('Admin/Report', [
+          'listReport' => $reports,
+        ]);
     }
 }
