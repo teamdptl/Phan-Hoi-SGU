@@ -70,7 +70,7 @@ export default function ({types, equipment, roomHave}) {
                             <div className="w-full">
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phòng có thiết bị này</label>
                                 {roomHave.length > 0 && (
-                                    <p className={"text-sm"}>{roomHave.join(", ")}</p>
+                                    <p className={"text-sm"}>{roomHave.map((item) => item.name).join(", ")}</p>
                                 )}
 
                                 {roomHave.length === 0 && (

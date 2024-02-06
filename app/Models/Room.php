@@ -14,6 +14,16 @@ class Room extends Model
     protected $fillable = ['name', 'type', 'facility', 'qr_code', 'icon', 'extra_data'];
     protected $table = 'rooms';
 
+//    public function getReviewsRatingAndNotFinishReport(){
+//        $this->load('reviews', 'reports');
+//
+//        // Get review counts and avg
+//        $reviewsCount = $this->reviews->count();
+//        $reviewsAvg = $this->reviews()->avg('rating');
+//
+//        $reports = $this->reports();
+//    }
+
     public function reports() : HasMany
     {
         return $this->hasMany(Report::class, 'rooms_id', 'id');
@@ -21,7 +31,7 @@ class Room extends Model
 
     public function reviews() : HasMany
     {
-        return $this->hasMany(Room::class, 'rooms_id', 'id');
+        return $this->hasMany(Review::class, 'rooms_id', 'id');
     }
 
     public function equipments() : BelongsToMany

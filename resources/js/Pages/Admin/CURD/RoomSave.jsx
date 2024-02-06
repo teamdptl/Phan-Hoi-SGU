@@ -7,40 +7,26 @@ import {
 } from "@heroicons/react/24/outline/index.js";
 import {QRCodeCanvas} from "qrcode.react";
 import {Link, router, useForm, usePage} from "@inertiajs/react";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import InputError from "@/Components/InputError.jsx";
 
-export default function ({equipments, url, qr_code, new_qr_code, new_url, room}){
+export default function ({equipments, url, qr_code}){
     const { errors } = usePage().props;
-    const [isNewQR, setIsNewQR] = useState(false);
 
     const {data, setData} = useForm({
-        equipments: room.equipments.map(item => item.id),
-        name: room.name,
-        type: room.type,
-        facility: room.facility,
+        equipments: [],
+        name: '',
+        type: '',
+        facility: '',
     })
 
     const submitForm = (e) => {
         e.preventDefault();
         router.post('', {
             ...data,
-            qr_code: isNewQR ? new_qr_code : qr_code,
-            new_qr: isNewQR,
+            qr_code: qr_code
         }, {
-            forceFormData: true,
-        });
-    }
-
-    const getNewQrCode = (e) => {
-        e.preventDefault();
-        router.get('', {}, {
-            preserveState: true,
-            only: ['new_qr_code', 'new_url'],
-            preserveScroll: true,
-            onFinish: (visit) => {
-                setIsNewQR(true);
-            }
+            forceFormData: true
         });
     }
 
@@ -50,7 +36,7 @@ export default function ({equipments, url, qr_code, new_qr_code, new_url, room})
                     <Link href={route('admin.room')}>
                         <Button icon={ArrowUturnLeftIcon} variant={"light"} className={"mb-4"}>Trở về</Button>
                     </Link>
-                    <Title>Sửa phòng</Title>
+                    <Title>Thêm phòng</Title>
                 </div>
                 <section className="bg-gray-50 dark:bg-gray-900 antialiased">
                     <div className="mx-auto max-w-screen-xl bg-white p-4 sm:p-5 sm:rounded-lg dark:bg-gray-800 overflow-hidden shadow-lg">
@@ -116,10 +102,13 @@ export default function ({equipments, url, qr_code, new_qr_code, new_url, room})
                                     <label htmlFor="qrCode"
                                            className="block mb-4 text-sm font-medium text-gray-900 dark:text-white">Mã
                                         QR tạo ngẫu nhiên</label>
-                                    <QRCodeCanvas size={200} value={ isNewQR ? new_url : url }/>
+                                    <QRCodeCanvas size={200} value={url}/>
                                     <Flex className={"mt-4 space-x-4"} alignItems={"center"} justifyContent={"start"}>
                                         {/*TODO: Gọi api lấy mã mới*/}
-                                        <Button onClick={getNewQrCode} icon={ArrowPathRoundedSquareIcon} variant={"light"}>Tạo mã mới</Button>
+                                        <Link href={''} preserveState preserveScroll only={['qr_code', 'url']}>
+                                            <Button icon={ArrowPathRoundedSquareIcon} variant={"light"}>Tạo mã mới</Button>
+                                        </Link>
+
 
                                         {/*TODO: Thực hiện hàm tải xuống hình ảnh*/}
                                         <Button icon={ArrowDownTrayIcon} variant={"light"}>Tải xuống</Button>
@@ -128,7 +117,7 @@ export default function ({equipments, url, qr_code, new_qr_code, new_url, room})
                                 </div>
                             </div>
                             <Flex justifyContent={"end"} className={"mt-4 space-x-4"}>
-                                <Button>Sửa phòng</Button>
+                                <Button>Thêm phòng</Button>
                                 <Link href={route('admin.room')}>
                                     <Button variant={"secondary"}>Hủy</Button>
                                 </Link>
