@@ -29,9 +29,13 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/phong', [\App\Http\Controllers\TestController::class, 'index'])->name('room.select');
-//Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
-Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index']);
+Route::get('/phong', [\App\Http\Controllers\Guest\IndexController::class, 'index'])->name('room.select');
+// Không tìm thấy phòng có id
+Route::get('/loi-phong', function (){
+    return Inertia::render('Guest/RoomError');
+})->name('room.error');
+
+Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index'])->name('room.report');
 Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
 
 
@@ -62,8 +66,8 @@ Route::post('/admin/report/filters', [\App\Http\Controllers\Admin\ReportControll
 Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
 
 // Guests
-Route::get('/guest/rating', [\App\Http\Controllers\Guest\RatingController::class, 'index']);
-Route::post('/guest/rating', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
+Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'index'])->name('room.review');
+Route::post('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

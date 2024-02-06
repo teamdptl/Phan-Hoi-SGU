@@ -22,6 +22,7 @@ import Dropdown from "@/Components/Dropdown.jsx";
 import {Pagination} from "@mui/material";
 import {useEffect, useState} from "react";
 import Swal from "sweetalert2";
+import {facilityToString} from "@/Utils/facility.js";
 
 export default function Room({rooms, coSo, search, from, to, lastPage, total, currentPage, sortColumn, sortType}){
     const [inputVal, setInputVal] = useState(search);
@@ -83,13 +84,6 @@ export default function Room({rooms, coSo, search, from, to, lastPage, total, cu
         else {
             router.get('', {sortColumn: headerKey, sortType: 'desc'})
         }
-    }
-
-    const facilityToString = (id) => {
-        if (id === 'c')
-            return "Cơ sở chính";
-        if (id === '1' || id === '2')
-            return "Cơ sở " + id;
     }
 
     const deleteConfirm = (id, header, content) => {
@@ -272,8 +266,15 @@ export default function Room({rooms, coSo, search, from, to, lastPage, total, cu
                                             <td className="px-4 py-3 truncate">{facilityToString(room.facility)}</td>
                                             <td className="px-4 py-3 truncate">{room.type}</td>
                                             <td className="px-4 py-3 truncate">
-                                                {room.average_rating}/5
-                                                ({room.total_ratings} lượt)
+                                                { room.average_rating !== null && (
+                                                    <>
+                                                        { parseFloat(room.average_rating).toFixed(1) } /5
+                                                        ({room.total_ratings} lượt)
+                                                    </>
+                                                )}
+                                                {
+                                                    room.average_rating === null && "Chưa có"
+                                                }
                                             </td>
                                             <td className="px-4 py-3 truncate">
                                                 {room.sent_reports} chưa xử lý
