@@ -54,15 +54,16 @@ Route::post('/admin/equipment/add', [\App\Http\Controllers\Admin\EquipmentContro
 Route::post('/admin/equipment/update/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'updateEquipmentData']);
 Route::delete('/admin/equipment/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'removeEquipment']);
 Route::delete('/admin/equipment/list', [\App\Http\Controllers\Admin\EquipmentController::class, 'removeListEquipment']);
-
-Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index']);
+Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.user');
 Route::get('/admin/user/add', [\App\Http\Controllers\Admin\UserController::class, 'addUser']);
+Route::post('/admin/user/add', [\App\Http\Controllers\Admin\UserController::class, 'storeNewUser']);
 Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
+Route::post('/admin/report/filters', [\App\Http\Controllers\Admin\ReportController::class, 'filterReports']);
 Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
 
 // Guests
 Route::get('/guest/rating', [\App\Http\Controllers\Guest\RatingController::class, 'index']);
-Route::post('/guest/rating/create', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
+Route::post('/guest/rating', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -70,18 +71,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Admin middleware
-    Route::middleware('admin')->group(function(){
+    Route::middleware('admin')->group(function () {
 
     });
 
     // Worker middleware
-    Route::middleware('worker')->group(function(){
+    Route::middleware('worker')->group(function () {
 
     });
 
-    Route::middleware('inspector')->group(function(){
+    Route::middleware('inspector')->group(function () {
 
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Guest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Rating\RatingRequest;
 use App\Models\Review;
+use App\Models\Room;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
@@ -20,17 +21,12 @@ class RatingController extends Controller{
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret=6Ld17l0pAAAAAJNhNbKjDPx15ze-xd-_LxqgkI5O&response='. $request->input('token');
         $response = Http::post($url);
         $success = json_decode($response)->success;
+        // dd($request->all());
+        $rating = false;
         if($success){
-            // dd($validated);
-            $rating = DB::table('reviews')->insert(
-                [
-                    'rating' => $validated['rating'],
-                    'y_kien' => $validated['y_kien'],
-                    'rooms_id' => $validated['rooms_id'],
-                ]
-                );
+            $review = Review::create($validated);
+            $rating = Room::find($validated['rooms_id'])->reviews()->save($review);
         }
-        return Inertia::render('Guest/CreateRating', ['success' => $success]);
-        // return $success;
+        return Inertia::render('Guest/CreateRating', ['success' => $success, 'insertRating' => $rating]);
     }
 }

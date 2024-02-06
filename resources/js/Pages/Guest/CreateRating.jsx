@@ -12,16 +12,11 @@ import AlertModal from "@/Components/AlertModal";
 
 
 const labels = {
-    0.5: 'Useless',
-    1: 'Useless+',
-    1.5: 'Poor',
-    2: 'Poor+',
-    2.5: 'Ok',
-    3: 'Ok+',
-    3.5: 'Good',
-    4: 'Good+',
-    4.5: 'Excellent',
-    5: 'Excellent+',
+    1: 'Rất kém+',
+    2: 'Tệ',
+    3: 'Bình thường',
+    4: 'Tốt',
+    5: 'Rất tốt',
   };
 
   function getLabelText(value) {
@@ -48,18 +43,29 @@ export default function CreateRating(){
     //Xử lý và gửi dữ liệu xuống server
     function submitRating() {
         
-        const url = '/guest/rating/create'
+        const url = '/guest/rating'
         router.post(url, {'token': token, 'rating': value, 'y_kien': text, 'rooms_id': 2}, {
             onSuccess: (data) => {
                 console.log(data)
                 if(data.props.success){
-                    setIcon(<FaCircleCheck class="size-16 text-green-600"/>)
-                    setTitleContent("Thành công!")
-                    setDescription("Đã gửi đánh giá của bạn!")
-                    setButtons(
-                    <>
-                        <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Đi xem</button>
-                    </>)
+                    if(data.props.insertRating){
+                        setIcon(<FaCircleCheck class="size-16 text-green-600"/>)
+                        setTitleContent("Thành công!")
+                        setDescription("Đã gửi đánh giá của bạn!")
+                        setButtons(
+                        <>
+                            <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Đi xem</button>
+                        </>)
+                    }else{
+                        setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
+                        setTitleContent("Thất bại!")
+                        setDescription("Lỗi server! Không thể lưu đánh giá!")
+                        setButtons(
+                        <>
+                            <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Làm mới trang</button>
+                        </>)
+                    }
+                    
                 }else{
                     setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
                     setTitleContent("Thất bại!")
@@ -145,7 +151,6 @@ export default function CreateRating(){
                         <Rating
                             name="hover-feedback"
                             value={value}
-                            precision={0.5} 
                             getLabelText={getLabelText}
                             onChange={(event, newValue) => {
                             setValue(newValue);
