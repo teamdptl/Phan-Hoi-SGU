@@ -164,6 +164,12 @@ return [
         'title'                 => 'tiêu đề',
         'username'              => 'tên đăng nhập',
         'year'                  => 'năm',
+        'equipments'            => 'thiết bị',
+        'qr_code'               => 'mã qr',
+        'facility'              => 'cơ sở',
+        'type'                  => 'loại',
+        'icon'                  => 'hình ảnh',
+
     ],
 
 ];

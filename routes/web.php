@@ -29,24 +29,32 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
+Route::get('/phong', [\App\Http\Controllers\TestController::class, 'index'])->name('room.select');
+//Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
 Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index']);
 Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
 
 
 // Admin
 Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
-Route::get('/admin/room', [\App\Http\Controllers\Admin\RoomController::class, 'index']);
-Route::get('/admin/room/add', [\App\Http\Controllers\Admin\RoomController::class, 'addRoom']);
-Route::get('/admin/room/info', [\App\Http\Controllers\Admin\RoomController::class, 'roomInfo']);
+Route::get('/admin/room', [\App\Http\Controllers\Admin\RoomController::class, 'index'])->name('admin.room');
+Route::get('/admin/room/add', [\App\Http\Controllers\Admin\RoomController::class, 'addRoomForm']);
+Route::get('/admin/room/{id}', [\App\Http\Controllers\Admin\RoomController::class, 'infoRoomForm']);
+Route::get('/admin/room/update/{id}', [\App\Http\Controllers\Admin\RoomController::class, 'editRoomForm']);
+Route::post('/admin/room/add', [\App\Http\Controllers\Admin\RoomController::class, 'addRoomRequest']);
+Route::post('/admin/room/update/{id}', [\App\Http\Controllers\Admin\RoomController::class, 'editRoomRequest']);
+Route::delete('/admin/room/{id}', [\App\Http\Controllers\Admin\RoomController::class, 'removeRoom']);
+Route::delete('/admin/room/list', [\App\Http\Controllers\Admin\RoomController::class, 'removeListRoom']);
+
 Route::get('/admin/equipment', [\App\Http\Controllers\Admin\EquipmentController::class, 'index'])->name('admin.equipment');
 Route::get('/admin/equipment/add', [\App\Http\Controllers\Admin\EquipmentController::class, 'addEquipment']);
 Route::get('/admin/equipment/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'infoEquipment']);
-Route::get('/admin/equipment/update/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'updateEquipment']);
+Route::get('/admin/equipment/update/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'updateEquipmentF']);
 Route::post('/admin/equipment/add', [\App\Http\Controllers\Admin\EquipmentController::class, 'storeNewEquipment']);
 Route::post('/admin/equipment/update/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'updateEquipmentData']);
 Route::delete('/admin/equipment/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'removeEquipment']);
 Route::delete('/admin/equipment/list', [\App\Http\Controllers\Admin\EquipmentController::class, 'removeListEquipment']);
+
 Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index']);
 Route::get('/admin/user/add', [\App\Http\Controllers\Admin\UserController::class, 'addUser']);
 Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
