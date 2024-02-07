@@ -61,6 +61,10 @@ Route::delete('/admin/equipment/list', [\App\Http\Controllers\Admin\EquipmentCon
 Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.user');
 Route::get('/admin/user/add', [\App\Http\Controllers\Admin\UserController::class, 'addUser']);
 Route::post('/admin/user/add', [\App\Http\Controllers\Admin\UserController::class, 'storeNewUser']);
+Route::delete('/admin/user/{id}', [\App\Http\Controllers\Admin\UserController::class, 'removeUser']);
+Route::delete('/admin/user/list', [\App\Http\Controllers\Admin\UserController::class, 'removeListUser']);
+Route::get('/admin/user/update/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updateUser']);
+Route::post('/admin/user/update/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updateUserData']);
 Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
 Route::post('/admin/report/filters', [\App\Http\Controllers\Admin\ReportController::class, 'filterReports']);
 Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
