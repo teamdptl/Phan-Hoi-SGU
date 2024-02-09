@@ -36,6 +36,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    #
+
     /**
      * The attributes that should be cast.
      *
@@ -46,41 +48,44 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function isAdmin(){
+    public function isAdmin()
+    {
         return $this->roles->contains('id', RoleEnum::ADMIN);
     }
 
-    public function isWorker(){
+    public function isWorker()
+    {
         return $this->roles->contains('id', RoleEnum::WORKER);
     }
 
-    public function isInspector(){
+    public function isInspector()
+    {
         return $this->roles->contains('id', RoleEnum::INSPECTOR);
     }
 
-    public function roles() : BelongsToMany
+    public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'user_role' , 'users_id', 'roles_id');
+        return $this->belongsToMany(Role::class, 'user_role', 'users_id', 'roles_id');
     }
 
-    public function reports() : HasMany
+    public function reports(): HasMany
     {
         return $this->hasMany(Report::class, 'users_id', 'id');
     }
 
-    public function reviews() : HasMany
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'users_id', 'id');
     }
 
     // Relation này dùng cho nhân viên kỹ thuật, lấy các assignment được giao
-    public function jobs() : HasMany
+    public function jobs(): HasMany
     {
         return $this->hasMany(Assignment::class, 'worker_id', 'id');
     }
 
     // Relation này dùng cho nhân viên kỹ thuật, lấy các phản hồi đã hoàn thành
-    public function replies() : HasMany
+    public function replies(): HasMany
     {
         return $this->hasMany(Reply::class, 'users_id', 'id');
     }

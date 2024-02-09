@@ -3,26 +3,72 @@ import {Flex, TextInput, Title, Button} from "@tremor/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/solid/index.js";
 import {Pagination} from "@mui/material";
 import { router, usePage} from "@inertiajs/react";
+import Swal from "sweetalert2";
+import Dropdown from "@/Components/Dropdown.jsx";
 
 import {useContext, useEffect, useState} from "react";
 
 import {
     BarsArrowDownIcon,
-    ChevronDownIcon,
     PencilIcon,
     PlusIcon,
     TrashIcon,
-    XMarkIcon
+    XMarkIcon,
+    ChevronUpDownIcon, ChevronUpIcon, ChevronDownIcon,
+
 } from "@heroicons/react/24/outline/index.js";
 import { Link } from '@inertiajs/react';
 
 
 import Checkbox from "@/Components/Checkbox.jsx";
 
-export default function ({users, from, to, total, lastPage, currentPage, search}) {
+export default function ({users, from, to, total, lastPage, currentPage, search, sortColumn, sortType}) {
+    const { message, error } = usePage().props.flash;
     const [inputVal, setInputVal] = useState(search);
-    
-    
+    const [checkBoxes, setCheckboxes] = useState([]);
+    const [allChecked, setAllChecked] = useState(false);
+
+    const tableHeader = [
+        { title: 'Tên người dùng', key: 'name' },
+        { title: 'Vai trò', key: 'role' },
+        { title: 'Email', key: 'email' },
+        { title: 'Status', key: 'status' },
+    ];
+
+    const changeSort = (headerKey) => {
+        if (headerKey === sortColumn){
+            if (!sortType || sortType === 'asc'){
+                router.get('', {sortColumn: headerKey, sortType: 'desc'})
+            }
+            else {
+                router.get('', {sortColumn: headerKey, sortType: 'asc'})
+            }
+        }
+        else {
+            router.get('', {sortColumn: headerKey, sortType: 'desc'})
+        }
+    }
+
+    useEffect(() => {
+        if (message){
+            Swal.fire({
+                text: message,
+                title: "Thành công",
+                icon: "success"
+            })
+        }
+    }, [message]);
+
+    useEffect(() => {
+        if (error){
+            Swal.fire({
+                text: error,
+                title: "Thất bại",
+                icon: "error"
+            })
+        }
+    }, [error]);
+
     useEffect(() => {
         // Khắc phục lỗi khi xóa trang có 1 items
         if (users.length === 0 && currentPage !== 1){
@@ -47,9 +93,63 @@ export default function ({users, from, to, total, lastPage, currentPage, search}
     }
 
     const searchData = (searchText) => {
-        router.get('', {search: searchText , page: 1});
+        router.get('', {search: searchText , page: 1, sortColumn: '', sortType: ''});
     }
     
+    const deleteConfirm = (id, header, content) => {
+        Swal.fire({
+            title: header,
+            text: content,
+            icon: "question",
+            showDenyButton: true,
+            confirmButtonText: "Có",
+            denyButtonText: "Không"
+        }).then((result) => {
+            if (result.isConfirmed){
+                router.delete(route('admin.user') + `/${id}`);
+            }
+        })
+    }
+
+    const toggleAllCheckbox = () => {
+        if (!allChecked){
+            setCheckboxes(users.map(user => user.id))
+            setAllChecked(true);
+        }
+        else {
+            setCheckboxes([])
+            setAllChecked(false);
+        }
+    }
+
+    const deleteMutipleConfirm = () => {
+        Swal.fire({
+            title: "Xóa thiết bị",
+            text: "Bạn có muốn xóa các thiết bị đã chọn ?",
+            icon: "question",
+            showDenyButton: true,
+            confirmButtonText: "Có",
+            denyButtonText: "Không"
+        }).then((result) => {
+            if (result.isConfirmed){
+                if (checkBoxes.length === 0){
+                    Swal.fire({
+                        text: "Bạn chưa chọn bất kì thiết bị nào để xóa",
+                        title: "Không thể thực hiện",
+                        icon: "warning"
+                    })
+                    return;
+                }
+                router.visit(route('admin.user') + `/list`, {
+                    data: {
+                        items: checkBoxes,
+                    },
+                    method: 'delete'
+                });
+            }
+        })
+    }
+
     return <>
         <AdminLayout>
             <Flex justifyContent={"between"} className={"mb-4"}>
@@ -83,8 +183,18 @@ export default function ({users, from, to, total, lastPage, currentPage, search}
                             <Button size={"xs"} icon={PlusIcon}>Thêm người dùng</Button>
                             </Link>
                             <div className="flex items-center space-x-1 md:space-x-2 lg:space-x-3 w-full md:w-auto">
-                                <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
-                                <Button size={"xs"} icon={BarsArrowDownIcon} variant={"secondary"}>Sắp xếp</Button>
+                            <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
+                                    </Dropdown.Trigger>
+                                    <Dropdown.Content>
+                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={deleteMutipleConfirm} preserveState>
+                                            <TrashIcon className={"h-4 w-4"}/>
+                                            <p>Xóa thiết bị đã chọn</p>
+                                        </Dropdown.Link>
+                                        </Dropdown.Content>
+                                </Dropdown>
+                                {/* <Button size={"xs"} icon={BarsArrowDownIcon} variant={"secondary"}>Sắp xếp</Button> */}
                             </div>
                         </div>
                     </div>
@@ -94,9 +204,30 @@ export default function ({users, from, to, total, lastPage, currentPage, search}
                                 className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <td className={"pl-4"}>
-                                    <Checkbox/>
+                                <Checkbox checked={allChecked} onClick={toggleAllCheckbox}/>
                                 </td>
-                                <th scope="col" className="px-4 py-4">
+                                {
+                                    tableHeader.map(item => (
+                                        <th scope="col" className="px-4 py-4 cursor-pointer"  onClick={() => changeSort(item.key)}>
+                                          <span className={"flex truncate space-x-2 items-center"}>
+                                                <p>{item.title}</p>
+                                                {item.key !== sortColumn && (
+                                                    <ChevronUpDownIcon className={"w-4 h-4"}/>
+                                                )}
+
+                                                {item.key === sortColumn && sortType === 'asc' && (
+                                                    <ChevronUpIcon className={"w-3 h-3"}/>
+                                                )}
+
+                                                {item.key === sortColumn && sortType === 'desc' && (
+                                                    <ChevronDownIcon className={"w-3 h-3"}/>
+                                                )}
+                                            </span>
+                                        </th>
+
+                                    ))
+                                }
+                                {/* <th scope="col" className="px-4 py-4">
                                     Tên người dùng
                                 </th>
                                 <th scope="col" className="px-4 py-3">
@@ -107,7 +238,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search}
                                 </th>
                                 <th scope="col" className="px-4 py-3">
                                     Tình trạng
-                                </th>
+                                </th> */}
                                 <th scope="col" className="px-4 py-3 text-center">
                                     <span className="sr-only">Hành động</span>
                                     Hành động
@@ -119,7 +250,14 @@ export default function ({users, from, to, total, lastPage, currentPage, search}
                                 users.length > 0 && users.map(user => (
                                 <tr className="border-b dark:border-gray-700 cursor-pointer">
                                 <td className={"pl-4"}>
-                                    <Checkbox/>
+                                <Checkbox checked={checkBoxes.includes(user.id)} onClick={() => {
+                                                if (checkBoxes.includes(user.id)) {
+                                                    setCheckboxes(checkBoxes.filter(item => item !== user.id));
+                                                }
+                                                else {
+                                                    setCheckboxes([...checkBoxes, user.id]);
+                                                }
+                                            }}  disabled={user.status === 0}/>
                                 </td>
                                 <th
                                     scope="row"
@@ -132,9 +270,11 @@ export default function ({users, from, to, total, lastPage, currentPage, search}
                                 {user.status ? 'Hoạt động' : 'Không hoạt động'}
                                 </td>
                                 <td className="px-4 py-3 flex items-center justify-center space-x-4">
+                                <Link href={route('admin.user')+`/update/${user.id}`}>
                                     <Button size={"xs"} icon={PencilIcon} variant={"light"}
                                             color={"yellow"}>Sửa</Button>
-                                    <Button size={"xs"} icon={TrashIcon} color={"red"} variant={"light"}>Xóa</Button>
+                                </Link>     
+                                    <Button  onClick={() => deleteConfirm(user.id, 'Xóa người dùng', 'Bạn có muốn xóa người dùng '+user.name+' ?')} size={"xs"} icon={TrashIcon} color={"red"} variant={"light"}>Xóa</Button>
                                 </td>
                             </tr>
                              ))
