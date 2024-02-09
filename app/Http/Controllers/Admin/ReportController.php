@@ -15,9 +15,9 @@ class ReportController extends Controller
         $currentDateTimeString = date('Y-m-d');
         $lastMonthDateTimeString = date('Y-m-d',strtotime($currentDateTimeString .'-1 month'));
         // dd($lastMonthDateTimeString);
-        $reports = Report::with('room', 'equipments', 'media')->where('created_at', '>=', $lastMonthDateTimeString)->get();
+        $reports = Report::with('room', 'equipments', 'media')->where('created_at', '>=', $lastMonthDateTimeString)->paginate(2);
         return Inertia::render('Admin/Report', [
-            'listReport' => $reports
+            'reports' => $reports
         ]);
     }
 
@@ -50,16 +50,18 @@ class ReportController extends Controller
             });
         }
         
+        
         if($arrange == 'increase'){
             $reports = $reports->orderBy('created_at', 'asc');
         }else{
             $reports = $reports->orderBy('created_at', 'desc');
         }
                        
-        $reports = $reports->get();
+        $reports = $reports->paginate(2);
+
         // dd($reports);
         return Inertia::render('Admin/Report', [
-          'listReport' => $reports,
+          'reports' => $reports,
         ]);
     }
 }

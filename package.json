@@ -24,7 +24,7 @@
         "@emotion/styled": "^11.11.0",
         "@heroicons/react": "^2.1.1",
         "@mui/icons-material": "^5.15.6",
-        "@mui/material": "^5.15.6",
+        "@mui/material": "^5.15.7",
         "@tremor/react": "^3.13.4",
         "file-saver": "^2.0.5",
         "lightgallery": "^2.7.2",

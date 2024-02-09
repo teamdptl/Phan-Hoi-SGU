@@ -1,7 +1,7 @@
 import AdminLayout from "@/Layouts/AdminLayout.jsx";
 import {Button, DateRangePicker, Grid, TextInput, Title, Text} from "@tremor/react";
 import ReportItem from "@/Pages/Admin/Report/ReportItem.jsx";
-import {Head, router} from "@inertiajs/react";
+import { Link, router} from "@inertiajs/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/solid/index.js";
 import {BarsArrowDownIcon, ChevronDownIcon, WrenchScrewdriverIcon} from "@heroicons/react/24/outline/index.js";
 import { vi } from "date-fns/locale";
@@ -9,6 +9,8 @@ import DropDownList from "@/Components/DropDownList";
 import { useState } from "react";
 import '../../../css/home.css'
 import { ChartBarIcon } from "@heroicons/react/24/outline";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from '@mui/material/PaginationItem';
 
 const getDateFormatted = (date, plusDay = 0, plusMonth = 0, plusYear = 0) =>{
     const fullYear = date.getFullYear() + plusYear;
@@ -16,8 +18,7 @@ const getDateFormatted = (date, plusDay = 0, plusMonth = 0, plusYear = 0) =>{
     const day = date.getDate() + plusDay;
     return fullYear + "-" + month + "-" + day
 }
-export default function ({listReport}){
-    console.log(listReport)
+export default function ({reports}){
     const firstDate = new Date('1970-01-01')
     const currentDate = new Date()
     const lastMonthDate = new Date(new Date().setMonth(new Date().getMonth() - 1))
@@ -30,7 +31,8 @@ export default function ({listReport}){
         to: currentDate,
       });
 
-
+    const [listReport, setListReport] = useState(reports.data);
+    const [page, setPage] = useState(reports.current_page)
     const [listFacility, setListFacility] = useState([
         {
             optionValue: 'all',
@@ -54,6 +56,10 @@ export default function ({listReport}){
         }
     ])
 
+    console.log("Data khi render component", reports)
+    console.log("Data list reports", listReport)
+    
+
     const handleFilter = () => {
         console.log(facility, searchText, actions, arrange)
         router.post('/admin/report/filters',{
@@ -63,6 +69,34 @@ export default function ({listReport}){
             from: getDateFormatted(datePicker.from || firstDate),
             to: getDateFormatted(datePicker.to || new Date(), 1),
             arrange: arrange,
+        },
+        {
+            onSuccess: (data) =>{
+                console.log(data)
+                setListReport(data.props.reports.data)
+                setPage(data.props.reports.current_page)
+            }
+        })
+    }
+
+    const handlePageNav = (event, value) => {
+        const url = 'http://localhost:8000/admin/report/filters?page=' + value
+        console.log("HandlePageNav", event)
+        console.log(value)
+        console.log(url)
+        setPage(value)
+        router.post(url, {
+            facility: facility,
+            searchText: searchText,
+            actions: actions,
+            from: getDateFormatted(datePicker.from || firstDate),
+            to: getDateFormatted(datePicker.to || new Date(), 1),
+            arrange: arrange,
+        }, {
+            onSuccess: (data) => {
+                console.log("On succcess page nav: ",data)
+                setListReport(data.props.reports.data)
+            }
         })
     }
     
@@ -133,12 +167,19 @@ export default function ({listReport}){
                     </div>
                     <div className={"grid grid-cols-1 gap-4 p-4 pt-2 md:grid-cols-2 lg:grid-cols-2 min-h-40"}>
                         {
-                            listReport === undefined ? 'Chưa có báo cáo nào' : 
+                            listReport === undefined ? 'Lỗi! Vui lòng refresh lại trang!' : (listReport.length === 0 ? 'Chưa có báo cáo nào!' : 
                             listReport.map((item, index) =>{
                                 return <ReportItem report={item}/>
-                            })
+                            }))
                         }
                     </div>
+                </div>
+                <div class="flex justify-center items-center mt-2">
+                    <Pagination page={page} 
+                                count={reports.last_page} 
+                                variant="outlined" 
+                                shape="rounded"
+                                onChange={handlePageNav}/>
                 </div>
             </div>
         </AdminLayout>
