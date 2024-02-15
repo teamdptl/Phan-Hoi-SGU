@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.jsx";
 import { useForm } from '@inertiajs/react'
 import CameraComponent from "@/Components/CameraComponent";
 import ListImgHorizontal from "@/Components/ListImgHorizontal";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import DropDownListDevice from "@/Components/DropDownListDevice";
 import { TextInput } from "@tremor/react";
 import { Textarea } from "@tremor/react";
@@ -11,16 +11,25 @@ import ReCAPTCHA from "react-google-recaptcha";
 import InputError from '@/Components/InputError';
 import { router, usePage} from "@inertiajs/react";
 import Swal from "sweetalert2";
+import MyCaptcha from "@/Components/MyCaptcha";
 
 
 
-export default function ReportAction({userEquimentIds, roomName}){
-    const { message } = usePage().props.flash;
+export default function ReportAction({userEquimentIds, roomName, roomId}){
+    const { message, error } = usePage().props.flash;
+    //Captcha
+    const captchaRef = useRef(null)
+    const [token, setToken] = useState('')//Lưu token được trả về từ google recaptcha
+    const [disable, setDisable] = useState(true) //Dùng để cho phép người dùng có thể click vào button gửi đánh giá
 
 
-    useEffect(()=>{
-        console.log(userEquimentIds);
-    },[userEquimentIds])
+    // useEffect(()=>{
+    //     console.log(userEquimentIds);
+    // },[userEquimentIds])
+
+    // useEffect(()=>{
+    //     console.log(roomId);
+    // },[roomId])
 
 
     // Mảng chứa hình
@@ -33,7 +42,7 @@ export default function ReportAction({userEquimentIds, roomName}){
         idEquipment: selectedValue,
         other: null,
         description: null,
-        rooms_id: '1',
+        roomId: roomId,
     })
 
     useEffect(()=>{
@@ -58,15 +67,15 @@ export default function ReportAction({userEquimentIds, roomName}){
         }
     }, [message]);
 
-    // useEffect(() => {
-    //     if (error){
-    //         Swal.fire({
-    //             text: error,
-    //             title: "Thất bại",
-    //             icon: "error"
-    //         })
-    //     }
-    // }, [error]);
+    useEffect(() => {
+        if (error){
+            Swal.fire({
+                text: error,
+                title: "Thất bại",
+                icon: "error"
+            })
+        }
+    }, [error]);
 
     function submit(e) {
         e.preventDefault()
@@ -83,13 +92,15 @@ export default function ReportAction({userEquimentIds, roomName}){
     }, [selectedValue]);
     
 
-        // useEffect(()=>{
-        //     console.log("Giá trị của images "+data.photo);
-        //     console.log("Giá trị của idEquipment: "+data.idEquipment);
-        //     console.log("Giá trị của selectDevice other: "+data.other);
-        //     console.log("Giá trị của des "+data.description);
+        useEffect(()=>{
+            console.log("Giá trị của images "+data.photo);
+            console.log("Giá trị của idEquipment: "+data.idEquipment);
+            console.log("Giá trị của selectDevice other: "+data.other);
+            console.log("Giá trị của des "+data.description);
+            console.log("Giá trị của RoomID "+data.roomId);
 
-        // },[data.idEquipment, data.other, data.photo, data.description, selectedValue]);
+
+        },[data.idEquipment, data.other, data.photo, data.description, selectedValue]);
 
     return <>
         <AppLayout>
@@ -155,10 +166,8 @@ export default function ReportAction({userEquimentIds, roomName}){
                         </div>
                         <div className="space-y-2 mx-5 mt-5">
                             <Text color="black" className={"font-medium text-lg text-[#4E4E51]"}>Xác nhận bạn không phải robot</Text>
-                            <ReCAPTCHA
-                                sitekey="6LcnJ1wpAAAAAObdrHtAzSB_wd-nrT8YhflyW2nu"
-                                onChange={onChange}
-                            />
+                            {/* <MyCaptcha captchaRef={captchaRef} setToken={setToken} setDisableButton={setDisable} /> */}
+
                         </div>
                         <Flex  justifyContent="center" className="space-x-8 mt-6 mb-8" >
                             <button type="submit"   className={"bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"}>Gửi báo cáo</button>

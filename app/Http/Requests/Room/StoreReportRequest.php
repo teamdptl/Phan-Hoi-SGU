@@ -29,6 +29,7 @@ class StoreReportRequest extends FormRequest
             'photo' => 'required|array|min:1|max:6',
             'photo.*' => 'required|image|max:30000',
             'description' => 'required|max:2000',
+            'roomId' => 'required'
         ];
     }
 

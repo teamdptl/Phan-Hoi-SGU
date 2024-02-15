@@ -26,16 +26,24 @@ class SendReportController extends Controller
         return Inertia::render('Guest/ReportAction', [
             "rooms" => [],
             'userEquimentIds' => $userEquimentIds,
-            "roomName" => $room->name
+            "roomName" => $room->name,
+            "roomId" => $room->id,
         ]);
     }
     public function store(StoreReportRequest $request)
     {
         $validated = $request->validated();
+        $idEquipment = $validated['idEquipment'];
+        $room = Room::find($validated['roomId']);
+        $userEquimentIds = $room->equipments()->pluck('id')->toArray();
 
-
+        // Kiểm tra xem idEquipment có trong danh sách userEquimentIds không
+        if (!in_array($idEquipment, $userEquimentIds)) {
+            return back()->with('error', 'Thiết bị không thuộc phòng, vui lòng chọn lại.');
+        }
 
         $report = Report::create($validated);
+        $report->equipments()->attach($idEquipment);
 
         $files = $request->file()['photo'];
         $paths = [];
