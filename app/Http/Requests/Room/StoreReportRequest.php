@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Room;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ValidateOtherSendReport;
+
 
 class StoreReportRequest extends FormRequest
 {
@@ -22,8 +24,8 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'idEquipment' =>  'bail|required|numeric',
-            'other' => 'max:100',
+            'idEquipment' => 'bail|required|numeric',
+            'other' => ['max:100', new ValidateOtherSendReport],
             'photo' => 'required|array|min:1|max:6',
             'photo.*' => 'required|image|max:30000',
             'description' => 'required|max:2000',
@@ -31,13 +33,10 @@ class StoreReportRequest extends FormRequest
     }
 
     public function messages(): array
-    {   
+    {
         return [
             'idEquipment' => [
                 'required' => 'Bạn chưa chọn thiết bị cần sửa',
-            ],
-            'other' =>  [
-                'max:100' => 'Độ dài thiết bị vượt quá 100 kí tự' 
             ],
             'photo' => [
                 'required' => 'Vui lòng chọn file hình ảnh gửi báo cáo',
@@ -50,7 +49,7 @@ class StoreReportRequest extends FormRequest
             'description' => [
                 'required' => 'Vui lòng nhập mô tả báo cáo',
                 'max:2000' => 'Độ dài tối đa 2000 kí tự'
-            ]    
+            ]
         ];
 
     }

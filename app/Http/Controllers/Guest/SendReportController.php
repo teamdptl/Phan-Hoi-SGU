@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Guest;
+
 use App\Http\Controllers\Controller;
 use App\Models\Report;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\Room\StoreReportRequest;
@@ -13,16 +15,25 @@ use Illuminate\Support\Facades\Storage;
 
 class SendReportController extends Controller
 {
-    public function index(){
+    public function index(Request $request)
+    {
+        $roomId = $request->query('roomId');
         // Lấy danh sách phòng bằng laravel và trả về
+        $room = Room::find($roomId);
+
+        $userEquimentIds = $room->equipments()->select(['id', 'name'])->get()->toArray();
 
         return Inertia::render('Guest/ReportAction', [
             "rooms" => [],
+            'userEquimentIds' => $userEquimentIds,
+            "roomName" => $room->name
         ]);
     }
-
-    public function store(StoreReportRequest $request){
+    public function store(StoreReportRequest $request)
+    {
         $validated = $request->validated();
+
+
 
         $report = Report::create($validated);
 
@@ -39,11 +50,11 @@ class SendReportController extends Controller
             ];
             $i++;
         }
-        
-        
+
+
         $report->media()->createMany($paths);
-        
-        return "Success";
+
+        return back()->with('message', 'Đã được thêm vào cơ sở dữ liệu của trường');
     }
 
     public function makeDir()

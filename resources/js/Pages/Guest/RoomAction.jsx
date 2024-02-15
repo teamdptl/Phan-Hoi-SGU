@@ -2,10 +2,15 @@ import AppLayout from "@/Layouts/AppLayout.jsx";
 import {Badge, Button, Card, Divider, Flex, Text, Title} from "@tremor/react";
 import {Head, Link, usePage} from "@inertiajs/react";
 import {facilityToString} from "@/Utils/facility.js";
+import { useEffect } from "react";
 
-export default function RoomAction({ roomName, roomFacility, id}) {
-    const { auth } = usePage().props
-    console.log(auth.user);
+export default function RoomAction({ roomName, roomFacility, id }) {
+    const { auth } = usePage().props;
+    const { roomId } = usePage().props;
+    // console.log(auth.user);
+
+    // useEffect(() => {console.log(roomId)}, [roomId]);
+
     return <>
         <AppLayout>
             <Head title={"Phản hồi cho "+roomName}/>
@@ -21,7 +26,7 @@ export default function RoomAction({ roomName, roomFacility, id}) {
                     <Title className={"my-2"}>{roomName}</Title>
                     <Badge>{facilityToString(roomFacility)}</Badge>
                     <Flex justifyContent={"center"} className={"space-x-8 mt-8"} >
-                        <Link href={route('room.report') + `?id=${id}`} method="get">
+                    <Link href={route('room.report') + `?roomId=${roomId}`} method="get">
                             <Card className={"w-32 h-32 bg-[#EFF7FE] ring-0 p-4"}>
                                 <div className={"flex justify-center items-center flex-col"}>
                                     <img src={"/icons/warning.png"} alt={"Warning icon"} className={"w-16 h-16 object-cover"}/>
@@ -29,7 +34,7 @@ export default function RoomAction({ roomName, roomFacility, id}) {
                                 </div>
                             </Card>
                         </Link>
-                        <Link href={route('room.review') + `?id=${id}`}>
+                        <Link href={route('room.review') + `?\id=${roomId}`}>
                             <Card className={"w-32 h-32 bg-[#EFF7FE] ring-0 p-4"}>
                                 <div className={"flex justify-center items-center flex-col"}>
                                     <img src={"/icons/rating.png"} alt={"Rating icon"} className={"w-16 h-16 object-cover"}/>

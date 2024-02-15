@@ -31,7 +31,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/phong', [\App\Http\Controllers\Guest\IndexController::class, 'index'])->name('room.select');
 // Không tìm thấy phòng có id
-Route::get('/loi-phong', function (){
+Route::get('/loi-phong', function () {
     return Inertia::render('Guest/RoomError');
 })->name('room.error');
 

@@ -9,24 +9,65 @@ import { TextInput } from "@tremor/react";
 import { Textarea } from "@tremor/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import InputError from '@/Components/InputError';
+import { router, usePage} from "@inertiajs/react";
+import Swal from "sweetalert2";
 
 
 
-export default function ReportAction(){
+export default function ReportAction({userEquimentIds, roomName}){
+    const { message } = usePage().props.flash;
+
+
+    useEffect(()=>{
+        console.log(userEquimentIds);
+    },[userEquimentIds])
+
 
     // Mảng chứa hình
     const [capturedImages, setCapturedImages] = useState([]);
 
     const [selectedValue, setSelectedValue] = useState(""); //Bật tắt input khác
    
-    const { data, setData, post, progress, errors, processing } = useForm({
+    const { data, setData, post, progress, processing, errors } = useForm({
         photo: null,
         idEquipment: selectedValue,
         other: null,
         description: null,
         rooms_id: '1',
     })
-    
+
+    useEffect(()=>{
+        console.log(errors);
+    },[errors])
+
+    useEffect(()=>{
+        console.log(message);
+        setData({ ...data, errors: {} });
+    },[message])
+
+    useEffect(() => {
+        if (message){
+            Swal.fire({
+                text: message,
+                title: "Thành công",
+                icon: "success"
+            }).then(() => {
+                // Tải lại trang web sau khi người dùng nhấp vào nút "OK"
+                window.location.reload();
+              });
+        }
+    }, [message]);
+
+    // useEffect(() => {
+    //     if (error){
+    //         Swal.fire({
+    //             text: error,
+    //             title: "Thất bại",
+    //             icon: "error"
+    //         })
+    //     }
+    // }, [error]);
+
     function submit(e) {
         e.preventDefault()
         post('/gui-bao-hong', data);
@@ -41,17 +82,14 @@ export default function ReportAction(){
         setData(prevData => ({ ...prevData, idEquipment: selectedValue }));
     }, [selectedValue]);
     
-    // Đảm bảo rằng data.idEquipment được cập nhật khi selectedValue thay đổi
-    useEffect(() => {
-    }, [data.idEquipment]);
 
-        useEffect(()=>{
-            console.log("Giá trị của images "+data.photo);
-            console.log("Giá trị của idEquipment "+data.idEquipment);
-            console.log("Giá trị của selectDevice other "+data.other);
-            console.log("Giá trị của des "+data.description);
+        // useEffect(()=>{
+        //     console.log("Giá trị của images "+data.photo);
+        //     console.log("Giá trị của idEquipment: "+data.idEquipment);
+        //     console.log("Giá trị của selectDevice other: "+data.other);
+        //     console.log("Giá trị của des "+data.description);
 
-        },[data.idEquipment, data.other, data.photo, data.description, selectedValue]);
+        // },[data.idEquipment, data.other, data.photo, data.description, selectedValue]);
 
     return <>
         <AppLayout>
@@ -59,7 +97,7 @@ export default function ReportAction(){
                 <div className=" mx-auto  relative" >
                     <div className="h-28 bg-[url('/img/classroom.jpg')] from-cyan-500 to-blue-500 w-full  mx-auto bg-center	">
                         <Flex className="h-full" flexDirection="col" justifyContent="center" alignItems="center" >
-                            <Text color="white" className={"font-medium text-xl"}>Phòng C.A401</Text>
+                            <Text color="white" className={"font-medium text-xl"}>Phòng {roomName}</Text>
                             <hr className="w-36 h-0.5 mt-2 bg-white border-none"/>
                         </Flex>
                     </div>
@@ -89,12 +127,12 @@ export default function ReportAction(){
                         )}
                         <div className="space-y-2 mx-5 mt-5">
                             <Text color="black" className={"font-medium text-lg text-[#4E4E51]" }>Chọn thiết bị</Text>
-                            <DropDownListDevice  setData={setData} setSelectedValue={setSelectedValue}/>
+                            <DropDownListDevice selectedValue={selectedValue} userEquimentIds={userEquimentIds}  setData={setData} setSelectedValue={setSelectedValue}/>
                             <InputError message={errors.idEquipment} className="mt-2"/>
 
                         </div>
                      
-                            {selectedValue == "4" && (
+                            {selectedValue == "-1" && (
                                 <div className="space-y-2 mx-5 mt-5">
                                 <Text color="black" className={"font-medium text-lg text-[#4E4E51]"}>Thiết bị khác</Text>
                                 <TextInput 
@@ -103,7 +141,7 @@ export default function ReportAction(){
                                 }}
                                 />
                                <InputError message={errors.other} className="mt-2"/>
-
+                                
                                 </div>
                             )}
                         <div className="space-y-2 mx-5 mt-5">
