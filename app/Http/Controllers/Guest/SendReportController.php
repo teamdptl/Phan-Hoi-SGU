@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use App\Http\Requests\Room\StoreReportRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 
 
@@ -33,36 +34,43 @@ class SendReportController extends Controller
     public function store(StoreReportRequest $request)
     {
         $validated = $request->validated();
-        $idEquipment = $validated['idEquipment'];
-        $room = Room::find($validated['roomId']);
-        $userEquimentIds = $room->equipments()->pluck('id')->toArray();
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=6Ld17l0pAAAAAJNhNbKjDPx15ze-xd-_LxqgkI5O&response=' . $request->input('token');
+        $response = Http::post($url);
+        $success = json_decode($response)->success;
+        if ($success) {
+            $idEquipment = $validated['idEquipment'];
+            $room = Room::find($validated['roomId']);
+            $userEquimentIds = $room->equipments()->pluck('id')->toArray();
 
-        // Kiểm tra xem idEquipment có trong danh sách userEquimentIds không
-        if (!in_array($idEquipment, $userEquimentIds)) {
-            return back()->with('error', 'Thiết bị không thuộc phòng, vui lòng chọn lại.');
+            // Kiểm tra xem idEquipment có trong danh sách userEquimentIds không
+            if (!in_array($idEquipment, $userEquimentIds)) {
+                return back()->with('error', 'Thiết bị không thuộc phòng, vui lòng chọn lại.');
+            }
+
+            $report = Report::create($validated);
+            $report->equipments()->attach($idEquipment);
+
+            $files = $request->file()['photo'];
+            $paths = [];
+            $i = 1;
+            $dir = $this->makeDir();
+            foreach ($files as $file) {
+                $fileName = $file->storeAs($dir, "img$i" . '_' . $report->id . '_' . sha1(time()) . '.' . $file->extension());
+                $paths[] = [
+                    'path' => $fileName,
+                    'is_local' => true,
+                    'reports_id' => $report->id // Gán ID của báo cáo
+                ];
+                $i++;
+            }
+
+
+            $report->media()->createMany($paths);
+
+            return back()->with('message', 'Đã được thêm vào cơ sở dữ liệu của trường');
+        } else {
+            return back()->with('error', 'Đã xảy ra lỗi xác thực');
         }
-
-        $report = Report::create($validated);
-        $report->equipments()->attach($idEquipment);
-
-        $files = $request->file()['photo'];
-        $paths = [];
-        $i = 1;
-        $dir = $this->makeDir();
-        foreach ($files as $file) {
-            $fileName = $file->storeAs($dir, "img$i" . '_' . $report->id . '_' . sha1(time()) . '.' . $file->extension());
-            $paths[] = [
-                'path' => $fileName,
-                'is_local' => true,
-                'reports_id' => $report->id // Gán ID của báo cáo
-            ];
-            $i++;
-        }
-
-
-        $report->media()->createMany($paths);
-
-        return back()->with('message', 'Đã được thêm vào cơ sở dữ liệu của trường');
     }
 
     public function makeDir()

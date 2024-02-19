@@ -29,7 +29,8 @@ class StoreReportRequest extends FormRequest
             'photo' => 'required|array|min:1|max:6',
             'photo.*' => 'required|image|max:30000',
             'description' => 'required|max:2000',
-            'roomId' => 'required'
+            'roomId' => 'required',
+            'token' => 'required|string',
         ];
     }
 
@@ -50,7 +51,10 @@ class StoreReportRequest extends FormRequest
             'description' => [
                 'required' => 'Vui lòng nhập mô tả báo cáo',
                 'max:2000' => 'Độ dài tối đa 2000 kí tự'
-            ]
+            ],
+            'token' => [
+                'required' => 'Hãy xác thực bạn không phải robot',
+            ]   
         ];
 
     }

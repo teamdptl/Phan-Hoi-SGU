@@ -19,7 +19,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
     const { message, error } = usePage().props.flash;
     //Captcha
     const captchaRef = useRef(null)
-    const [token, setToken] = useState('')//Lưu token được trả về từ google recaptcha
+    const [token, setToken] = useState(null)//Lưu token được trả về từ google recaptcha
     const [disable, setDisable] = useState(true) //Dùng để cho phép người dùng có thể click vào button gửi đánh giá
 
 
@@ -30,7 +30,6 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
     // useEffect(()=>{
     //     console.log(roomId);
     // },[roomId])
-
 
     // Mảng chứa hình
     const [capturedImages, setCapturedImages] = useState([]);
@@ -43,6 +42,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
         other: null,
         description: null,
         roomId: roomId,
+        token: token
     })
 
     useEffect(()=>{
@@ -90,7 +90,13 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
         // Gán giá trị của selectedValue vào data.idEquipment
         setData(prevData => ({ ...prevData, idEquipment: selectedValue }));
     }, [selectedValue]);
-    
+
+    useEffect(() => {
+        setData(prevData => ({
+          ...prevData,
+          token: token
+        }));
+      }, [token]);
 
         useEffect(()=>{
             console.log("Giá trị của images "+data.photo);
@@ -98,9 +104,9 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
             console.log("Giá trị của selectDevice other: "+data.other);
             console.log("Giá trị của des "+data.description);
             console.log("Giá trị của RoomID "+data.roomId);
+            console.log("Giá trị của token "+data.token);
 
-
-        },[data.idEquipment, data.other, data.photo, data.description, selectedValue]);
+        },[data.idEquipment, data.other, data.photo, data.description, selectedValue, data.token]);
 
     return <>
         <AppLayout>
@@ -166,11 +172,11 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
                         </div>
                         <div className="space-y-2 mx-5 mt-5">
                             <Text color="black" className={"font-medium text-lg text-[#4E4E51]"}>Xác nhận bạn không phải robot</Text>
-                            {/* <MyCaptcha captchaRef={captchaRef} setToken={setToken} setDisableButton={setDisable} /> */}
+                            <MyCaptcha captchaRef={captchaRef} setToken={setToken} setDisableButton={setDisable} />
 
                         </div>
                         <Flex  justifyContent="center" className="space-x-8 mt-6 mb-8" >
-                            <button type="submit"   className={"bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"}>Gửi báo cáo</button>
+                            <button type="submit" disabled={disable}  className={"bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"}>Gửi báo cáo</button>
                         </Flex>
                     </form>
                 </div>
