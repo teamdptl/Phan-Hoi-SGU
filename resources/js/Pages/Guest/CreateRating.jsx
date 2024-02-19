@@ -134,8 +134,8 @@ export default function CreateRating(){
     return (
         <>
         <AppLayout>
-            <div class="md:flex xl:px-32 md:px-8 md:py-5">
-                <div class="relative md:w-7/12 lg:w-2/3">
+            <div class="md:flex xl:px-32 md:px-8 md:py-5 shadow-blue-800 shadow-lg">
+                <div class="relative md:w-7/12 lg:w-2/3 ">
                     <img class="object-cover h-full" src="/img/classroom.jpg"></img>
                     <div class="absolute top-0 left-0 bottom-0 right-0 justify-center items-center flex">
                         <div class="text-white font-bold text-2xl w-fit">

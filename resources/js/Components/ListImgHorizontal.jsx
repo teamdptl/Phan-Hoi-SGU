@@ -46,7 +46,7 @@ export default function ListImgHorizontal(props) {
   
 
   return (
-    <div className="flex mx-3 overflow-x-auto whitespace-nowrap">
+    <div className="flex mx-3 overflow-x-auto whitespace-nowrap lg:max-w-56">
       {props.capturedImages.map((imageUri, index) => (
         <div key={index} className="relative inline-block mx-1">
           <img
