@@ -264,7 +264,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                                     className="truncate px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {user.name}
                                 </th>
-                                <td className="px-4 py-3 truncate">{user.roles[0].name}</td>
+                                <td className="px-4 py-3 truncate">{user.roles.length > 0 ? user.roles[0].name : 'No Role'}</td>
                                 <td className="px-4 py-3 truncate">{user.email}</td>
                                 <td className="px-4 py-3 truncate">
                                 {user.status ? 'Hoạt động' : 'Không hoạt động'}
