@@ -171,9 +171,9 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
                                 <td className={"px-4"}>
                                     <Checkbox checked={allChecked} onClick={toggleAllCheckbox}/>
                                 </td>
-                                <th scope="col" className="px-4 py-4 text-center lg:text-left cursor-pointer select-none w-8">
-                                    Hình
-                                </th>
+                                {/*<th scope="col" className="px-4 py-4 text-center lg:text-left cursor-pointer select-none w-8">*/}
+                                {/*    Hình*/}
+                                {/*</th>*/}
                                 <th scope="col" className="px-4 py-3 cursor-pointer select-none">
                                     Tên
                                 </th>
@@ -203,9 +203,9 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
                                                 }
                                             }}/>
                                         </td>
-                                        <td className={"flex items-center justify-center py-2 w-12"}>
-                                            <img className={"w-8 h-8"} src={equip.icon}/>
-                                        </td>
+                                        {/*<td className={"flex items-center justify-center py-2 w-12"}>*/}
+                                        {/*    <img className={"w-8 h-8"} src={equip.icon}/>*/}
+                                        {/*</td>*/}
                                         <td className="px-4 py-3 truncate">{equip.name}</td>
                                         <td className="px-4 py-3 text-ellipsis">{equip.description}</td>
                                         <td className="px-4 py-3 truncate">
@@ -259,7 +259,7 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
                                             {total} thiết bị
                                         </span>
                                     </span>
-                        {lastPage > 1 && (  
+                        {lastPage > 1 && (
                             <div className="inline-flex items-stretch -space-x-px">
                                 <Pagination onChange={(e, num) => {
                                     changePage(num)

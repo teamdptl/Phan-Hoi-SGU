@@ -72,17 +72,17 @@ class DatabaseSeeder extends Seeder
             'icon' => 'default_equipment.png',
         ]);
 
-        for ($i = 0; $i < 10; $i++) { 
-            User::create([
-                'name' => Str::random(10),
-                'email' => Str::random(10) . '@example.com',
-                'email_verified_at' => now(),
-                'password' => bcrypt('password'),
-                'status' => rand(0, 1),
-                'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+//        for ($i = 0; $i < 10; $i++) {
+//            User::create([
+//                'name' => Str::random(10),
+//                'email' => Str::random(10) . '@example.com',
+//                'email_verified_at' => now(),
+//                'password' => bcrypt('password'),
+//                'status' => rand(0, 1),
+//                'remember_token' => Str::random(10),
+//                'created_at' => now(),
+//                'updated_at' => now(),
+//            ]);
+//        }
     }
 }

@@ -16,7 +16,7 @@ export default function RoomAction({ roomName, roomFacility, id }) {
             <Head title={"Phản hồi cho "+roomName}/>
             <div className={"min-h-64"}>
                 <div className={"max-w-6xl mx-auto my-4 relative"}>
-                    <img src={"/img/banner.jpg"} className={"h-48 md:h-64 lg:h-96 w-11/12 mx-auto object-cover object-top rounded-lg"}
+                    <img src={"/img/banner.jpg"} className={"brightness-90 h-48 md:h-64 lg:h-96 w-11/12 mx-auto object-cover object-top rounded-lg"}
                          alt={"Hình ảnh trường"} />
                 </div>
                 <Text className={"text-center text-xl text-blue-500 font-medium"}>Phản hồi cơ sở vật chất</Text>
