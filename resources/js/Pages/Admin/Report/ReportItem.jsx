@@ -1,5 +1,6 @@
 import {Badge, Card, Text} from "@tremor/react";
 import {MapPinIcon} from "@heroicons/react/16/solid/index.js";
+import Checkbox from "@/Components/Checkbox";
 
 const dateCreatedFormat = (date)=>{
     return date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
@@ -53,17 +54,17 @@ export default function ({report}){
             <div className={"flex-none"}>
                 <img className={"object-cover w-28 h-28 rounded"} alt={"Ảnh báo cáo"} src={report.media[0] !== undefined ? ("/storage/" + report.media[0].path ) : "https://diennuocnhatlong.vn/uploads/nguyen-nhan-quat-tran-hu.jpg"}/>
             </div>
-            <div className={"flex flex-col justify-center w-full"}>
+            <div className={"flex flex-col justify-center w-full h-fit"}>
                 <div className={"flex justify-between"}>
-                    <p className={"font-medium text-gray-600"}>{getNameEquipString()}</p>
+                    <p className={"font-medium text-gray-600 line-clamp-1"}>{getNameEquipString()}</p>
                     <Badge className={"text-sm h-fit pt-0"}>{report.status || 'unkown'}</Badge>
                 </div>
                 <p className={"text-sm text-gray-400"}>Tạo lúc {dateCreatedFormat(createAt !== undefined ? new Date(createAt) : new Date())}</p>
-                <p className={"border-l-2 border-l-gray-500 text-sm pl-2 text-gray-700 mt-2"}>{report.description || 'Mô tả chi tiết'}</p>
-                <p className={"mt-2 text-sm inline-flex items-center"}>
+                <p className={"border-l-2 border-l-gray-500 text-sm pl-2 text-gray-700 mt-2 line-clamp-1"}>{report.description || 'Mô tả chi tiết'}</p>
+                <div className={"mt-2 text-sm inline-flex justify-start items-center"}>
                     <MapPinIcon className={"h-4 w-4 text-gray-500 mr-2"}/>
-                    {getRoomNameString()}
-                </p>
+                    <p class="w-full line-clamp-1">{getRoomNameString()}</p>
+                </div>
             </div>
         </Card>
     </>

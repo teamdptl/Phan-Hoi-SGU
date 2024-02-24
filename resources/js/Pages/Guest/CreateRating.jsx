@@ -12,7 +12,7 @@ import AlertModal from "@/Components/AlertModal";
 
 
 const labels = {
-    1: 'Rất kém+',
+    1: 'Rất kém',
     2: 'Tệ',
     3: 'Bình thường',
     4: 'Tốt',
@@ -43,7 +43,7 @@ export default function CreateRating(){
     //Xử lý và gửi dữ liệu xuống server
     function submitRating() {
         
-        const url = '/guest/rating'
+        const url = '/gui-danh-gia'
         router.post(url, {'token': token, 'rating': value, 'y_kien': text, 'rooms_id': 2}, {
             onSuccess: (data) => {
                 console.log(data)
@@ -134,7 +134,7 @@ export default function CreateRating(){
     return (
         <>
         <AppLayout>
-            <div class="md:flex xl:px-32 md:px-8 md:py-5">
+            <div class="md:flex xl:px-32 md:px-8 md:py-5 shadow-md">
                 <div class="relative md:w-7/12 lg:w-2/3">
                     <img class="object-cover h-full" src="/img/classroom.jpg"></img>
                     <div class="absolute top-0 left-0 bottom-0 right-0 justify-center items-center flex">
@@ -168,10 +168,10 @@ export default function CreateRating(){
                     </div>
                     <div class="w-full items-start mt-5">
                         <p>Mô tả chi tiết</p>
-                        <Textarea value={text} onChange={(e) => setText(e.target.value)} class="rounded-xl w-full" rows={3}></Textarea>
+                        <Textarea placeholder="Nhập mô tả..." value={text} onChange={(e) => setText(e.target.value)} rows={3}></Textarea>
                     </div>
                     <div class="w-full items-start mt-5 mb-10">
-                        <p class="italic font-sans text-sm w-fit">Xác nhận bạn không phải robot*</p>
+                        {/* <p class="italic font-sans text-sm w-fit">Xác nhận bạn không phải robot*</p> */}
                         <MyCaptcha captchaRef={captchaRef} setToken={setToken} setDisableButton={setDisable} />
                     </div>
 
