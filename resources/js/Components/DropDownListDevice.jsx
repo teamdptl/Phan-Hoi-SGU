@@ -4,32 +4,28 @@ import { CalculatorIcon, EllipsisHorizontalCircleIcon } from "@heroicons/react/2
 
 
 export default function DropDownListDevice(props) {
+    const userEquimentIdsWithOther = [...props.userEquimentIds, { id: '-1', name: 'Khác' }];
 
-    const handleDeviceChange = (value) => {
-      props.setSelectedValue(value);
-      
-      if (value != 4) {
 
-        props.setData('selectDeviceOther', null);
+  const handleDeviceChange = (value) => {
+      if (value !== "-1") {
+          props.setSelectedValue(value);
+          props.setData('other', null);
+      } else {
+          props.setSelectedValue(value);
+          // props.setData('idEquipment', null);
       }
-    };
+  };
 
-    return (
+  return (
       <>
-        <Select onValueChange={handleDeviceChange}>
-          <SelectItem value="1" >
-            Kilometers
-          </SelectItem>
-          <SelectItem value="2" >
-            Meters
-          </SelectItem>
-          <SelectItem value="3" >
-            Miles
-          </SelectItem>
-          <SelectItem value="4" >
-            Khác
-          </SelectItem>
-        </Select>
+          <Select value={props.selectedValue}  onChange={handleDeviceChange} placeholder={"Chọn thiết bị"}>
+              {userEquimentIdsWithOther.map(item => (
+                  <SelectItem key={item.id}  value={item.id} >
+                      {item.name}
+                  </SelectItem>
+              ))}
+          </Select>
       </>
-    );
+  );
 }

@@ -3,30 +3,80 @@ import AppLayout from "@/Layouts/AppLayout.jsx";
 import { useForm } from '@inertiajs/react'
 import CameraComponent from "@/Components/CameraComponent";
 import ListImgHorizontal from "@/Components/ListImgHorizontal";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import DropDownListDevice from "@/Components/DropDownListDevice";
 import { TextInput } from "@tremor/react";
 import { Textarea } from "@tremor/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import InputError from '@/Components/InputError';
+import { router, usePage} from "@inertiajs/react";
+import Swal from "sweetalert2";
+import MyCaptcha from "@/Components/MyCaptcha";
 
 
 
-export default function ReportAction(){
+export default function ReportAction({userEquimentIds, roomName, roomId}){
+    const { message, error } = usePage().props.flash;
+    //Captcha
+    const captchaRef = useRef(null)
+    const [token, setToken] = useState(null)//Lưu token được trả về từ google recaptcha
+    const [disable, setDisable] = useState(true) //Dùng để cho phép người dùng có thể click vào button gửi đánh giá
+
+
+    // useEffect(()=>{
+    //     console.log(userEquimentIds);
+    // },[userEquimentIds])
+
+    // useEffect(()=>{
+    //     console.log(roomId);
+    // },[roomId])
 
     // Mảng chứa hình
     const [capturedImages, setCapturedImages] = useState([]);
 
     const [selectedValue, setSelectedValue] = useState(""); //Bật tắt input khác
    
-    const { data, setData, post, progress, errors, processing } = useForm({
+    const { data, setData, post, progress, processing, errors } = useForm({
         photo: null,
         idEquipment: selectedValue,
         other: null,
         description: null,
-        rooms_id: '1',
+        roomId: roomId,
+        token: token
     })
-    
+
+    useEffect(()=>{
+        console.log(errors);
+    },[errors])
+
+    useEffect(()=>{
+        console.log(message);
+        setData({ ...data, errors: {} });
+    },[message])
+
+    useEffect(() => {
+        if (message){
+            Swal.fire({
+                text: message,
+                title: "Thành công",
+                icon: "success"
+            }).then(() => {
+                // Tải lại trang web sau khi người dùng nhấp vào nút "OK"
+                window.location.reload();
+              });
+        }
+    }, [message]);
+
+    useEffect(() => {
+        if (error){
+            Swal.fire({
+                text: error,
+                title: "Thất bại",
+                icon: "error"
+            })
+        }
+    }, [error]);
+
     function submit(e) {
         e.preventDefault()
         post('/gui-bao-hong', data);
@@ -40,30 +90,44 @@ export default function ReportAction(){
         // Gán giá trị của selectedValue vào data.idEquipment
         setData(prevData => ({ ...prevData, idEquipment: selectedValue }));
     }, [selectedValue]);
-    
-    // Đảm bảo rằng data.idEquipment được cập nhật khi selectedValue thay đổi
+
     useEffect(() => {
-    }, [data.idEquipment]);
+        setData(prevData => ({
+          ...prevData,
+          token: token
+        }));
+      }, [token]);
 
         useEffect(()=>{
             console.log("Giá trị của images "+data.photo);
-            console.log("Giá trị của idEquipment "+data.idEquipment);
-            console.log("Giá trị của selectDevice other "+data.other);
+            console.log("Giá trị của idEquipment: "+data.idEquipment);
+            console.log("Giá trị của selectDevice other: "+data.other);
             console.log("Giá trị của des "+data.description);
+            console.log("Giá trị của RoomID "+data.roomId);
+            console.log("Giá trị của token "+data.token);
 
-        },[data.idEquipment, data.other, data.photo, data.description, selectedValue]);
+        },[data.idEquipment, data.other, data.photo, data.description, selectedValue, data.token]);
 
     return <>
         <AppLayout>
             <div className="min-h-64">
-                <div className=" mx-auto  relative" >
-                    <div className="h-28 bg-[url('/img/classroom.jpg')] from-cyan-500 to-blue-500 w-full  mx-auto bg-center	">
-                        <Flex className="h-full" flexDirection="col" justifyContent="center" alignItems="center" >
-                            <Text color="white" className={"font-medium text-xl"}>Phòng C.A401</Text>
-                            <hr className="w-36 h-0.5 mt-2 bg-white border-none"/>
-                        </Flex>
+                <div className="md:flex xl:px-20 md:px-8 md:py-5" >
+                <div className="relative md:w-7/12 lg:w-2/3">
+
+                <img className="object-cover h-full brightness-75" src="/img/classroom.jpg"></img>
+                    <div class="absolute top-0 left-0 bottom-0 right-0 justify-center items-center flex">
+                        <div class="text-white font-bold text-2xl w-fit">
+                            <p>Phòng {roomName}</p>
+                            <div class="border-2"></div>
+                        </div>
+                        
                     </div>
-                    <Flex  justifyContent="center" className="space-x-8 " >
+                   
+                   
+                </div>
+
+                    <div className="xl:pl-20 lg:pl-10 md:pl-0" >
+                    <Flex justifyContent="center"  className="space-x-8 my-5" >
                         <Text color="black" className={"font-medium text-xl mt-5 text-[#4E4E51]"}>Tạo báo hỏng</Text>
                     </Flex>
                     <form onSubmit={submit} enctype="multipart/form-data" method="post">
@@ -89,12 +153,12 @@ export default function ReportAction(){
                         )}
                         <div className="space-y-2 mx-5 mt-5">
                             <Text color="black" className={"font-medium text-lg text-[#4E4E51]" }>Chọn thiết bị</Text>
-                            <DropDownListDevice  setData={setData} setSelectedValue={setSelectedValue}/>
+                            <DropDownListDevice selectedValue={selectedValue} userEquimentIds={userEquimentIds}  setData={setData} setSelectedValue={setSelectedValue}/>
                             <InputError message={errors.idEquipment} className="mt-2"/>
 
                         </div>
                      
-                            {selectedValue == "4" && (
+                            {selectedValue == "-1" && (
                                 <div className="space-y-2 mx-5 mt-5">
                                 <Text color="black" className={"font-medium text-lg text-[#4E4E51]"}>Thiết bị khác</Text>
                                 <TextInput 
@@ -103,7 +167,7 @@ export default function ReportAction(){
                                 }}
                                 />
                                <InputError message={errors.other} className="mt-2"/>
-
+                                
                                 </div>
                             )}
                         <div className="space-y-2 mx-5 mt-5">
@@ -117,15 +181,15 @@ export default function ReportAction(){
                         </div>
                         <div className="space-y-2 mx-5 mt-5">
                             <Text color="black" className={"font-medium text-lg text-[#4E4E51]"}>Xác nhận bạn không phải robot</Text>
-                            <ReCAPTCHA
-                                sitekey="6LcnJ1wpAAAAAObdrHtAzSB_wd-nrT8YhflyW2nu"
-                                onChange={onChange}
-                            />
+                            <MyCaptcha captchaRef={captchaRef} setToken={setToken} setDisableButton={setDisable} />
+
                         </div>
                         <Flex  justifyContent="center" className="space-x-8 mt-6 mb-8" >
-                            <button type="submit"   className={"bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"}>Gửi báo cáo</button>
+                            <button type="submit" disabled={disable}  className={"bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"}>Gửi báo cáo</button>
                         </Flex>
                     </form>
+                    </div>
+                    
                 </div>
                 
 

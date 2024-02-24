@@ -31,7 +31,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/phong', [\App\Http\Controllers\Guest\IndexController::class, 'index'])->name('room.select');
 // Không tìm thấy phòng có id
-Route::get('/loi-phong', function (){
+Route::get('/loi-phong', function () {
     return Inertia::render('Guest/RoomError');
 })->name('room.error');
 
@@ -66,6 +66,10 @@ Route::delete('/admin/user/list', [\App\Http\Controllers\Admin\UserController::c
 Route::get('/admin/user/update/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updateUser']);
 Route::post('/admin/user/update/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updateUserData']);
 Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
+Route::get('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'index']);
+Route::post('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'assignReport']);
+Route::put('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'undoAssign']);
+Route::delete('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'ignoreReport']);
 Route::post('/admin/report/filters', [\App\Http\Controllers\Admin\ReportController::class, 'filterReports']);
 Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
 
