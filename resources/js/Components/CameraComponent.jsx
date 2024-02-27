@@ -1,22 +1,24 @@
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { Icon } from "@tremor/react";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function CameraComponent(props) {
 
     const takePicture = (e) => {
-        // console.log(e.target.files);
+       
         const files = e.target.files;
         if (files.length > 0) {
             const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
             props.setCapturedImages((prevImages) => [...prevImages, ...newImages]);
-  
+            
             props.setData((prevData) => ({
                 ...prevData,
-                photo: [...(prevData.photo || []), ...e.target.files],
+                photo: files.length > 1 ? [...files] : [...(prevData.photo || []), ...files],
+                // Concatenate the new files with the existing photo array
             }));
-            
         }
     }
+    
 
     // const handleFileInputChange = (e) => {
     //     props.setData('images', e.target.files);
@@ -28,7 +30,8 @@ export default function CameraComponent(props) {
             <CameraIcon className={"w-6 h-6 text-gray-500"}/>
             <p className={"mt-2 text-xs text-gray-500 dark:text-gray-400"}><span className={"font-semibold"}>Thêm hình</span></p>
         </div>
-        <input id="photo"  type="file" className={"hidden"} multiple accept="image/*"onChange={(e) => {
+        <input ref={props.inputRef} id="photo"  type="file" className={"hidden"} multiple accept="image/*"
+        onChange={(e) => {
                 takePicture(e);
                 // handleFileInputChange(e);
             }} />

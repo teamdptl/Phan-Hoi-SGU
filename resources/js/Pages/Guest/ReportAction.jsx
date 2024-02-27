@@ -12,24 +12,20 @@ import InputError from '@/Components/InputError';
 import { router, usePage} from "@inertiajs/react";
 import Swal from "sweetalert2";
 import MyCaptcha from "@/Components/MyCaptcha";
+import { ProgressCircle } from '@tremor/react';
+
 
 
 
 export default function ReportAction({userEquimentIds, roomName, roomId}){
+
+    const inputRef = useRef(null);
+
     const { message, error } = usePage().props.flash;
     //Captcha
     const captchaRef = useRef(null)
     const [token, setToken] = useState(null)//Lưu token được trả về từ google recaptcha
     const [disable, setDisable] = useState(true) //Dùng để cho phép người dùng có thể click vào button gửi đánh giá
-
-
-    // useEffect(()=>{
-    //     console.log(userEquimentIds);
-    // },[userEquimentIds])
-
-    // useEffect(()=>{
-    //     console.log(roomId);
-    // },[roomId])
 
     // Mảng chứa hình
     const [capturedImages, setCapturedImages] = useState([]);
@@ -100,17 +96,25 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
 
         useEffect(()=>{
             console.log("Giá trị của images "+data.photo);
-            console.log("Giá trị của idEquipment: "+data.idEquipment);
-            console.log("Giá trị của selectDevice other: "+data.other);
-            console.log("Giá trị của des "+data.description);
-            console.log("Giá trị của RoomID "+data.roomId);
-            console.log("Giá trị của token "+data.token);
+            console.log("Giá trị của capturedImages "+capturedImages);
+            // console.log("Giá trị của idEquipment: "+data.idEquipment);
+            // console.log("Giá trị của selectDevice other: "+data.other);
+            // console.log("Giá trị của des "+data.description);
+            // console.log("Giá trị của RoomID "+data.roomId);
+            // console.log("Giá trị của token "+data.token);
+            inputRef.current.value = null;
 
-        },[data.idEquipment, data.other, data.photo, data.description, selectedValue, data.token]);
+        },[capturedImages,data.idEquipment, data.other, data.photo, data.description, selectedValue, data.token]);
 
     return <>
         <AppLayout>
             <div className="min-h-64">
+                {progress && ( //Thanh tải file
+                <div className="fixed flex justify-center items-center inset-0 z-50 bg-black bg-opacity-50">
+                                <ProgressCircle value={75} size="md" />
+                                </div>
+                )}
+            
                 <div className="md:flex xl:px-20 md:px-8 md:py-5" >
                 <div className="relative md:w-7/12 lg:w-2/3">
 
@@ -133,24 +137,14 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
                     <form onSubmit={submit} enctype="multipart/form-data" method="post">
                         <div className="space-y-2">
                             <Text color="black" className={"font-medium text-lg mx-5 text-[#4E4E51]"}>Hình ảnh thiết bị</Text>
-                            {/* <input type="file" value={data.avatar} onChange={e => setData('images', e.target.files[0])} />
-                            {progress && (
-                            <progress value={progress.percentage} max="100">
-                                {progress.percentage}%
-                            </progress>
-                            )} */}
                             <div class="mx-5 mt-5 flex flex-row relative">
-                                <CameraComponent setCapturedImages={setCapturedImages} className={"shrink-0"} setData={setData}/>
-                                <ListImgHorizontal capturedImages={capturedImages} setCapturedImages={setCapturedImages} setData={setData}/>
+                                <CameraComponent inputRef={inputRef} setCapturedImages={setCapturedImages} className={"shrink-0"} setData={setData}/>
+                                <ListImgHorizontal inputRef={inputRef} capturedImages={capturedImages} setCapturedImages={setCapturedImages} setData={setData}/>
                             </div> 
                             <InputError message={errors.photo} className="mt-2 mx-5"/>
 
                         </div> 
-                        {progress && ( //Thanh tải file
-                            <progress value={progress.percentage} max="100" className={"bg-black"}>
-                                {progress.percentage}%
-                            </progress>
-                        )}
+                       
                         <div className="space-y-2 mx-5 mt-5">
                             <Text color="black" className={"font-medium text-lg text-[#4E4E51]" }>Chọn thiết bị</Text>
                             <DropDownListDevice selectedValue={selectedValue} userEquimentIds={userEquimentIds}  setData={setData} setSelectedValue={setSelectedValue}/>
@@ -171,7 +165,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
                                 </div>
                             )}
                         <div className="space-y-2 mx-5 mt-5">
-                            <Text color="black" className={"font-medium text-lg text-[#4E4E51]"}>Mô tả chi tiết</Text>
+                            <Text color="black" className={"font-medium text-lg text-[#4E4E51]"}>Mô tả chi tiết (nếu có)</Text>
                             <Textarea
                             onChange={(e) => setData('description',e.target.value)}
                             id="description"
@@ -185,7 +179,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
 
                         </div>
                         <Flex  justifyContent="center" className="space-x-8 mt-6 mb-8" >
-                            <button type="submit" disabled={disable}  className={"bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"}>Gửi báo cáo</button>
+                            <Button type="submit" disabled={disable}  className={"bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"}>Gửi báo cáo</Button>
                         </Flex>
                     </form>
                     </div>

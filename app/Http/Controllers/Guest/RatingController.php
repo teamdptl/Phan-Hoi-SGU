@@ -9,11 +9,17 @@ use App\Models\Room;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
 
 class RatingController extends Controller{
     //Hiển thị giao diện đánh giá
-    public function index(){
-        return Inertia::render('Guest/CreateRating');
+    public function index(Request $request){
+        $room = Room::where('qr_code', $request->get('id'))->first();
+
+
+        return Inertia::render('Guest/CreateRating', [
+            "roomName" => $room->name,
+    ]);
     }
 
     public function checkWithCaptcha(RatingRequest $request){      

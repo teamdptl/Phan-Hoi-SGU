@@ -42,8 +42,11 @@ export default function ListImgHorizontal(props) {
       ...prevData,
       photo: prevData.photo ? prevData.photo.filter((_, i) => i !== index) : [],
     }));
+
   }, [props.capturedImages, props.setCapturedImages, props.setData]);
   
+ 
+ 
 
   return (
     <div className="flex mx-3 overflow-x-auto whitespace-nowrap lg:max-w-56">

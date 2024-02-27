@@ -18,9 +18,12 @@ class SendReportController extends Controller
 {
     public function index(Request $request)
     {
-        $roomId = $request->query('roomId');
-        // Lấy danh sách phòng bằng laravel và trả về
-        $room = Room::find($roomId);
+        // $qrCode = $request->query('id');
+        // // Lấy danh sách phòng bằng laravel và trả về
+        // $room = Room::find($qrCode);
+
+        $room = Room::where('qr_code', $request->get('id'))->first();
+
 
         $userEquimentIds = $room->equipments()->select(['id', 'name'])->get()->toArray();
 
@@ -43,12 +46,15 @@ class SendReportController extends Controller
             $userEquimentIds = $room->equipments()->pluck('id')->toArray();
 
             // Kiểm tra xem idEquipment có trong danh sách userEquimentIds không
-            if (!in_array($idEquipment, $userEquimentIds)) {
+            if (!in_array($idEquipment, $userEquimentIds) && $idEquipment != -1) {
                 return back()->with('error', 'Thiết bị không thuộc phòng, vui lòng chọn lại.');
             }
 
             $report = Report::create($validated);
-            $report->equipments()->attach($idEquipment);
+            if ($idEquipment != -1) {
+                $report->equipments()->attach($idEquipment);
+
+            }
 
             $files = $request->file()['photo'];
             $paths = [];

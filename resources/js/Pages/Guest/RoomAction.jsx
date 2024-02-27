@@ -7,6 +7,8 @@ import { useEffect } from "react";
 export default function RoomAction({ roomName, roomFacility, id }) {
     const { auth } = usePage().props;
     const { roomId } = usePage().props;
+    const { qrCode } = usePage().props;
+
     // console.log(auth.user);
 
     // useEffect(() => {console.log(roomId)}, [roomId]);
@@ -26,7 +28,7 @@ export default function RoomAction({ roomName, roomFacility, id }) {
                     <Title className={"my-2"}>{roomName}</Title>
                     <Badge>{facilityToString(roomFacility)}</Badge>
                     <Flex justifyContent={"center"} className={"space-x-8 mt-8"} >
-                    <Link href={route('room.report') + `?roomId=${roomId}`} method="get">
+                    <Link href={route('room.report') + `?id=${qrCode}`} method="get">
                             <Card className={"w-32 h-32 bg-[#EFF7FE] ring-0 p-4"}>
                                 <div className={"flex justify-center items-center flex-col"}>
                                     <img src={"/icons/warning.png"} alt={"Warning icon"} className={"w-16 h-16 object-cover"}/>
@@ -34,7 +36,7 @@ export default function RoomAction({ roomName, roomFacility, id }) {
                                 </div>
                             </Card>
                         </Link>
-                        <Link href={route('room.review') + `?\id=${roomId}`}>
+                        <Link href={route('room.review') + `?id=${qrCode}`}>
                             <Card className={"w-32 h-32 bg-[#EFF7FE] ring-0 p-4"}>
                                 <div className={"flex justify-center items-center flex-col"}>
                                     <img src={"/icons/rating.png"} alt={"Rating icon"} className={"w-16 h-16 object-cover"}/>

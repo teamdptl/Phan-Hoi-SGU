@@ -24,7 +24,7 @@ const labels = {
   }
 
   
-export default function CreateRating(){
+export default function CreateRating({roomName}){
     const [value, setValue] = useState(2) //Lưu giá trị (số sao) được người dùng đánh giá
     const [hover, setHover] = useState(-1) //Giá trị sao tạm để tạo hiệu ứng khi người dùng hover
     const [text, setText] = useState('') //Chứa nội dung mà người dùng đánh giá
@@ -139,7 +139,7 @@ export default function CreateRating(){
                     <img class="object-cover h-full" src="/img/classroom.jpg"></img>
                     <div class="absolute top-0 left-0 bottom-0 right-0 justify-center items-center flex">
                         <div class="text-white font-bold text-2xl w-fit">
-                            <p>Phòng C.E403</p>
+                            <p>Phòng {roomName}</p>
                             <div class="border-2"></div>
                         </div>
                         

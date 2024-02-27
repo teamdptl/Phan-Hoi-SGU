@@ -28,7 +28,7 @@ class StoreReportRequest extends FormRequest
             'other' => ['max:100', new ValidateOtherSendReport],
             'photo' => 'required|array|min:1|max:6',
             'photo.*' => 'required|image|max:30000',
-            'description' => 'required|max:2000',
+            'description' => 'max:2000',
             'roomId' => 'required',
             'token' => 'required|string',
         ];
@@ -49,7 +49,6 @@ class StoreReportRequest extends FormRequest
                 'max:30000' => 'Độ dài của mỗi bức ảnh là 300MB'
             ],
             'description' => [
-                'required' => 'Vui lòng nhập mô tả báo cáo',
                 'max:2000' => 'Độ dài tối đa 2000 kí tự'
             ],
             'token' => [

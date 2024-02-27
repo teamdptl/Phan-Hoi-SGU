@@ -24,6 +24,7 @@ class IndexController extends Controller
             'roomFacility' => $room->facility,
             'id' => $request->get('id'),
             'roomId' => $room->id,
+            'qrCode' => $room->qr_code,
             // 'userEquimentIds' => $userEquimentIds
         ]);
     }
