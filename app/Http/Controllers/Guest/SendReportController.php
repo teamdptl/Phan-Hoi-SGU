@@ -42,7 +42,7 @@ class SendReportController extends Controller
         $success = json_decode($response)->success;
         if ($success) {
             $idEquipment = $validated['idEquipment'];
-            $room = Room::find($validated['roomId']);
+            $room = Room::find($validated['rooms_id']);
             $userEquimentIds = $room->equipments()->pluck('id')->toArray();
 
             // Kiểm tra xem idEquipment có trong danh sách userEquimentIds không

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Room;
+namespace App\Http\Requests\Worker;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\ValidateOtherSendReport;
 
-
-class StoreReportRequest extends FormRequest
+class CompletionReportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +22,19 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'idEquipment' => 'bail|required|numeric',
-            'other' => ['max:100', new ValidateOtherSendReport],
             'photo' => 'required|array|min:1|max:6',
             'photo.*' => 'required|image|max:30000',
-            'description' => 'max:2000',
-            'rooms_id' => 'required',
-            'token' => 'required|string',
+            'content' => 'required|max:2000',
+            'reports_id' => 'required',
+            'users_id' => 'required',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'idEquipment' => [
-                'required' => 'Bạn chưa chọn thiết bị cần sửa',
+            'users_id' => [
+                'required' => 'Không có userId',
             ],
             'photo' => [
                 'required' => 'Vui lòng chọn file hình ảnh gửi báo cáo',
@@ -48,12 +44,13 @@ class StoreReportRequest extends FormRequest
             'photo*' => [
                 'max:30000' => 'Độ dài của mỗi bức ảnh là 300MB'
             ],
-            'description' => [
-                'max:2000' => 'Độ dài tối đa 2000 kí tự'
+            'content' => [
+                'max:2000' => 'Độ dài tối đa 2000 kí tự',
+                'required' => 'Vui lòng nhập mô tả'
             ],
-            'token' => [
-                'required' => 'Hãy xác thực bạn không phải robot',
-            ]   
+            'reports_id' => [
+                'required' => 'Không có reportId',
+            ]
         ];
 
     }

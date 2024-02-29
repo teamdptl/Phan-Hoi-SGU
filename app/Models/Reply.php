@@ -12,19 +12,19 @@ class Reply extends Model
     use HasFactory;
 
     protected $table = 'reply';
-    protected $fillable = ['content'];
+    protected $fillable = ['content', 'users_id', 'reports_id'];
 
-    public function media() : BelongsToMany
+    public function media(): BelongsToMany
     {
         return $this->belongsToMany(Media::class, 'reply_media', 'reply_id', 'media_id');
     }
 
-    public function report() : BelongsTo
+    public function report(): BelongsTo
     {
         return $this->belongsTo(Report::class, 'reports_id', 'id');
     }
 
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'users_id', 'id');
     }

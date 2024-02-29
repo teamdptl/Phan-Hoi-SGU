@@ -77,6 +77,10 @@ Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class
 Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'index'])->name('room.review');
 Route::post('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 
+// Worker
+Route::get('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'index'])->name('room.completion-report');
+Route::post('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'store']);
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
