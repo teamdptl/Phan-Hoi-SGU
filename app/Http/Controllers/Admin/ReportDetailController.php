@@ -14,7 +14,7 @@ use Inertia\Inertia;
 class ReportDetailController extends Controller
 {
     public function index(string $id){
-        $report = Report::with('room', 'equipments', 'media', 'assignment', 'reply')->find($id);
+        $report = Report::with('room', 'equipments', 'media', 'assignment', 'reply', 'reply.media')->find($id);
         $worker = Role::find(RoleEnum::WORKER->value)->users;
         return Inertia::render('Admin/CURD/ReportDetail', [
             'report' => $report,

@@ -1,17 +1,56 @@
 import AppLayout from "@/Layouts/AppLayout.jsx";
-import {Badge, Button, Card, Divider, Flex, Text, Title} from "@tremor/react";
-import {Head, Link, usePage} from "@inertiajs/react";
+import {
+    Badge,
+    Button,
+    Card, DialogPanel,
+    Divider,
+    Flex,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Text,
+    Title,
+    Dialog
+} from "@tremor/react";
+import {Head, Link, router, usePage} from "@inertiajs/react";
 import {facilityToString} from "@/Utils/facility.js";
-import { useEffect } from "react";
+import React, {useEffect, useState} from "react";
+import ReportDetail from "@/Pages/Admin/CURD/ReportDetail.jsx";
+import ReportItem from "@/Pages/Admin/Report/ReportItem.jsx";
+import {Pagination} from "@mui/material";
+import ReviewItem from "@/Pages/Admin/Review/ReviewItem.jsx";
+import ReportInfo from "@/Components/ReportInfo.jsx";
+import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
 
-export default function RoomAction({ roomName, roomFacility, id }) {
+export default function RoomAction({ roomName, roomFacility, reports, reviews, workers }) {
     const { auth } = usePage().props;
-    const { roomId } = usePage().props;
     const { qrCode } = usePage().props;
 
-    // console.log(auth.user);
+    const [dialogStatus, setDialogStatus] = useState({
+        open: false,
+        reportIndex: -1,
+    });
 
+    // console.log(auth.user);
+    const openDialog = (index) => {
+        setDialogStatus({
+            open: true,
+            reportIndex: index,
+        });
+    }
     // useEffect(() => {console.log(roomId)}, [roomId]);
+    console.log(reports);
+    console.log(workers);
+
+    const redirectToCompleteForm = (reportId) => {
+        router.get(route('room.complete', {
+            id: qrCode,
+            reports_id: reportId,
+        }))
+    }
+
 
     return <>
         <AppLayout>
@@ -67,7 +106,66 @@ export default function RoomAction({ roomName, roomFacility, id }) {
                     )}
 
                 </Flex>
+                {
+                    auth.user != null && (
+                        <>
+                            <div className={"max-w-xl mx-auto px-4"}>
+                                <TabGroup>
+                                    <TabList className="mt-4">
+                                        <Tab>Báo hỏng được giao</Tab>
+                                        <Tab>Đánh giá của phòng</Tab>
+                                    </TabList>
+                                    <TabPanels className={"my-4"}>
+                                        <TabPanel className={"space-y-4"}>
+                                            {(reports.data === null || reports.data.length === 0) && (
+                                                <>
+                                                    <p className="mt-4 leading-6 text-tremor-default text-tremor-content dark:text-dark-tremor-content">
+                                                        Không có báo hỏng nào
+                                                    </p>
+                                                </>
+                                            )}
+                                            {reports.data !== null && reports.data.length > 0 && reports.data.map((item, index) => (
+                                                <ReportItem report={item} openReport={() => openDialog(index)}/>
+                                            ))}
+
+                                            {reports.last_page > 1 && (
+                                                <Pagination onChange={(_, num) => {
+                                                    router.get('', {page: num}, {preserveScroll: true})
+                                                }}
+                                                            className={"flex justify-center my-4"}
+                                                            count={reports.last_page}
+                                                            page={reports.current_page} shape="rounded"/>
+                                            )}
+
+                                        </TabPanel>
+                                        <TabPanel>
+                                            <ReviewItem/>
+
+                                        </TabPanel>
+                                    </TabPanels>
+                                </TabGroup>
+                            </div>
+                        </>
+                    )
+                }
+
             </div>
+            {reports !== null && reports.data.length > 0 && (
+                <Dialog open={dialogStatus.open} onClose={(val) => setDialogStatus({...dialogStatus, open: val})} static={true}>
+                    <DialogPanel className={"max-w-4xl"}>
+                        <div className={"flex justify-between mb-4 items-center"}>
+                            <Title>Thông tin báo hỏng</Title>
+                            <span className={"cursor-pointer text-red-500 inline-flex items-center"} onClick={() => {setDialogStatus({...dialogStatus, open: false})}}>
+                                Đóng
+                                <XMarkIcon className={"w-6 h-6 text-red-500 font-bold"}/>
+                            </span>
+                        </div>
+                        <ReportInfo report={reports.data[dialogStatus.reportIndex]} worker={workers} openCompleteForm={() => redirectToCompleteForm(reports.data[dialogStatus.reportIndex]?.id)}/>
+                    </DialogPanel>
+                </Dialog>
+            )}
+
+
         </AppLayout>
     </>
 }

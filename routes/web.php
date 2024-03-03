@@ -65,7 +65,7 @@ Route::delete('/admin/user/{id}', [\App\Http\Controllers\Admin\UserController::c
 Route::delete('/admin/user/list', [\App\Http\Controllers\Admin\UserController::class, 'removeListUser']);
 Route::get('/admin/user/update/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updateUser']);
 Route::post('/admin/user/update/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updateUserData']);
-Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
+Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.report');
 Route::get('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'index']);
 Route::post('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'assignReport']);
 Route::put('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'undoAssign']);
@@ -78,7 +78,7 @@ Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class
 Route::post('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 
 // Worker
-Route::get('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'index'])->name('room.completion-report');
+Route::get('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'index'])->name('room.complete');
 Route::post('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'store']);
 
 Route::middleware('auth')->group(function () {

@@ -56,49 +56,49 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
     const [listFacility, setListFacility] = useState([
         {
             optionValue: '',
-            icon: "<ChartBarIcon className=\"h-4 w-4 text-black\"/>",                 
+            icon: "<ChartBarIcon className=\"h-4 w-4 text-black\"/>",
             content: 'Tất cả'
         },
         {
             optionValue: 'c',
-            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,                 
+            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,
             content: 'Cơ sở chính'
         },
         {
             optionValue: '1',
-            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,                 
+            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,
             content: 'Cơ sở 1'
         },
         {
             optionValue: '2',
-            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,                 
+            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,
             content: 'Cơ sở 2'
         }
     ])
     const [listReportStatus, setListReportStatus] = useState([
         {
             optionValue: '',
-            icon: "<ChartBarIcon className=\"h-4 w-4 text-black\"/>",                 
+            icon: "<ChartBarIcon className=\"h-4 w-4 text-black\"/>",
             content: 'Tất cả'
         },
         {
             optionValue: 'sent',
-            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,                 
+            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,
             content: 'Đã gửi'
         },
         {
             optionValue: 'process',
-            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,                 
+            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,
             content: 'Đang thực hiện'
         },
         {
             optionValue: 'complete',
-            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,                 
+            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,
             content: 'Đã hoàn thành'
         },
         {
             optionValue: 'ignore',
-            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,                 
+            icon: <ChartBarIcon className="h-4 w-4 text-black"/>,
             content: 'Đã bỏ qua'
         }
     ])
@@ -109,7 +109,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
 
     // console.log("Data khi render component", reports)
     // console.log("Data list reports", listReport)
-    
+
 
     console.log("Báo cáo sau khi thêm ischecked", reports)
 
@@ -163,16 +163,20 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
     const changePage = (pageNum) => {
         router.get('', {page: pageNum})
     }
-    
+
+    const openReport = (id) => {
+        router.get(route('admin.report') + '/' + id);
+    }
+
     return <>
         <AdminLayout title="Danh sách báo hỏng">
             <div className={"mb-4 flex flex-col md:flex-row md:justify-between md:items-center"}>
                 <Title>Danh sách báo hỏng</Title>
-                <DateRangePicker 
+                <DateRangePicker
                     className={"mt-2 md:mt-0"}
-                    value={datePicker} 
-                    onValueChange={setDatePicker}  
-                    locale={vi} placeholder={"Chọn thời gian"} 
+                    value={datePicker}
+                    onValueChange={setDatePicker}
+                    locale={vi} placeholder={"Chọn thời gian"}
                     selectPlaceholder={"Chọn khoảng"}/>
             </div>
             <div className="mx-auto max-w-screen-7xl">
@@ -182,10 +186,10 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                         <div className="w-full md:w-1/2 flex items-center space-x-1 md:space-x-2 lg:space-x-3">
                             <TextInput value={searchText} onChange={(e) => setSearchText(e.target.value)} icon={MagnifyingGlassIcon} className={"md:max-w-64 min-w-24"}
                                        placeholder="Tìm báo hỏng"/>
-                            
+
                             <Dropdown className="mt-0">
                                 <Dropdown.Trigger>
-                                    <Button className="flex items-center min-w-36" size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>    
+                                    <Button className="flex items-center min-w-36" size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>
                                         <div class="flex justify-center items-center ml-2">
                                             <p class="mr-0.5">Filter</p>
                                             <FunnelIcon className={"h-4 w-4"}/>
@@ -200,7 +204,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                         })})</p>
                                     </Dropdown.Link>
                                     {
-                                        openFacilitiesMenu && 
+                                        openFacilitiesMenu &&
                                         <div>
                                             {listFacility.map((item)=>{
                                                 return <>
@@ -213,7 +217,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                         </div>
                                     }
 
-                                    
+
                                     <Dropdown.Link isFocus={false} as="button" type="button" className={"flex items-center space-x-2"} onClick={()=>{setOpenStatusMenu(!openStatusMenu)}} preserveState>
                                         <ArrowPathIcon className={"h-4 w-4"}/>
                                         <p>Chọn trạng thái ({listReportStatus.map((item)=>{
@@ -221,7 +225,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                         })})</p>
                                     </Dropdown.Link>
                                     {
-                                        openStatusMenu && 
+                                        openStatusMenu &&
                                         <div>
                                             {listReportStatus.map((item)=>{
                                                 return <>
@@ -269,9 +273,9 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                     </div>
                     <div className={"grid grid-cols-1 gap-4 p-4 pt-2 md:grid-cols-2 lg:grid-cols-2 min-h-40"}>
                         {
-                            listReport === undefined ? 'Lỗi! Vui lòng refresh lại trang!' : (listReport.length === 0 ? 'Chưa có báo cáo nào!' : 
+                            listReport === undefined ? 'Lỗi! Vui lòng refresh lại trang!' : (listReport.length === 0 ? 'Chưa có báo cáo nào!' :
                             listReport.map((item, index) =>{
-                                return <ReportItem report={item}/>
+                                return <ReportItem report={item} openReport={() => openReport(item.id)}/>
                             }))
                         }
                     </div>
@@ -302,7 +306,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                         )}
                     </nav>
                 </div>
-                
+
             </div>
         </AdminLayout>
     </>

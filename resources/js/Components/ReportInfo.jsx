@@ -4,7 +4,7 @@ import lgZoom from "lightgallery/plugins/zoom";
 import lgVideo from 'lightgallery/plugins/video';
 import LightGallery from "lightgallery/react";
 import ListImgHorizontal from "@/Components/ListImgHorizontal.jsx";
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
     BarsArrowUpIcon,
     BriefcaseIcon,
@@ -22,11 +22,13 @@ import Swal from "sweetalert2";
 import { Badge, BadgeDelta } from '@tremor/react';
 
 // TODO: Thêm auth user admin mới cho hiện các quyền
-export default function({report, worker}){
+export default function({report, worker, openCompleteForm}){
+    console.log(report);
     const lightGallery = useRef(null);
     const {auth} = usePage().props;
     const { message } = usePage().props.flash;
-    const [workerId, setWorkerId] = useState(report.assignment ? report.assignment.worker_id : '');
+    const [workerId, setWorkerId] = useState(report?.assignment ? report.assignment.worker_id : '');
+
 
     const onInit = useCallback((detail) => {
         if (detail) {
@@ -131,14 +133,16 @@ export default function({report, worker}){
                             <BriefcaseIcon className={"text-gray-600h-4 w-4 mr-2"}/>
                             Nhân viên thực hiện
                         </Text>
-                        <SearchSelect disabled value={workerId} onValueChange={(val) => setWorkerId(val)}
+                        <SearchSelect disabled enableClear={false} value={workerId} onValueChange={(val) => setWorkerId(val)}
                                       className={"mt-2 lg:w-6/12 w-full"} placeholder={"Phân công nhân viên"}>
                             {worker.map(w => (
                                 <SearchSelectItem value={w.id}>{w.name}</SearchSelectItem>
                             ))}
                         </SearchSelect>
                         <div className={"mt-4 flex gap-4 flex-wrap"}>
-                            <Button>Hoàn thành</Button>
+                            {openCompleteForm && (
+                                <Button onClick={openCompleteForm}>Hoàn thành</Button>
+                            )}
                             <Button onClick={undoAssign} variant={"secondary"}>Hủy phân công</Button>
                         </div>
                     </>
@@ -150,9 +154,10 @@ export default function({report, worker}){
                             <DocumentCheckIcon className={"text-gray-600h-4 w-4 mr-2"}/>
                             Hoàn thành
                         </Text>
-                        <p className={"text-[#716F6F] text-base mt-1 mb-2"}>Đã hoàn thành</p>
+                        <p className={"text-[#716F6F] text-base mt-1 mb-2"}>{report.reply?.content} - Hoàn thành bởi {worker.find(item => item.id === report.reply?.users_id).name} lúc {displayTime(new Date(report.reply?.created_at))}</p>
                         <ListImgHorizontal
-                            capturedImages={['/img/banner.jpg', '/img/banner.jpg', '/img/banner.jpg', '/img/banner.jpg', '/img/banner.jpg', '/img/banner.jpg', '/img/banner.jpg']}/>
+                            isNotRemove={true}
+                            capturedImages={report.reply?.media.map(item => '/storage/' + item.path)}/>
                     </>
                 )}
 

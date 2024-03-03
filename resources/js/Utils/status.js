@@ -3,7 +3,7 @@ export const statusToText = (status) => {
         return ["Đã gửi", "yellow"];
 
     if (status === 'process')
-        return ["Đang thực hiện", "blue"];
+        return ["Đang làm", "blue"];
 
     if (status === 'complete')
         return ["Hoàn thành", "green"];

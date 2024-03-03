@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Worker;
 
+use App\Enums\ReportStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\Room;
@@ -26,56 +27,85 @@ class CompletionReportController extends Controller
 
         // $room = Room::where('qr_code', $request->get('id'))->first();
 
+        $room = Room::where('qr_code', $request->get('id'))->first();
+        $report = Report::with(['room', 'media', 'assignment', 'reply', 'equipments'])->find($request->get('reports_id'));
 
-        // $userEquimentIds = $room->equipments()->select(['id', 'name'])->get()->toArray();
+        if ($room && $report && $report->status === ReportStatus::PROCESS->value){
+            $exist = $room->reports->first(function ($item) use ($report) {
+                return $item->id == $report->id;
+            });
 
-        $StrqrCode = "HjwYjOS0";
-        $room = Room::where('qr_code', $StrqrCode)->first();
+            $allow = $request->user()->jobs->first(function ($item) use ($report) {
+                return $item->reports_id == $report->id;
+            });
 
-        $userId = "1";
-        $reportId = "3";
+            if ($exist && ($allow || $request->user()->isAdmin())){
+                return Inertia::render('Worker/CompletionReportAction', [
+                    "report" => $report,
+                    "qrCode" => $room->qr_code
+                ]);
+            }
+        }
 
-
-        return Inertia::render('Worker/CompletionReportAction', [
-            "rooms" => [],
-            "roomName" => $room->name,
-            'userId' => $userId,
-            "reportId" => $reportId,
-        ]);
+        return Inertia::render('Guest/RoomError');
     }
+
+
     public function store(CompletionReportRequest $request)
     {
         $validated = $request->validated();
 
-        $user = User::find($validated['users_id']);
-        $allowedRoles = Role::whereIn('id', [1, 2])->get();
-        $userRoles = $user->roles()->whereIn('id', $allowedRoles->pluck('id'))->get();
-        if ($userRoles->isNotEmpty()) {
-            $reply = Reply::create($validated);
-            $files = $request->file()['photo'];
-            $paths = [];
-            $i = 1;
-            $dir = $this->makeDir();
-            foreach ($files as $file) {
-                $fileName = $file->storeAs($dir, "img$i" . '_' . $reply->id . '_' . sha1(time()) . '.' . $file->extension());
-                $paths[] = [
-                    'path' => $fileName,
-                    'is_local' => true,
-                    'reports_id' => $reply->id // Gán ID của báo cáo
-                ];
-                $i++;
+        $room = Room::where('qr_code', $request->get('qrId'))->first();
+        $report = Report::with(['room', 'media', 'assignment', 'reply', 'equipments'])->find($request->get('reports_id'));
+
+        if ($room && $report && $report->status === ReportStatus::PROCESS->value){
+            $exist = $room->reports->first(function ($item) use ($report) {
+                return $item->id == $report->id;
+            });
+
+            $allow = $request->user()->jobs->first(function ($item) use ($report) {
+                return $item->reports_id == $report->id;
+            });
+
+            if ($exist && ($allow || $request->user()->isAdmin())){
+                if ($request->user()->isAdmin()){
+                    $assignUserId = $report->assignment->worker_id;
+                    $reply = Reply::create([
+                        ...$validated,
+                        'users_id' => $assignUserId,
+                    ]);
+                } else {
+                    $reply = Reply::create([
+                        ...$validated,
+                        'users_id' => $request->user()->id,
+                    ]);
+                }
+
+                $files = $request->file()['photo'];
+
+                $paths = [];
+                $i = 1;
+                $dir = $this->makeDir();
+                foreach ($files as $file) {
+                    $fileName = $file->storeAs($dir, "img$i" . '_' . $reply->id . '_' . sha1(time()) . '.' . $file->extension());
+                    $paths[] = [
+                        'path' => $fileName,
+                        'is_local' => true,
+                        'reports_id' => $reply->id // Gán ID của báo cáo
+                    ];
+                    $i++;
+                }
+
+                $reply->media()->createMany($paths);
+                $report->status = ReportStatus::COMPLETE;
+                $report->save();
+                if ($request->user()->isAdmin()){
+                    return back()->with('message', 'Đã xác nhận hoàn thành báo cáo');
+                }
+                return to_route('room.select', ['id' => $request->get('qrId')]);
             }
-
-
-            $reply->media()->createMany($paths);
-
-            return back()->with('message', 'Đã được thêm vào cơ sở dữ liệu của trường');
-        } else {
-            return back()->with('error', 'Không thuộc người dùng gửi phản hồi');
-
         }
-
-
+        return back()->with('error', 'Có lỗi trong quá trình gửi phản hồi');
 
     }
 

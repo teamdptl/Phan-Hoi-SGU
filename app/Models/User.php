@@ -7,6 +7,7 @@ use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -50,17 +51,17 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->roles->contains('id', RoleEnum::ADMIN);
+        return $this->roles->contains('id', RoleEnum::ADMIN->value);
     }
 
     public function isWorker()
     {
-        return $this->roles->contains('id', RoleEnum::WORKER);
+        return $this->roles->contains('id', RoleEnum::WORKER->value);
     }
 
     public function isInspector()
     {
-        return $this->roles->contains('id', RoleEnum::INSPECTOR);
+        return $this->roles->contains('id', RoleEnum::INSPECTOR->value);
     }
 
     public function roles(): BelongsToMany
@@ -82,6 +83,12 @@ class User extends Authenticatable
     public function jobs(): HasMany
     {
         return $this->hasMany(Assignment::class, 'worker_id', 'id');
+    }
+
+    // Relation này dùng để lấy report cho worker
+    public function reportWorker(): HasManyThrough
+    {
+        return $this->hasManyThrough(Report::class, Assignment::class, 'worker_id', 'id', 'id', 'reports_id');
     }
 
     // Relation này dùng cho nhân viên kỹ thuật, lấy các phản hồi đã hoàn thành

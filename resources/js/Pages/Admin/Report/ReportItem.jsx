@@ -1,13 +1,18 @@
 import {Badge, Card, Text} from "@tremor/react";
 import {MapPinIcon} from "@heroicons/react/16/solid/index.js";
 import Checkbox from "@/Components/Checkbox";
+import {statusToText} from "@/Utils/status.js";
+import {router, usePage} from "@inertiajs/react";
+import {ADMIN} from "@/Utils/role.js";
 
 const dateCreatedFormat = (date)=>{
     return date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
 }
 
 
-export default function ({report}){
+export default function ({report, openReport}){
+    const {auth} = usePage().props;
+
     const createAt = report.created_at === undefined ? undefined : report.created_at.replace('Z', '')
     console.log(createAt)
 
@@ -49,15 +54,24 @@ export default function ({report}){
 
         return roomName
     }
+
+    // const handleClick = () => {
+    //     const isAdmin = auth.role?.findIndex(item => item.id === ADMIN) >= 0;
+    //
+    //     if (isAdmin){
+    //         router.get(route('admin.report') + '/' + report.id);
+    //     }
+    // }
+
     return <>
-        <Card className={"flex p-3 gap-4 cursor-pointer"}>
+        <Card className={"flex p-3 gap-4 cursor-pointer"} onClick={openReport}>
             <div className={"flex-none"}>
                 <img className={"object-cover w-28 h-28 rounded"} alt={"Ảnh báo cáo"} src={report.media[0] !== undefined ? ("/storage/" + report.media[0].path ) : "https://diennuocnhatlong.vn/uploads/nguyen-nhan-quat-tran-hu.jpg"}/>
             </div>
             <div className={"flex flex-col justify-center w-full h-fit"}>
                 <div className={"flex justify-between"}>
                     <p className={"font-medium text-gray-600 line-clamp-1"}>{getNameEquipString()}</p>
-                    <Badge className={"text-sm h-fit pt-0"}>{report.status || 'unkown'}</Badge>
+                    <Badge className={"text-sm h-fit pt-0"} color={statusToText(report.status)[1]}>{statusToText(report.status)[0]}</Badge>
                 </div>
                 <p className={"text-sm text-gray-400"}>Tạo lúc {dateCreatedFormat(createAt !== undefined ? new Date(createAt) : new Date())}</p>
                 <p className={"border-l-2 border-l-gray-500 text-sm pl-2 text-gray-700 mt-2 line-clamp-1"}>{report.description || 'Mô tả chi tiết'}</p>

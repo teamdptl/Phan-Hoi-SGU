@@ -1,4 +1,4 @@
-import {Link} from "@inertiajs/react";
+import {Link, router} from "@inertiajs/react";
 import {Divider} from "@tremor/react";
 import {
     AdjustmentsHorizontalIcon,
@@ -10,6 +10,11 @@ import {useState} from "react";
 
 export default function ({isMenuOpen, closeSidebar, listTab}){
     const [activeTab, setActiveTab] = useState(location.href);
+
+    const logout = () => {
+        router.post(route('logout'));
+    }
+
     return <>
         <div
             className={`lg:w-auto lg:h-auto lg:relative ${isMenuOpen ? 'fixed w-screen z-40 backdrop-blur-sm' : ''}`}
@@ -81,7 +86,7 @@ export default function ({isMenuOpen, closeSidebar, listTab}){
                         </div>
                     </div>
                     <div className={"h-10 flex items-center flex-nowrap"}>
-                        <div
+                        <div onClick={logout}
                             className={"w-full mx-4 py-2 px-4 flex items-center gap-2 hover:bg-blue-50 rounded-lg"}>
                             <ArrowLeftStartOnRectangleIcon className="h-4 w-4 text-black"/>
                             Đăng xuất

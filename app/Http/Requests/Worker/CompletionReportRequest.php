@@ -26,7 +26,6 @@ class CompletionReportRequest extends FormRequest
             'photo.*' => 'required|image|max:30000',
             'content' => 'required|max:2000',
             'reports_id' => 'required',
-            'users_id' => 'required',
         ];
     }
 
