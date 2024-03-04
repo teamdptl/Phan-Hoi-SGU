@@ -65,6 +65,26 @@ class UserController extends Controller
     {
         $data = $request->validationData();
 
+        $userIsDel = User::where('email', $data['email'])->first();
+        if ($userIsDel && $userIsDel->status) {
+            return back()->with('error', 'Email already');
+        } else if ($userIsDel && !$userIsDel->status) {
+
+            $userIsDel->name = $request->get('name');
+            $userIsDel->password = Hash::make($data['password']);
+            $userIsDel->status = '1';
+
+            // Lưu các thay đổi
+            $userIsDel->save();
+            // Lấy vai trò từ dữ liệu request và gán cho người dùng
+            if (isset($data['role'])) {
+                $role = Role::findOrFail($data['role']);
+                $userIsDel->roles()->sync([$role->id]); // Sử dụng sync để xóa các vai trò cũ và thêm vai trò mới
+            }
+
+            return to_route('admin.user');
+        }
+
         // Tạo một user mới
         $user = new User();
         $user->fill($data);
@@ -82,6 +102,9 @@ class UserController extends Controller
 
 
         return to_route('admin.user');
+
+
+
 
     }
 

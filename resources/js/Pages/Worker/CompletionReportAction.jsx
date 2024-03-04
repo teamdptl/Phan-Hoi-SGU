@@ -1,18 +1,17 @@
 import {Button, Card, Divider, Flex, Text, Title} from "@tremor/react";
 import AppLayout from "@/Layouts/AppLayout.jsx";
-import { useForm } from '@inertiajs/react'
 import CameraComponent from "@/Components/CameraComponent";
 import ListImgHorizontal from "@/Components/ListImgHorizontal";
 import { useEffect, useState, useRef } from "react";
 import { ProgressCircle } from '@tremor/react';
 import Swal from "sweetalert2";
-import { router, usePage} from "@inertiajs/react";
 import InputError from '@/Components/InputError';
 import { TextInput } from "@tremor/react";
 import { Textarea } from "@tremor/react";
 import ReportInfo from "@/Components/ReportInfo.jsx";
 import ReportItem from "@/Pages/Admin/Report/ReportItem.jsx";
-
+import {ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
+import {Head, Link, useForm, usePage} from "@inertiajs/react";
 
 export default function CompletionReportAction({report, qrCode}){
     const inputRef = useRef(null);
@@ -78,9 +77,15 @@ return <>
          )}
 
          <div className={"max-w-xl mx-auto"}>
-             <Flex justifyContent="center" className="space-x-8 my-5">
-                 <Text color="black" className={"font-medium text-xl mt-5 text-[#4E4E51]"}>Hoàn thành báo hỏng</Text>
+         <div className={"mt-6"}>
+                <Link href={route('room.select') + `?id=${qrCode}`} method="get" className="mx-6">
+                    <Button icon={ArrowUturnLeftIcon} variant={"light"}>Trở về</Button>
+                </Link>
+                <Flex justifyContent="center" className="">
+                 <Text color="black" className={"font-medium text-xl  text-[#4E4E51]"}>Hoàn thành báo hỏng</Text>
              </Flex>
+        </div>
+            
              <div className={"mx-5 mt-5 mb-5"}>
                  <Text color="black" className={"font-medium text-lg mb-2 text-[#4E4E51]"}>Báo hỏng</Text>
                  <ReportItem report={report} openReport={() => {}}/>

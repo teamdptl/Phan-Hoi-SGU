@@ -3,12 +3,14 @@ import {Button, Flex, Select, SelectItem, Textarea, TextInput, Title} from "@tre
 import {ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
 import {Head, Link, useForm, usePage} from "@inertiajs/react";
 import InputError from "@/Components/InputError.jsx";
+import Swal from "sweetalert2";
+import { useEffect, useState, useRef } from "react";
 
 
 export default function ({roles}){
-    const { errors } = usePage().props;
+    const { message, error } = usePage().props.flash;
 
-    const { data, setData, post, processing } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         name: '',
         role: '',
         email: '',
@@ -20,6 +22,16 @@ export default function ({roles}){
         // console.log('submitForm', data )
         post('', { forceFormData: true });
     }
+
+    useEffect(() => {
+        if (error){
+            Swal.fire({
+                text: error,
+                title: "Thất bại",
+                icon: "error"
+            })
+        }
+    }, [error]);
 
     return <>
         <AdminLayout title={"Thêm người dùng"}>
