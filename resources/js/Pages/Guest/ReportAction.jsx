@@ -1,6 +1,5 @@
 import {Button, Card, Divider, Flex, Text, Title} from "@tremor/react";
 import AppLayout from "@/Layouts/AppLayout.jsx";
-import { useForm } from '@inertiajs/react'
 import CameraComponent from "@/Components/CameraComponent";
 import ListImgHorizontal from "@/Components/ListImgHorizontal";
 import { useEffect, useState, useRef } from "react";
@@ -9,15 +8,20 @@ import { TextInput } from "@tremor/react";
 import { Textarea } from "@tremor/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import InputError from '@/Components/InputError';
-import { router, usePage} from "@inertiajs/react";
+import { router, usePage, useForm, Link} from "@inertiajs/react";
 import Swal from "sweetalert2";
 import MyCaptcha from "@/Components/MyCaptcha";
 import { ProgressCircle } from '@tremor/react';
+import {ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
 
 
 
 
-export default function ReportAction({userEquimentIds, roomName, roomId}){
+export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}){
+
+    useEffect(() => {
+        console.log(qrCode);
+    },[qrCode])
 
     const inputRef = useRef(null);
 
@@ -128,10 +132,15 @@ export default function ReportAction({userEquimentIds, roomName, roomId}){
                    
                 </div>
 
-                <div className="xl:pl-20 lg:pl-10 md:pl-0 md:w-5/12 lg:w-1/3" >
-                    <Flex justifyContent="center"  className="space-x-8 my-5" >
-                        <Text color="black" className={"font-medium text-xl mt-5 text-[#4E4E51]"}>Tạo báo hỏng</Text>
+                <div className="xl:pl-20 lg:pl-10 md:pl-0 md:pt-4 md:w-5/12 lg:w-1/3" >
+                <div className={"mt-3"}>
+                <Link href={route('room.select') + `?id=${qrCode}`} method="get" className="mx-5 ">
+                    <Button icon={ArrowUturnLeftIcon} variant={"light"} >Trở về</Button>
+                </Link>
+                    <Flex justifyContent="center"  className="space-x-8 mb-4 " >
+                        <Text color="black" className={"font-medium text-xl  text-[#4E4E51]"}>Tạo báo hỏng</Text>
                     </Flex>
+                    </div>
                     <form onSubmit={submit} enctype="multipart/form-data" method="post">
                         <div className="space-y-2">
                             <Text color="black" className={"font-medium text-lg mx-5 text-[#4E4E51]"}>Hình ảnh thiết bị</Text>

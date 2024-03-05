@@ -32,6 +32,7 @@ class SendReportController extends Controller
             'userEquimentIds' => $userEquimentIds,
             "roomName" => $room->name,
             "roomId" => $room->id,
+            "qrCode" => $request->get('id')
         ]);
     }
     public function store(StoreReportRequest $request)

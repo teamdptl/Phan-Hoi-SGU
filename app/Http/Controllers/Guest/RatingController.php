@@ -19,6 +19,7 @@ class RatingController extends Controller{
 
         return Inertia::render('Guest/CreateRating', [
             "roomName" => $room->name,
+            "qrCode" => $request->get('id')
     ]);
     }
 

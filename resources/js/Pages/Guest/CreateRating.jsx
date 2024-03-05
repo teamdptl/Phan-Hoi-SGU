@@ -1,14 +1,15 @@
 import AppLayout from "@/Layouts/AppLayout";
-import { Button, Textarea } from "@tremor/react";
+import { Button, Textarea, Flex, Text } from "@tremor/react";
 import { useRef, useState } from "react";
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
-import { router } from "@inertiajs/react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import MyCaptcha from "@/Components/MyCaptcha";
 import AlertModal from "@/Components/AlertModal";
+import {ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
+import { router, usePage, useForm, Link} from "@inertiajs/react";
 
 
 const labels = {
@@ -24,7 +25,7 @@ const labels = {
   }
 
   
-export default function CreateRating({roomName}){
+export default function CreateRating({roomName, qrCode}){
     const [value, setValue] = useState(2) //Lưu giá trị (số sao) được người dùng đánh giá
     const [hover, setHover] = useState(-1) //Giá trị sao tạm để tạo hiệu ứng khi người dùng hover
     const [text, setText] = useState('') //Chứa nội dung mà người dùng đánh giá
@@ -33,6 +34,7 @@ export default function CreateRating({roomName}){
     const [token, setToken] = useState('')//Lưu token được trả về từ google recaptcha
     const [sendSuccess, setSendSuccess] = useState() //Lưu trạng thái khi gửi đánh giá
     const captchaRef = useRef(null)
+
 
     //Các biến dùng cho Modal để hiển thị thống báo cho người dùng
     const [modal, setModal] = useState(false) //Dùng để tắt mở modal thông báo cho người dùng
@@ -134,19 +136,27 @@ export default function CreateRating({roomName}){
     return (
         <>
         <AppLayout>
-            <div class="md:flex xl:px-32 md:px-8 md:py-5 shadow-blue-800 shadow-lg">
-                <div class="relative md:w-7/12 lg:w-2/3 ">
-                    <img class="object-cover h-full" src="/img/classroom.jpg"></img>
+        <div className="md:flex xl:px-20 md:px-8 md:py-5" >
+                <div className="relative md:w-7/12 lg:w-2/3">
+                <img className="object-cover h-full brightness-75" src="/img/classroom.jpg"></img>
                     <div class="absolute top-0 left-0 bottom-0 right-0 justify-center items-center flex">
                         <div class="text-white font-bold text-2xl w-fit">
                             <p>Phòng {roomName}</p>
                             <div class="border-2"></div>
                         </div>
-                        
                     </div>
+                   
+                   
                 </div>
-                <div class="flex flex-col justify-center items-center px-5 md:w-5/12 lg:w-1/3 h-full">
-                    <p class="font-semibold text-2xl w-fit">Đánh giá phòng</p>
+                <div className="xl:pl-20 lg:pl-10 md:pl-0 md:w-5/12 lg:w-1/3" >
+                <div className={"mt-3"}>
+                <Link href={route('room.select') + `?id=${qrCode}`} method="get" className="mx-5">
+                    <Button icon={ArrowUturnLeftIcon} variant={"light"}>Trở về</Button>
+                </Link>
+                    <Flex justifyContent="center"  className="space-x-8 mb-4 " >
+                        <Text color="black" className={"font-medium text-xl  text-[#4E4E51]"}>Đánh giá phòng</Text>
+                    </Flex>
+                    </div>
                     <div class="mt-5 flex flex-col items-center justify-center">
                         <Rating
                             name="hover-feedback"
@@ -166,17 +176,18 @@ export default function CreateRating({roomName}){
                             <Box>{labels[hover !== -1 ? hover : value]}</Box>
                         )}
                     </div>
-                    <div class="w-full items-start mt-5">
-                        <p>Mô tả chi tiết</p>
+                    <div className="space-y-2 mx-5 mt-5">
+                        <Text color="black" className={"font-medium text-lg text-[#4E4E51]" }>Mô tả chi tiết</Text>
                         <Textarea placeholder="Nhập mô tả..." value={text} onChange={(e) => setText(e.target.value)} rows={3}></Textarea>
                     </div>
-                    <div class="w-full items-start mt-5 mb-10">
+                    <div className="space-y-2 mx-5 mt-5">
                         {/* <p class="italic font-sans text-sm w-fit">Xác nhận bạn không phải robot*</p> */}
                         <MyCaptcha captchaRef={captchaRef} setToken={setToken} setDisableButton={setDisable} />
                     </div>
-
+                    <Flex  justifyContent="center" className="space-x-8 mt-6 mb-8" >
                     <Button disabled={disable} onClick={submitRating}>Đánh giá</Button>
-                    
+                    </Flex>
+
                 </div>
                 <AlertModal isOpen={modal} onClose={() => setModal(false)} icon={icon} contentTitle={titleContent} description={description} button={buttons}/>
 
