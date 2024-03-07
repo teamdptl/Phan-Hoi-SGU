@@ -115,6 +115,6 @@ class ReportController extends Controller
 
     public function export()
     {
-        return Excel::download(new ReportExport, 'bao_hong.xlsx');
+        return Excel::download(new ReportExport, 'danh_sach_bao_hong.xlsx');
     }
 }

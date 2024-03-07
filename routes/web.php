@@ -42,6 +42,8 @@ Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::
 // Admin
 Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
 Route::get('/admin/room', [\App\Http\Controllers\Admin\RoomController::class, 'index'])->name('admin.room');
+Route::get('/admin/room/export', [\App\Http\Controllers\Admin\RoomController::class, 'export']);
+Route::post('/admin/room/import', [\App\Http\Controllers\Admin\RoomController::class, 'import']); // Chưa test
 Route::get('/admin/room/add', [\App\Http\Controllers\Admin\RoomController::class, 'addRoomForm']);
 Route::get('/admin/room/{id}', [\App\Http\Controllers\Admin\RoomController::class, 'infoRoomForm']);
 Route::get('/admin/room/update/{id}', [\App\Http\Controllers\Admin\RoomController::class, 'editRoomForm']);
