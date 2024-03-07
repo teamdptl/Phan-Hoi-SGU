@@ -66,6 +66,7 @@ Route::delete('/admin/user/list', [\App\Http\Controllers\Admin\UserController::c
 Route::get('/admin/user/update/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updateUser']);
 Route::post('/admin/user/update/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updateUserData']);
 Route::get('/admin/report', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.report');
+Route::get('/admin/report/export', [\App\Http\Controllers\Admin\ReportController::class, 'export']);
 Route::get('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'index']);
 Route::post('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'assignReport']);
 Route::put('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'undoAssign']);

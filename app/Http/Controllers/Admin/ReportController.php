@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ReportExport;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -21,7 +23,7 @@ class ReportController extends Controller
         $facility = $request->input('facility', '');
         $status = $request->input('status', '');
         $arrange = $request->input('sortType', 'asc');
-        
+
         // dd($searchText, $from, $to, $facility, $arrange);
 
         $reports = Report::with('room', 'equipments', 'media')
@@ -95,19 +97,24 @@ class ReportController extends Controller
                 $query->where('facility', $facility);
             });
         }
-        
-        
+
+
         if($arrange == 'increase'){
             $reports = $reports->orderBy('created_at', 'asc');
         }else{
             $reports = $reports->orderBy('created_at', 'desc');
         }
-                       
+
         $reports = $reports->paginate(2);
 
         // dd($reports);
         return Inertia::render('Admin/Report', [
           'reports' => $reports,
         ]);
+    }
+
+    public function export()
+    {
+        return Excel::download(new ReportExport, 'bao_hong.xlsx');
     }
 }

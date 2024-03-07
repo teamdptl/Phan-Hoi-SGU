@@ -36,6 +36,13 @@ export default {
         transparent: "transparent",
         current: "currentColor",
         extend: {
+            fontFamily: {
+                sans: [
+                    '"Segoe UI"',
+                    'Roboto',
+                    'sans-serif',
+                ],
+            },
             colors: {
                 // light mode
                 tremor: {
