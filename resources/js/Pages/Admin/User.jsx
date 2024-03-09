@@ -2,7 +2,7 @@ import AdminLayout from "@/Layouts/AdminLayout.jsx";
 import {Flex, TextInput, Title, Button} from "@tremor/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/solid/index.js";
 import {Pagination} from "@mui/material";
-import { router, usePage} from "@inertiajs/react";
+import { router, usePage, useForm} from "@inertiajs/react";
 import Swal from "sweetalert2";
 import Dropdown from "@/Components/Dropdown.jsx";
 
@@ -18,6 +18,8 @@ import {
 
 } from "@heroicons/react/24/outline/index.js";
 import { Link } from '@inertiajs/react';
+import { Dialog, DialogPanel } from '@tremor/react';
+
 
 
 import Checkbox from "@/Components/Checkbox.jsx";
@@ -27,6 +29,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
     const [inputVal, setInputVal] = useState(search);
     const [checkBoxes, setCheckboxes] = useState([]);
     const [allChecked, setAllChecked] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const tableHeader = [
         { title: 'Tên người dùng', key: 'name' },
@@ -150,6 +153,22 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
         })
     }
 
+    const { data, setData, post, processing, errors } = useForm({
+        import_file: null,
+    })
+
+    const submitFormFileExcel = (e) => {
+        e.preventDefault();
+        post('/admin/user/import', data);
+    }
+
+    useEffect(() => {
+        console.log(data.icon);
+        console.log(errors);
+    },[data.icon, errors]);
+   
+
+
     return <>
         <AdminLayout>
             <Flex justifyContent={"between"} className={"mb-4"}>
@@ -190,9 +209,13 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                                     <Dropdown.Content>
                                         <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={deleteMutipleConfirm} preserveState>
                                             <TrashIcon className={"h-4 w-4"}/>
-                                            <p>Xóa thiết bị đã chọn</p>
+                                            <p>Xóa user đã chọn</p>
                                         </Dropdown.Link>
-                                        </Dropdown.Content>
+                                        <Dropdown.Link as="button" type="button" onClick={() => setIsOpen(true)} className={"flex items-center space-x-2"}  preserveState>
+                                            <TrashIcon className={"h-4 w-4"}/>
+                                            <p>Nhập excel</p>
+                                        </Dropdown.Link>
+                                    </Dropdown.Content>
                                 </Dropdown>
                                 {/* <Button size={"xs"} icon={BarsArrowDownIcon} variant={"secondary"}>Sắp xếp</Button> */}
                             </div>
@@ -323,6 +346,25 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                     </nav>
                 </div>
             </div>
+            <Dialog open={isOpen} onClose={(val) => setIsOpen(val)} static={true}>
+      <DialogPanel>
+        <h3 className="text-lg font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">Thêm file excel</h3>
+        <form onSubmit={submitFormFileExcel} enctype="multipart/form-data">
+            <input type="file" name="import_file" id="import_file" className="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600
+                                        file:border-0
+                                        file:bg-gray-100 file:me-4
+                                        file:py-2 file:px-4
+                                        dark:file:bg-gray-700 dark:file:text-gray-400"
+                                        onChange={e => setData('import_file', e.target.files[0])}
+                                        />
+            <Button className="mt-8 w-full" onClick={() => setIsOpen(false)}>
+                Thêm File Excel
+            </Button>
+        </form>
+        
+      </DialogPanel>
+    </Dialog>
+
         </AdminLayout>
     </>
 }

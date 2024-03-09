@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UserExport;
+use App\Imports\UserImport;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -12,6 +14,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -100,11 +103,7 @@ class UserController extends Controller
             $user->roles()->attach($role->id);
         }
 
-
         return to_route('admin.user');
-
-
-
 
     }
 
@@ -182,4 +181,21 @@ class UserController extends Controller
         return redirect()->route('admin.user');
     }
 
+    public function exportUser()
+    {
+        return Excel::download(new UserExport, 'danh_sach_user.xlsx');
+    }
+    public function importUser(Request $request)
+    {
+        $request->validate([
+            'import_file' => [
+                'required',
+                'file'
+            ],
+        ]);
+
+        Excel::import(new UserImport, $request->file('import_file'));
+
+        return redirect()->back()->with('status', 'Imported Successfully');
+    }
 }
