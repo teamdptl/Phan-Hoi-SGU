@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\EquipmentStatus;
+use App\Exports\ReportExport;
+use App\Exports\RoomExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Room\CreateRoomRequest;
 use App\Http\Requests\Room\UpdateRoomRequest;
+use App\Imports\RoomImport;
 use App\Models\Equipment;
 use App\Models\Report;
 use App\Models\Review;
@@ -13,6 +16,7 @@ use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RoomController extends Controller
 {
@@ -143,6 +147,13 @@ class RoomController extends Controller
         return back()->with('message', 'Xóa thành công các phòng');
     }
 
+    public function export(){
+        return Excel::download(new RoomExport, 'danh_sach_phong.xlsx');
+    }
+
+    public function import(){
+        return Excel::import(new RoomImport, request()->file('excel_file'));
+    }
 
     // Hàm dùng để tạo chuỗi ngẫu nhiên cho qrcode phòng
     function generateRandomString($length = 8): string
@@ -155,4 +166,5 @@ class RoomController extends Controller
         }
         return $randomString;
     }
+
 }

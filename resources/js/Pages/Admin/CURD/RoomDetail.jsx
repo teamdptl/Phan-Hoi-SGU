@@ -13,18 +13,39 @@ import {
     Text,
     Button, TextInput, Select, SelectItem, MultiSelect, MultiSelectItem
 } from "@tremor/react";
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
     ArrowDownTrayIcon,
     ArrowPathRoundedSquareIcon,
-    ArrowUturnLeftIcon,
+    ArrowUturnLeftIcon, CheckIcon,
     ClipboardIcon
 } from "@heroicons/react/24/outline/index.js";
 import {Link} from "@inertiajs/react";
 import {QRCodeCanvas} from "qrcode.react";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 export default function ({room, equipments, url}){
-    console.log(room);
+    const [isCopy, setCopy] = useState(false);
+
+    const downloadStringAsFile = (data, filename) => {
+        let a = document.createElement('a');
+        a.download = filename;
+        a.href = data;
+        a.click();
+    }
+
+    const onCanvasButtonClick = () => {
+        // console.log('fun')
+        const node = document.querySelector("#qrCanvas");
+        if (node == null) {
+            return;
+        }
+        // For canvas, we just extract the image data and send that directly.
+        const dataURI = node.toDataURL('image/png');
+
+        downloadStringAsFile(dataURI, `phong_${room.name}_cs${room.facility}.png`);
+    }
+
     return <>
         <AdminLayout>
             <div className={"mb-4"}>
@@ -100,12 +121,15 @@ export default function ({room, equipments, url}){
                                         <label htmlFor="qrCode"
                                                className="block mb-4 text-sm font-medium text-gray-900 dark:text-white">Mã
                                             QR tạo ngẫu nhiên</label>
-                                        <QRCodeCanvas size={200} value={url}/>
+                                        <QRCodeCanvas id={"qrCanvas"} size={200} value={url}/>
                                         <Flex className={"mt-4 space-x-4"} alignItems={"center"} justifyContent={"start"}>
                                             {/*TODO: Copy dữ liệu*/}
-                                            <Button icon={ClipboardIcon} variant={"light"}>Copy link</Button>
+                                            <CopyToClipboard text={url} onCopy={() => setCopy(true)}>
+                                                <Button icon={isCopy ? CheckIcon : ClipboardIcon} variant={"light"}>Copy link</Button>
+
+                                            </CopyToClipboard>
                                             {/*TODO: Thực hiện hàm tải xuống hình ảnh*/}
-                                            <Button icon={ArrowDownTrayIcon} variant={"light"}>Tải xuống</Button>
+                                            <Button icon={ArrowDownTrayIcon} variant={"light"} onClick={onCanvasButtonClick}>Tải xuống</Button>
                                         </Flex>
                                     </div>
                                 </div>
