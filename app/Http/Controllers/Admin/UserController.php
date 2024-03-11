@@ -188,14 +188,22 @@ class UserController extends Controller
     public function importUser(Request $request)
     {
         $request->validate([
-            'import_file' => [
-                'required',
-                'file'
-            ],
+            'import_file' => 'required|file|mimes:xlsx,xls',
+
         ]);
 
         Excel::import(new UserImport, $request->file('import_file'));
 
-        return redirect()->back()->with('status', 'Imported Successfully');
+        // try {
+        //     $import = Excel::import(new UserImport, $request->file('import_file'));
+        //     //  return json_encode($import);
+        //     if ($import) {
+        //         return back()->with('message', 'User đã được thêm vào cơ sở dữ liệu của trường');
+        //     } else {
+        //         return response()->json(['success' => false, 'message' => 'Import failed'], 400);
+        //     }
+        // } catch (\Exception $e) {
+        //     return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        // }
     }
 }

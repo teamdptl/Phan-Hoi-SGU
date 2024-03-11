@@ -25,10 +25,9 @@ class UserExport implements FromCollection, WithHeadings, WithMapping
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'email_verified_at' => $user->email_verified_at,
+            'password' => '',
             'status' => $user->status ? 'Đang hoạt động' : 'Không hoạt động',
             'roleName' => $user->roles->pluck('name')->implode(', '),
-            'roleDescription' => $user->roles->pluck('description')->implode(', ')
         ];
     }
 
@@ -38,10 +37,9 @@ class UserExport implements FromCollection, WithHeadings, WithMapping
             'Id',
             'Tên',
             'Email',
-            'Ngày khởi tạo',
+            'Password',
             'Trạng thái',
             'Vai trò',
-            'Miêu tả vai trò'
         ];
     }
 }

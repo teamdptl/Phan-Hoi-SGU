@@ -5,6 +5,7 @@ import {Pagination} from "@mui/material";
 import { router, usePage, useForm} from "@inertiajs/react";
 import Swal from "sweetalert2";
 import Dropdown from "@/Components/Dropdown.jsx";
+import InputError from '@/Components/InputError';
 
 import {useContext, useEffect, useState} from "react";
 
@@ -167,6 +168,11 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
         console.log(errors);
     },[data.icon, errors]);
    
+    useEffect(()=>{
+        console.log(message);
+        setData({ ...data, errors: {} });
+    },[message])
+
 
 
     return <>
@@ -357,6 +363,8 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                                         dark:file:bg-gray-700 dark:file:text-gray-400"
                                         onChange={e => setData('import_file', e.target.files[0])}
                                         />
+            <InputError message={errors.import_file} className="mt-2"/>
+
             <Button className="mt-8 w-full" onClick={() => setIsOpen(false)}>
                 Thêm File Excel
             </Button>
