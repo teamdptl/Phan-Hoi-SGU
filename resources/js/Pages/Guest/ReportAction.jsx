@@ -19,10 +19,6 @@ import {ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
 
 export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}){
 
-    useEffect(() => {
-        console.log(qrCode);
-    },[qrCode])
-
     const inputRef = useRef(null);
 
     const { message, error } = usePage().props.flash;
@@ -46,11 +42,6 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
     })
 
     useEffect(()=>{
-        console.log(errors);
-    },[errors])
-
-    useEffect(()=>{
-        console.log(message);
         setData({ ...data, errors: {} });
     },[message])
 

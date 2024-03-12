@@ -35,10 +35,6 @@ Route::get('/loi-phong', function () {
     return Inertia::render('Guest/RoomError');
 })->name('room.error');
 
-Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index'])->name('room.report');
-Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
-
-
 // Admin
 Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
 Route::get('/admin/room', [\App\Http\Controllers\Admin\RoomController::class, 'index'])->name('admin.room');
@@ -82,6 +78,8 @@ Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class
 // Guests
 Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'index'])->name('room.review');
 Route::post('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
+Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index'])->name('room.report');
+Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
 
 // Worker
 Route::get('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'index'])->name('room.complete');

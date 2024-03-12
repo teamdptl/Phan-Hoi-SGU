@@ -24,7 +24,7 @@ class CompletionReportRequest extends FormRequest
         return [
             'photo' => 'required|array|min:1|max:6',
             'photo.*' => 'required|image|max:30000',
-            'content' => 'required|max:2000',
+            'content' => 'max:2000',
             'reports_id' => 'required',
         ];
     }
@@ -45,7 +45,6 @@ class CompletionReportRequest extends FormRequest
             ],
             'content' => [
                 'max:2000' => 'Độ dài tối đa 2000 kí tự',
-                'required' => 'Vui lòng nhập mô tả'
             ],
             'reports_id' => [
                 'required' => 'Không có reportId',
