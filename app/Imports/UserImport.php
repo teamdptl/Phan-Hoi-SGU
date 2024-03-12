@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
 
+
 HeadingRowFormatter::default('none');
 class UserImport implements ToModel, WithHeadingRow, WithUpserts, WithUpsertColumns
 {
@@ -24,69 +25,61 @@ class UserImport implements ToModel, WithHeadingRow, WithUpserts, WithUpsertColu
      */
     public function model(array $row)
     {
-
-
-        // $userIsDel = User::where('email', $row['email'])->first();
-
-        // if ($userIsDel && $userIsDel->status) {
-        //     return null; // Người dùng đã tồn tại và đã được kích hoạt, không thêm mới
-        // } elseif ($userIsDel && !$userIsDel->status) {
-        //     $userIsDel->name = $row['name'];
-        //     $userIsDel->password = Hash::make($row['password']);
-        //     $userIsDel->status = 1;
-        //     $userIsDel->save();
-
-        //     // Lấy vai trò từ dữ liệu và gán cho người dùng
-        //     if (isset($row['role'])) {
-        //         $role = Role::where('id', $row['role'])->first();
-        //         if ($role) {
-        //             $userIsDel->roles()->sync([$role->id]); // Sử dụng sync để xóa các vai trò cũ và thêm vai trò mới
-        //         }
-        //     }
-
-        //     return $userIsDel;
-        // }
-
-        // Người dùng chưa tồn tại, thêm mới
-
-        // dd(array_values($row));
-
         $row = array_values($row);
-        // dd($row);
 
-        $user = new User([
-            'name' => $row[1],
-            'email' => $row[2],
-            'password' => Hash::make($row[3]),
-            'status' => 1,
-            'email_verified_at' => now(),
-            'remember_token' => Str::random(10),
-        ]);
+        // dd(Str::lower($row[4]));
+        $userIsDel = User::where('email', $row[2])->first();
+        $status = (Str::lower($row[4]) == 'đang hoạt động') ? 1 : 0;
 
 
-        $user->save();
-
-        // dd($user);
-
-        // Lấy vai trò từ dữ liệu và gán cho người dùng
-        if (isset($row[5])) {
-            $role = Role::findOrFail($row[5]);
-            if ($role) {
-                $user->roles()->sync([$role->id]); // Sử dụng sync để xóa các vai trò cũ và thêm vai trò mới
+        if ($userIsDel) {
+            // Cập nhật thông tin người dùng nếu email đã tồn tại
+            $userIsDel->name = $row[1];
+            if ($row[3]) {
+                $userIsDel->password = Hash::make($row[3]);
             }
-        }
+            $userIsDel->status = $status;
+            $userIsDel->save();
 
-        return $user;
+            // Kiểm tra và cập nhật vai trò nếu có
+            if (isset($row[5])) {
+                $role = Role::where('name', $row[5])->first();
+                $userIsDel->roles()->sync([$role->id]);
+            }
+
+            return $userIsDel;
+        } else {
+            // Người dùng chưa tồn tại, tạo mới
+            $user = new User([
+                'name' => $row[1],
+                'email' => $row[2],
+                'password' => Hash::make($row[3]),
+                'status' => $status,
+                'remember_token' => Str::random(10),
+            ]);
+
+            $user->save();
+
+            // Kiểm tra và gán vai trò nếu có
+            if (isset($row[5])) {
+                $role = Role::where('name', $row[5])->first();
+                $user->roles()->sync([$role->id]);
+
+            }
+
+            return $user;
+        }
     }
-    // public function rules(): array
-    // {
-    //     return [
-    //         '0' => ['required', 'string', 'max:250'],
-    //         '3' => ['required', 'string'],
-    //         '1' => ['required', 'string', 'email'],
-    //         '2' => ['required', 'string', 'min:6']
-    //     ];
-    // }
+
+    public function rules(): array
+    {
+        return [
+            '1' => ['required', 'string'],
+            '2' => ['required', 'email'],
+            '3' => ['required', 'string'],
+            '4' => ['required'],
+        ];
+    }
 
 
     public function headingRow(): int
@@ -101,6 +94,6 @@ class UserImport implements ToModel, WithHeadingRow, WithUpserts, WithUpsertColu
 
     public function upsertColumns()
     {
-        return ['name', 'email', 'password'];
+        return ['name', 'password'];
     }
 }
