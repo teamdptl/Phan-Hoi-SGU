@@ -17,7 +17,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Home', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -36,7 +36,7 @@ Route::get('/loi-phong', function () {
 })->name('room.error');
 
 // Admin
-Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
+Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 Route::get('/admin/room', [\App\Http\Controllers\Admin\RoomController::class, 'index'])->name('admin.room');
 Route::get('/admin/room/export', [\App\Http\Controllers\Admin\RoomController::class, 'export']);
 Route::post('/admin/room/import', [\App\Http\Controllers\Admin\RoomController::class, 'import']); // Chưa test
@@ -49,6 +49,8 @@ Route::delete('/admin/room/{id}', [\App\Http\Controllers\Admin\RoomController::c
 Route::delete('/admin/room/list', [\App\Http\Controllers\Admin\RoomController::class, 'removeListRoom']);
 
 Route::get('/admin/equipment', [\App\Http\Controllers\Admin\EquipmentController::class, 'index'])->name('admin.equipment');
+Route::get('/admin/equipment/export', [\App\Http\Controllers\Admin\EquipmentController::class, 'export']);
+Route::post('/admin/equipment/import', [\App\Http\Controllers\Admin\EquipmentController::class, 'import']);
 Route::get('/admin/equipment/add', [\App\Http\Controllers\Admin\EquipmentController::class, 'addEquipment']);
 Route::get('/admin/equipment/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'infoEquipment']);
 Route::get('/admin/equipment/update/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'updateEquipment']);
@@ -73,7 +75,8 @@ Route::post('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailContr
 Route::put('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'undoAssign']);
 Route::delete('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'ignoreReport']);
 Route::post('/admin/report/filters', [\App\Http\Controllers\Admin\ReportController::class, 'filterReports']);
-Route::get('/admin/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index']);
+
+Route::get('/admin/thong-bao', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('admin.notification');
 
 // Guests
 Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'index'])->name('room.review');
@@ -88,7 +91,6 @@ Route::post('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionRe
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Admin middleware
     Route::middleware('admin')->group(function () {

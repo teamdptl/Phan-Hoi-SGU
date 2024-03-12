@@ -24,9 +24,9 @@ const labels = {
     return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
   }
 
-  
+
 export default function CreateRating({roomName, qrCode}){
-    const [value, setValue] = useState(2) //Lưu giá trị (số sao) được người dùng đánh giá
+    const [value, setValue] = useState(5) //Lưu giá trị (số sao) được người dùng đánh giá
     const [hover, setHover] = useState(-1) //Giá trị sao tạm để tạo hiệu ứng khi người dùng hover
     const [text, setText] = useState('') //Chứa nội dung mà người dùng đánh giá
     const [disable, setDisable] = useState(true) //Dùng để cho phép người dùng có thể click vào button gửi đánh giá
@@ -44,9 +44,9 @@ export default function CreateRating({roomName, qrCode}){
     const [buttons, setButtons] = useState(<button></button>)
     //Xử lý và gửi dữ liệu xuống server
     function submitRating() {
-        
+
         const url = '/gui-danh-gia'
-        router.post(url, {'token': token, 'rating': value, 'y_kien': text, 'rooms_id': 2}, {
+        router.post(url, {'token': token, 'rating': value, 'y_kien': text, 'qr_code': qrCode}, {
             onSuccess: (data) => {
                 console.log(data)
                 if(data.props.success){
@@ -56,7 +56,7 @@ export default function CreateRating({roomName, qrCode}){
                         setDescription("Đã gửi đánh giá của bạn!")
                         setButtons(
                         <>
-                            <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Đi xem</button>
+                            <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Đã rõ</button>
                         </>)
                     }else{
                         setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
@@ -67,7 +67,7 @@ export default function CreateRating({roomName, qrCode}){
                             <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Làm mới trang</button>
                         </>)
                     }
-                    
+
                 }else{
                     setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
                     setTitleContent("Thất bại!")
@@ -123,7 +123,7 @@ export default function CreateRating({roomName, qrCode}){
                                 </>
                             )
                         }
-                        
+
                     }
                 }
                 setModal(true)
@@ -145,8 +145,8 @@ export default function CreateRating({roomName, qrCode}){
                             <div class="border-2"></div>
                         </div>
                     </div>
-                   
-                   
+
+
                 </div>
                 <div className="xl:pl-20 lg:pl-10 md:pl-0 md:w-5/12 lg:w-1/3" >
                 <div className={"mt-3"}>

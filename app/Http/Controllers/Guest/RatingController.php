@@ -20,10 +20,10 @@ class RatingController extends Controller{
         return Inertia::render('Guest/CreateRating', [
             "roomName" => $room->name,
             "qrCode" => $request->get('id')
-    ]);
+        ]);
     }
 
-    public function checkWithCaptcha(RatingRequest $request){      
+    public function checkWithCaptcha(RatingRequest $request){
         $validated = $request->validated();
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret=6Ld17l0pAAAAAJNhNbKjDPx15ze-xd-_LxqgkI5O&response='. $request->input('token');
         $response = Http::post($url);
@@ -31,8 +31,7 @@ class RatingController extends Controller{
         // dd($request->all());
         $rating = false;
         if($success){
-            $review = Review::create($validated);
-            $rating = Room::find($validated['rooms_id'])->reviews()->save($review);
+            $rating = Room::where('qr_code', $validated['qr_code'])->first()->reviews()->create($validated);
         }
         return Inertia::render('Guest/CreateRating', ['success' => $success, 'insertRating' => $rating]);
     }

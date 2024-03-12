@@ -23,6 +23,7 @@ import {Pagination} from "@mui/material";
 import ReviewItem from "@/Pages/Admin/Review/ReviewItem.jsx";
 import ReportInfo from "@/Components/ReportInfo.jsx";
 import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
+import {RiCloseLine} from "react-icons/ri";
 
 export default function RoomAction({ roomName, roomFacility, reports, reviews, workers }) {
     const { auth } = usePage().props;
@@ -140,7 +141,6 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                                         </TabPanel>
                                         <TabPanel>
                                             <ReviewItem/>
-
                                         </TabPanel>
                                     </TabPanels>
                                 </TabGroup>
@@ -155,12 +155,20 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                     <DialogPanel className={"max-w-4xl"}>
                         <div className={"flex justify-between mb-4 items-center"}>
                             <Title>Thông tin báo hỏng</Title>
-                            <span className={"cursor-pointer text-red-500 inline-flex items-center"} onClick={() => {setDialogStatus({...dialogStatus, open: false})}}>
-                                Đóng
-                                <XMarkIcon className={"w-6 h-6 text-red-500 font-bold"}/>
-                            </span>
+
+                            <button
+                                type="button"
+                                className="rounded-tremor-small p-2 text-tremor-content-subtle hover:bg-tremor-background-subtle hover:text-tremor-content"
+                                onClick={() => setDialogStatus({...dialogStatus, open: false})}
+                                aria-label="Close">
+                                <RiCloseLine
+                                    className="h-5 w-5 shrink-0"
+                                    aria-hidden={true}
+                                />
+                            </button>
                         </div>
-                        <ReportInfo report={reports.data[dialogStatus.reportIndex]} worker={workers} openCompleteForm={() => redirectToCompleteForm(reports.data[dialogStatus.reportIndex]?.id)}/>
+                        <ReportInfo report={reports.data[dialogStatus.reportIndex]} worker={workers}
+                                    openCompleteForm={() => redirectToCompleteForm(reports.data[dialogStatus.reportIndex]?.id)}/>
                     </DialogPanel>
                 </Dialog>
             )}
