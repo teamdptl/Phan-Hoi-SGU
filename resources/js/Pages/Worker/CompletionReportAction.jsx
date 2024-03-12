@@ -8,7 +8,6 @@ import Swal from "sweetalert2";
 import InputError from '@/Components/InputError';
 import { TextInput } from "@tremor/react";
 import { Textarea } from "@tremor/react";
-import ReportInfo from "@/Components/ReportInfo.jsx";
 import ReportItem from "@/Pages/Admin/Report/ReportItem.jsx";
 import {ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
 import {Head, Link, useForm, usePage} from "@inertiajs/react";
@@ -85,7 +84,7 @@ return <>
                  <Text color="black" className={"font-medium text-xl  text-[#4E4E51]"}>Hoàn thành báo hỏng</Text>
              </Flex>
         </div>
-            
+
              <div className={"mx-5 mt-5 mb-5"}>
                  <Text color="black" className={"font-medium text-lg mb-2 text-[#4E4E51]"}>Báo hỏng</Text>
                  <ReportItem report={report} openReport={() => {}}/>

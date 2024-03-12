@@ -146,9 +146,9 @@ export default function Room({rooms, coSo, search, from, to, lastPage, total, cu
                 <Title>Quản lý phòng</Title>
             </Flex>
             <div className="mx-auto max-w-screen-7xl">
-                <div className={"fixed bottom-0 right-0 z-50"}>
-                    Hello world
-                </div>
+                {/*<div className={"fixed bottom-0 right-0 z-50"}>*/}
+                {/*    Hello world*/}
+                {/*</div>*/}
                 {/* Start coding here */}
                 <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                     <div

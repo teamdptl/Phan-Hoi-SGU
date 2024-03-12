@@ -12,7 +12,7 @@ export default function({children, openSidebar}){
     }
 
     return <>
-        <div className={"w-full h-screen bg-gray-50"}>
+        <div className={"w-full min-h-screen bg-gray-50"}>
             <header className={"bg-white justify-between py-2 px-4 flex space-x-2 shadow-sm"}>
                 <div className={"space-x-4 flex items-center"}>
                     <Button className={"inline-flex lg:hidden"} icon={Bars3Icon} variant={"light"} color={"gray"}
@@ -39,7 +39,7 @@ export default function({children, openSidebar}){
                                 </Flex>
                             </Dropdown.Trigger>
                             <Dropdown.Content>
-                                <Dropdown.Link>Đổi mật khẩu</Dropdown.Link>
+                                <Dropdown.Link href={route('profile.edit')}>Thông tin cá nhân</Dropdown.Link>
                                 <Dropdown.Link href="/logout" method="post">Đăng xuất</Dropdown.Link>
                             </Dropdown.Content>
                         </Dropdown>

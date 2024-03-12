@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\EquipmentExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\CreateEquipmentRequest;
+use App\Imports\EquipmentImport;
 use App\Models\Equipment;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 use function Laravel\Prompts\search;
 
 class EquipmentController extends Controller
@@ -123,5 +126,13 @@ class EquipmentController extends Controller
         Equipment::whereIn('id', $itemIds)->delete();
         // Redirect or respond as needed
         return redirect()->back()->with('message', 'Xóa thành công');
+    }
+
+    public function export(){
+        return Excel::download(new EquipmentExport, 'danh_sach_thiet_bi.xlsx');
+    }
+
+    public function import(Request $request){
+        Excel::import(new EquipmentImport, $request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX);
     }
 }

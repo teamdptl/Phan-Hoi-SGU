@@ -10,6 +10,7 @@ use App\Models\User;
 
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
@@ -21,11 +22,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
 
         Role::create([
             'id' => RoleEnum::ADMIN,
@@ -71,6 +67,20 @@ class DatabaseSeeder extends Seeder
             'description' => 'Thiết bị làm lạnh, làm mát (máy lạnh, máy quạt)',
             'icon' => 'default_equipment.png',
         ]);
+
+        Type::create([
+            'name' => 'Khác',
+            'description' => 'Các thiết bị khác',
+            'icon' => 'default_equipment.png',
+        ]);
+
+        $user = User::factory()->create([
+            'name' => 'Duy',
+            'email' => 'duy@gmail.com',
+            'password' => Hash::make("duy@gmail.com")
+        ]);
+
+        Role::find(RoleEnum::ADMIN->value)->users()->attach($user);
 
 //        for ($i = 0; $i < 10; $i++) {
 //            User::create([

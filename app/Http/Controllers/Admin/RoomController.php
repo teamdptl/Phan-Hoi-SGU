@@ -76,7 +76,10 @@ class RoomController extends Controller
     }
 
     public function infoRoomForm(string $id){
-        $room = Room::with(['equipments', 'reports', 'reviews'])->find($id);
+        $room = Room::with(['equipments', 'reports', 'reviews'])
+            ->addSelect(['average_rating' => Review::selectRaw('avg(rating)')->whereColumn('rooms_id', 'rooms.id')])
+            ->addSelect(['total_ratings' => Review::selectRaw('count(*)')->whereColumn('rooms_id', 'rooms.id')])
+            ->find($id);
         $equipments = Equipment::all();
         return Inertia::render('Admin/CURD/RoomDetail', [
             'room' => $room,
@@ -151,8 +154,8 @@ class RoomController extends Controller
         return Excel::download(new RoomExport, 'danh_sach_phong.xlsx');
     }
 
-    public function import(){
-        return Excel::import(new RoomImport, request()->file('excel_file'));
+    public function import(Request $request){
+        Excel::import(new RoomImport, $request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX);
     }
 
     // Hàm dùng để tạo chuỗi ngẫu nhiên cho qrcode phòng
