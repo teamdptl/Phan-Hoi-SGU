@@ -57,7 +57,7 @@ Route::post('/admin/equipment/update/{id}', [\App\Http\Controllers\Admin\Equipme
 Route::delete('/admin/equipment/{id}', [\App\Http\Controllers\Admin\EquipmentController::class, 'removeEquipment']);
 Route::delete('/admin/equipment/list', [\App\Http\Controllers\Admin\EquipmentController::class, 'removeListEquipment']);
 Route::get('/admin/user', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.user');
-Route::get('/admin/user/export', [\App\Http\Controllers\Admin\UserController::class, 'exportUser']);
+Route::get('/admin/user/export', [\App\Http\Controllers\Admin\UserController::class, 'exportUser'])->name('user.export');
 Route::post('/admin/user/import', [\App\Http\Controllers\Admin\UserController::class, 'importUser']);
 
 Route::get('/admin/user/add', [\App\Http\Controllers\Admin\UserController::class, 'addUser']);
