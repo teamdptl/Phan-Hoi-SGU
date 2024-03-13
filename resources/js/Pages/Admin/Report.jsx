@@ -25,6 +25,7 @@ import '../../../css/home.css'
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 import Pagination from "@mui/material/Pagination";
 import Dropdown from "@/Components/Dropdown";
+import { useLongPress } from "@uidotdev/usehooks";
 
 const getDateFormatted = (date, plusDay = 0, plusMonth = 0, plusYear = 0) =>{
     const fullYear = date.getFullYear() + plusYear;
@@ -46,6 +47,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
         to: new Date(to) || lastMonthDate,
     });
 
+    //Thêm thuộc tính isChecked cho từng báo cáo
     reports = reports.map(item => {
         item['isChecked'] = false
         return item
@@ -105,16 +107,16 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
 
     const [openFacilitiesMenu, setOpenFacilitiesMenu] = useState(false);
     const [openStatusMenu, setOpenStatusMenu] = useState(false);
+    const [openCheckBox, setOpenCheckBox] = useState(false);
 
 
+
+    // console.log(datePicker.from, datePicker.to)
     // console.log("Data khi render component", reports)
     // console.log("Data list reports", listReport)
-
-
     console.log("Báo cáo sau khi thêm ischecked", reports)
 
     const filterSearchText = () => {
-        console.log(datePicker.from, datePicker.to, searchText, actions, sortType)
         router.get('', {
             searchText: searchText,
             page: 1,
@@ -124,8 +126,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
     }
 
     const filterFacility = (e) => {
-        console.log(e.target.id)
-        console.log(e)
+        
         e.preventDefault()
         setFacility(e.target.id)
         router.get('', {
@@ -137,8 +138,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
     }
 
     const filterReportStatus = (e) => {
-        console.log(e.target.id)
-        console.log(e)
+        
         e.preventDefault()
         setActions(e.target.id)
         router.get('', {
@@ -164,9 +164,12 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
         router.get('', {page: pageNum})
     }
 
-    const openReport = (id) => {
-        router.get(route('admin.report') + '/' + id);
+    const openReport = (e, id) => {
+        console.log("Open report: " ,e)
+        // router.get(route('admin.report') + '/' + id);
     }
+
+    
 
     return <>
         <AdminLayout title="Danh sách báo hỏng">
@@ -275,7 +278,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                         {
                             listReport === undefined ? 'Lỗi! Vui lòng refresh lại trang!' : (listReport.length === 0 ? 'Chưa có báo cáo nào!' :
                             listReport.map((item, index) =>{
-                                return <ReportItem report={item} openReport={() => openReport(item.id)}/>
+                                return <ReportItem setListReport={setListReport} listReport={listReport} reportParam={item} openCheckBox={openCheckBox} setOpenCheckBox={setOpenCheckBox} openReport={(e) => openReport(e, item.id)} />
                             }))
                         }
                     </div>
