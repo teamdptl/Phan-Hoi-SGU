@@ -20,15 +20,17 @@ import {facilityToString} from "@/Utils/facility.js";
 import {BellIcon, ClockIcon, Cog6ToothIcon, CogIcon, EllipsisHorizontalCircleIcon} from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
 import { Badge, BadgeDelta } from '@tremor/react';
+import ReportLog from "@/Components/ReportLog.jsx";
+import {ADMIN} from "@/Utils/role.js";
 
 // TODO: Thêm auth user admin mới cho hiện các quyền
 export default function({report, worker, openCompleteForm}){
-    console.log(report);
     const lightGallery = useRef(null);
     const {auth} = usePage().props;
     const { message } = usePage().props.flash;
     const [workerId, setWorkerId] = useState(report?.assignment ? report.assignment.worker_id : '');
-
+    const url = route('admin.report')+'/'+report.id;
+    const [logOpen, setLogOpen] = useState(false);
 
     const onInit = useCallback((detail) => {
         if (detail) {
@@ -42,7 +44,7 @@ export default function({report, worker, openCompleteForm}){
 
     const assignWorkerToReport = () => {
         if (workerId){
-            router.post('', {
+            router.post(url, {
                 workerId: workerId,
                 adminId: auth ? auth.user.id : '',
             })
@@ -61,25 +63,26 @@ export default function({report, worker, openCompleteForm}){
             denyButtonColor: "#3085d6"
         }).then((result) => {
             if (result.isConfirmed) {
-                router.delete('');
+                router.delete(url);
             }
         });
     }
 
     const undoAssign = () => {
-        router.put('');
+        router.put(url);
     }
 
     return <>
         <div className={"grid lg:grid-cols-2 grid-cols-1"}>
             <div className={"relative"}>
-                <img onClick={() => openGallery(0)} className={"object-cover object-center w-full h-96 rounded-lg cursor-pointer"} src={'/storage/'+report.media[0].path} alt={"Ảnh báo hỏng"}/>
+                <img onClick={() => openGallery(0)} className={"object-cover object-center w-full h-96 rounded-lg cursor-pointer"} src={report.media.length > 0 ? '/storage/'+report.media[0].path : '/img/banner.jpg'} alt={"Ảnh báo hỏng"}/>
                 <div className={"absolute top-2 right-1 bg-black px-3 py-1 bg-opacity-50 text-gray-100 rounded-lg"}>{report.media.length} hình ảnh</div>
             </div>
             <div className={"lg:mt-0 lg:px-8 px-2 mt-4 relative"}>
-                <EllipsisHorizontalCircleIcon className={"cursor-pointer w-5 h-5 absolute top-2 right-2"}/>
+                <EllipsisHorizontalCircleIcon onClick={() => setLogOpen(true)} className={"cursor-pointer w-5 h-5 absolute top-2 right-2"}/>
                 <Title color="black" className={"mb-1 text-gray-600"}>
-                    {report.equipments.map(item => item.name).join(', ') + (report.other ? ', ' + report.other : '')}
+                    {report.equipments.map(item => item.name).join(', ') + (report.other ?
+                        ( report.equipments.length > 0 ? ', ' + report.other : report.other) : '')}
                 </Title>
 
                 <p style={{color: "#979797", fontSize: 14}}>Tạo lúc {displayTime(report.created_at)}</p>
@@ -118,11 +121,13 @@ export default function({report, worker, openCompleteForm}){
                                     <SearchSelectItem value={w.id}>{w.name}</SearchSelectItem>
                                 ))}
                             </SearchSelect>
-                            <div className={"mt-4 flex gap-4"}>
-                                <Button disabled={workerId === '' || auth === null} onClick={assignWorkerToReport}>Phân
-                                    công</Button>
-                                <Button onClick={ignoreReport} variant={"secondary"}>Bỏ qua</Button>
-                            </div>
+                            {auth.role.find(item => item.id === ADMIN) && (
+                                <div className={"mt-4 flex gap-4"}>
+                                    <Button disabled={workerId === ''} onClick={assignWorkerToReport}>Phân
+                                        công</Button>
+                                    <Button onClick={ignoreReport} variant={"secondary"}>Bỏ qua</Button>
+                                </div>
+                            )}
                         </>
                     )
                 }
@@ -139,12 +144,19 @@ export default function({report, worker, openCompleteForm}){
                                 <SearchSelectItem value={w.id}>{w.name}</SearchSelectItem>
                             ))}
                         </SearchSelect>
-                        <div className={"mt-4 flex gap-4 flex-wrap"}>
-                            {openCompleteForm && (
-                                <Button onClick={openCompleteForm}>Hoàn thành</Button>
-                            )}
-                            <Button onClick={undoAssign} variant={"secondary"}>Hủy phân công</Button>
-                        </div>
+                            <div className={"mt-4 flex gap-4 flex-wrap"}>
+                                {openCompleteForm && (
+                                    <Button onClick={openCompleteForm}>Hoàn thành</Button>
+                                )}
+
+                                {!openCompleteForm && (
+                                    <p className={"text-red-500"}>Nhân viên quét QR trước cửa phòng để hoàn thành báo hỏng</p>
+                                )}
+
+                                {auth.role.find(item => item.id === ADMIN) && (
+                                    <Button onClick={undoAssign} variant={"secondary"}>Hủy phân công</Button>
+                                )}
+                            </div>
                     </>
                 )}
 
@@ -176,5 +188,6 @@ export default function({report, worker, openCompleteForm}){
             elementClassNames="custom-classname"
             plugins={[lgZoom, lgVideo, lgThumbnail]}>
         </LightGallery>
+        <ReportLog logs={report.logs} isOpen={logOpen} setIsOpen={setLogOpen}/>
     </>
 }

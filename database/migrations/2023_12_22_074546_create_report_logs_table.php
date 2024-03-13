@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('content'); // Nội dung log
             $table->set('status', ['complete', 'sent', 'process', 'ignore']);
-            $table->foreignId('author_id')->references('id')->on('users');
+            $table->foreignId('author_id')->nullable()->references('id')->on('users');
             $table->foreignId('reports_id')->constrained();
             $table->timestamps();
         });

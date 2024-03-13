@@ -23,6 +23,28 @@ class Report extends Model
         'status' => 'sent'
     ];
 
+    public function getTitle(): string
+    {
+        $equipments = $this->equipments;
+        return empty($this->other) ? $equipments->pluck('name')->join(', ') :
+            $equipments->pluck('name')->push($this->other)->join(', ');
+    }
+
+    public function getFacility(): string
+    {
+        switch ($this->room->facility) {
+            case 'c':
+                return "Cơ sở chính";
+            case '1':
+                return "Cơ sở 1";
+            case '2':
+                return "Cơ sở 2";
+            default:
+                return "";
+        }
+    }
+
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'users_id', 'id');
@@ -51,5 +73,10 @@ class Report extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class, 'rooms_id', 'id');
+    }
+
+    public function logs(): HasMany
+    {
+        return $this->hasMany(ReportLog::class, 'reports_id', 'id');
     }
 }

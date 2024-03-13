@@ -23,7 +23,7 @@ class RatingRequest extends FormRequest{
         return [
             'rating' => ['required', 'numeric','min:1','max:5'],
             'y_kien' => ['required','string','max:255'],
-            'rooms_id' => ['required','numeric','min:1'],
+            'qr_code' => ['required','exists:rooms,qr_code'],
             'token' => ['required','string'],
         ];
     }
@@ -40,9 +40,8 @@ class RatingRequest extends FormRequest{
             'y_kien.max' => 'Số sao phải từ 1 đến 255',
             'token.required' => 'Hãy xác thực bạn không phải robot',
             'token.string' => 'M cook',
-            'rooms_id.requied' => 'Thiếu id phòng rồi!',
-            'rooms_id.min' => 'ID phòng không hợp lệ',
-            'rooms_id.numeric' => 'ID phòng không hợp lệ'
+            'qr_code.required' => 'Thiếu mã QR của phòng!',
+            'qr_code.exists' => 'QR Code của phòng không hợp lệ',
         ];
     }
 }

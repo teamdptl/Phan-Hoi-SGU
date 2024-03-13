@@ -11,6 +11,8 @@ import {useContext, useEffect, useState} from "react";
 
 import {
     BarsArrowDownIcon,
+    ArrowDownTrayIcon,
+    ArrowUpTrayIcon,
     PencilIcon,
     PlusIcon,
     TrashIcon,
@@ -218,9 +220,16 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                                             <p>Xóa user đã chọn</p>
                                         </Dropdown.Link>
                                         <Dropdown.Link as="button" type="button" onClick={() => setIsOpen(true)} className={"flex items-center space-x-2"}  preserveState>
-                                            <TrashIcon className={"h-4 w-4"}/>
+                                            <ArrowUpTrayIcon className={"h-4 w-4"}/>
                                             <p>Nhập excel</p>
                                         </Dropdown.Link>
+                                        <div className="mx-4 mt-1">
+                                        <a  href={"/admin/user/export"} method="get" className={"flex items-center "}  >
+                                            <ArrowDownTrayIcon className={"h-4 w-4 font-[350]"}/>
+                                            <p className=" mx-2 font-[350]">Xuất excel</p>
+                                        </a>
+                                        </div>
+                                       
                                     </Dropdown.Content>
                                 </Dropdown>
                                 {/* <Button size={"xs"} icon={BarsArrowDownIcon} variant={"secondary"}>Sắp xếp</Button> */}
@@ -353,25 +362,25 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                 </div>
             </div>
             <Dialog open={isOpen} onClose={(val) => setIsOpen(val)} static={true}>
-      <DialogPanel>
-        <h3 className="text-lg font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">Thêm file excel</h3>
-        <form onSubmit={submitFormFileExcel} enctype="multipart/form-data">
-            <input type="file" name="import_file" id="import_file" className="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600
-                                        file:border-0
-                                        file:bg-gray-100 file:me-4
-                                        file:py-2 file:px-4
-                                        dark:file:bg-gray-700 dark:file:text-gray-400"
-                                        onChange={e => setData('import_file', e.target.files[0])}
-                                        />
-            <InputError message={errors.import_file} className="mt-2"/>
+            <DialogPanel>
+                <h3 className="text-lg font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">Thêm file excel</h3>
+                <form onSubmit={submitFormFileExcel} enctype="multipart/form-data" className="mt-3">
+                    <input type="file" name="import_file" id="import_file" className="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600
+                                                file:border-0
+                                                file:bg-gray-100 file:me-4
+                                                file:py-2 file:px-4
+                                                dark:file:bg-gray-700 dark:file:text-gray-400"
+                                                onChange={e => setData('import_file', e.target.files[0])}
+                                                />
+                    <InputError message={errors.import_file} className="mt-2"/>
 
-            <Button className="mt-8 w-full" onClick={() => setIsOpen(false)}>
-                Thêm File Excel
-            </Button>
-        </form>
-        
-      </DialogPanel>
-    </Dialog>
+                    <Button className="mt-8 w-full" onClick={() => setIsOpen(false)}>
+                        Thêm File Excel
+                    </Button>
+                </form>
+                
+            </DialogPanel>
+            </Dialog>
 
         </AdminLayout>
     </>

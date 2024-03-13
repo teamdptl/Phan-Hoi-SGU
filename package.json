@@ -27,13 +27,17 @@
         "@mui/material": "^5.15.7",
         "@tremor/react": "^3.13.4",
         "@uidotdev/usehooks": "^2.4.1",
+        "date-fns": "^3.4.0",
+        "deep-equal": "^2.2.3",
         "file-saver": "^2.0.5",
         "lightgallery": "^2.7.2",
+        "moment": "^2.30.1",
         "qrcode.react": "^3.1.0",
         "react-copy-to-clipboard": "^5.1.0",
         "react-google-recaptcha": "^3.1.0",
         "react-icons": "^5.0.1",
         "sweetalert2": "^11.6.13",
-        "swiper": "^11.0.5"
+        "swiper": "^11.0.5",
+        "use-debounce": "^10.0.0"
     }
 }

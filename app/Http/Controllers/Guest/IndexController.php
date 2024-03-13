@@ -28,12 +28,12 @@ class IndexController extends Controller
             $reviews = $room->reviews();
             $workers = Role::find(RoleEnum::WORKER->value)->users;
             if ($user->isAdmin() || $user->isInspector()){
-                $reports = $room->reports()->with(['room', 'media', 'assignment', 'reply', 'reply.media', 'equipments'])->where('status', ReportStatus::SENT->value)
+                $reports = $room->reports()->with(['room', 'media', 'assignment', 'reply', 'reply.media', 'equipments', 'logs'])->where('status', ReportStatus::SENT->value)
                     ->orWhere('status', ReportStatus::PROCESS->value)->paginate(10);
             }
 
             else if ($user->isWorker()){
-                $reports = $user->reportWorker()->with(['room', 'media', 'assignment', 'reply', 'reply.media', 'equipments'])->where('rooms_id', $room->id)
+                $reports = $user->reportWorker()->with(['room', 'media', 'assignment', 'reply', 'reply.media', 'equipments', 'logs'])->where('rooms_id', $room->id)
                     ->where('status', ReportStatus::PROCESS->value)->paginate(10);
             }
         }

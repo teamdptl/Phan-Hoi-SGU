@@ -23,6 +23,7 @@ import {
 import {Link} from "@inertiajs/react";
 import {QRCodeCanvas} from "qrcode.react";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import ReviewItem from "@/Pages/Admin/Review/ReviewItem.jsx";
 
 export default function ({room, equipments, url}){
     const [isCopy, setCopy] = useState(false);
@@ -46,13 +47,15 @@ export default function ({room, equipments, url}){
         downloadStringAsFile(dataURI, `phong_${room.name}_cs${room.facility}.png`);
     }
 
+    console.log(room);
+
     return <>
         <AdminLayout>
             <div className={"mb-4"}>
                 <Link href={route('admin.room')}>
                     <Button icon={ArrowUturnLeftIcon} variant={"light"} className={"mb-4"}>Trở về</Button>
                 </Link>
-                <Title>Chi tiết phòng A.1234</Title>
+                <Title>Chi tiết phòng {room.name}</Title>
             </div>
             <TabGroup className="mt-4">
                 <TabList>
@@ -138,15 +141,20 @@ export default function ({room, equipments, url}){
                     </TabPanel>
                     <TabPanel>
                         <div className="mt-6">
-                            <Card>
-                                <div className="h-96"/>
-                            </Card>
+                            <Link href={route('admin.report', { searchText: room.name})}>
+                                <Button>Chuyển đến trang báo hỏng</Button>
+                            </Link>
                         </div>
                     </TabPanel>
                     <TabPanel>
                         <div className="mt-6">
                             <Card>
-                                <div className="h-96"/>
+                                <h4 className={"font-medium"}>Đánh giá: <span className={"font-normal"}>{parseFloat(room.average_rating).toFixed(2)} ({room.total_ratings} lượt)</span></h4>
+                                <div className={"mt-4 ml-2"}>
+                                    {room.reviews.length > 0 && room.reviews.map(review => (
+                                        <ReviewItem review={review}/>
+                                    ))}
+                                </div>
                             </Card>
                         </div>
                     </TabPanel>

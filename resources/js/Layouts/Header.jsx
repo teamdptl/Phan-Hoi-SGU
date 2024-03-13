@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {Link, usePage} from "@inertiajs/react";
 import Dropdown from "@/Components/Dropdown.jsx";
+import {ADMIN, WORKER} from "@/Utils/role.js";
 
 export default function Header(){
     const [navToggle, setNavToggle] = useState(false);
@@ -9,6 +10,8 @@ export default function Header(){
     const toggleNav = () => {
         setNavToggle(!navToggle);
     }
+
+    console.log(auth);
 
     return <>
         <header className={`${navToggle ? 'pb-6' : 'pb-0'} bg-gray-50 lg:pb-0 shadow-md`}>
@@ -48,7 +51,7 @@ export default function Header(){
                                         <span className="inline-flex rounded-md ml-10">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 hover:text-gray-900 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 {auth.user.name}
 
@@ -69,7 +72,19 @@ export default function Header(){
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Trang quản lý</Dropdown.Link>
+                                        {
+                                            auth.role !== null && auth.role.find(item => item.id === ADMIN) !== undefined && (
+                                                <Dropdown.Link href={route('admin.dashboard')}>Trang quản lý</Dropdown.Link>
+                                            )
+                                        }
+
+                                        {
+                                            auth.role !== null && auth.role.find(item => item.id === WORKER) !== undefined && (
+                                                <Dropdown.Link href={route('worker.home')}>Danh sách việc</Dropdown.Link>
+                                            )
+                                        }
+
+                                        <Dropdown.Link href={route('profile.edit')}>Thông tin cá nhân</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Đăng xuất
                                         </Dropdown.Link>
@@ -133,7 +148,19 @@ export default function Header(){
                                         </Dropdown.Trigger>
 
                                         <Dropdown.Content>
-                                            <Dropdown.Link href={route('profile.edit')}>Trang quản lý</Dropdown.Link>
+                                            {
+                                                auth.role !== null && auth.role.find(item => item.id === ADMIN) !== undefined && (
+                                                    <Dropdown.Link href={route('admin.dashboard')}>Trang quản lý</Dropdown.Link>
+                                                )
+                                            }
+
+                                            {
+                                                auth.role !== null && auth.role.find(item => item.id === WORKER) !== undefined && (
+                                                    <Dropdown.Link href={route('worker.home')}>Danh sách việc</Dropdown.Link>
+                                                )
+                                            }
+
+                                            <Dropdown.Link href={route('profile.edit')}>Thông tin cá nhân</Dropdown.Link>
                                             <Dropdown.Link href={route('logout')} method="post" as="button">
                                                 Đăng xuất
                                             </Dropdown.Link>
