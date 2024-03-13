@@ -14,8 +14,9 @@ use Maatwebsite\Excel\Facades\Excel;
 class ReportController extends Controller
 {
     public function index(Request $request){
-        $currentDateTimeString = date('Y-m-d');
-        $lastMonthDateTimeString = date('Y-m-d',strtotime($currentDateTimeString .'-1 month'));
+        $currentDateTime = date('Y-m-d');
+        $currentDateTimeString = date('Y-m-d', strtotime($currentDateTime . '+1 day'));
+        $lastMonthDateTimeString = date('Y-m-d',strtotime($currentDateTime .'-1 month'));
         $searchText = $request->input('searchText') ?? ' ';
         $from = $request->input('from',$lastMonthDateTimeString);
         $to = $request->input('to', $currentDateTimeString);
@@ -62,7 +63,7 @@ class ReportController extends Controller
             'total' => $reports->total(),
             'search' => $request->input('searchText'),
             'from' => $from,
-            'to' => $to,
+            'to' => date('Y-m-d', strtotime($to . '-1 day')),
             'sort' => $arrange,
             'coSo' => $facility,
             'reportStatus' => $status,

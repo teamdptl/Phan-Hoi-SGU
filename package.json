@@ -26,6 +26,7 @@
         "@mui/icons-material": "^5.15.6",
         "@mui/material": "^5.15.7",
         "@tremor/react": "^3.13.4",
+        "@uidotdev/usehooks": "^2.4.1",
         "date-fns": "^3.4.0",
         "deep-equal": "^2.2.3",
         "file-saver": "^2.0.5",
