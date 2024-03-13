@@ -2,7 +2,7 @@ import {displayTime} from "@/Utils/time.js";
 import Rating from "@mui/material/Rating";
 
 export default function({review}){
-    console.log(review);
+
     return <>
         <div className="flex items-center">
             <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold"><img

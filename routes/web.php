@@ -16,14 +16,11 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Home', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/huong-dan', function () {
+    dd("Huong dan page");
+})->name('guide');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -87,6 +84,7 @@ Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::
 // Worker
 Route::get('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'index'])->name('room.complete');
 Route::post('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'store']);
+Route::get('/danh-sach', [\App\Http\Controllers\Worker\IndexController::class, 'index'])->name('worker.home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

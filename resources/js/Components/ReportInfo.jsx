@@ -21,6 +21,7 @@ import {BellIcon, ClockIcon, Cog6ToothIcon, CogIcon, EllipsisHorizontalCircleIco
 import Swal from "sweetalert2";
 import { Badge, BadgeDelta } from '@tremor/react';
 import ReportLog from "@/Components/ReportLog.jsx";
+import {ADMIN} from "@/Utils/role.js";
 
 // TODO: Thêm auth user admin mới cho hiện các quyền
 export default function({report, worker, openCompleteForm}){
@@ -120,11 +121,13 @@ export default function({report, worker, openCompleteForm}){
                                     <SearchSelectItem value={w.id}>{w.name}</SearchSelectItem>
                                 ))}
                             </SearchSelect>
-                            <div className={"mt-4 flex gap-4"}>
-                                <Button disabled={workerId === '' || auth === null} onClick={assignWorkerToReport}>Phân
-                                    công</Button>
-                                <Button onClick={ignoreReport} variant={"secondary"}>Bỏ qua</Button>
-                            </div>
+                            {auth.role.find(item => item.id === ADMIN) && (
+                                <div className={"mt-4 flex gap-4"}>
+                                    <Button disabled={workerId === ''} onClick={assignWorkerToReport}>Phân
+                                        công</Button>
+                                    <Button onClick={ignoreReport} variant={"secondary"}>Bỏ qua</Button>
+                                </div>
+                            )}
                         </>
                     )
                 }
@@ -141,12 +144,19 @@ export default function({report, worker, openCompleteForm}){
                                 <SearchSelectItem value={w.id}>{w.name}</SearchSelectItem>
                             ))}
                         </SearchSelect>
-                        <div className={"mt-4 flex gap-4 flex-wrap"}>
-                            {openCompleteForm && (
-                                <Button onClick={openCompleteForm}>Hoàn thành</Button>
-                            )}
-                            <Button onClick={undoAssign} variant={"secondary"}>Hủy phân công</Button>
-                        </div>
+                            <div className={"mt-4 flex gap-4 flex-wrap"}>
+                                {openCompleteForm && (
+                                    <Button onClick={openCompleteForm}>Hoàn thành</Button>
+                                )}
+
+                                {!openCompleteForm && (
+                                    <p className={"text-red-500"}>Nhân viên quét QR trước cửa phòng để hoàn thành báo hỏng</p>
+                                )}
+
+                                {auth.role.find(item => item.id === ADMIN) && (
+                                    <Button onClick={undoAssign} variant={"secondary"}>Hủy phân công</Button>
+                                )}
+                            </div>
                     </>
                 )}
 

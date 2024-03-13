@@ -114,7 +114,7 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                                 <TabGroup>
                                     <TabList className="mt-4">
                                         <Tab>Báo hỏng được giao</Tab>
-                                        <Tab>Đánh giá của phòng</Tab>
+                                        {/*<Tab>Đánh giá của phòng</Tab>*/}
                                     </TabList>
                                     <TabPanels className={"my-4"}>
                                         <TabPanel className={"space-y-4"}>
@@ -139,9 +139,9 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                                             )}
 
                                         </TabPanel>
-                                        <TabPanel>
-                                            <ReviewItem/>
-                                        </TabPanel>
+                                        {/*<TabPanel>*/}
+                                        {/*    <ReviewItem/>*/}
+                                        {/*</TabPanel>*/}
                                     </TabPanels>
                                 </TabGroup>
                             </div>

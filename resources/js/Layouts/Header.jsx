@@ -80,7 +80,7 @@ export default function Header(){
 
                                         {
                                             auth.role !== null && auth.role.find(item => item.id === WORKER) !== undefined && (
-                                                <Dropdown.Link href={route('profile.edit')}>Danh sách việc</Dropdown.Link>
+                                                <Dropdown.Link href={route('worker.home')}>Danh sách việc</Dropdown.Link>
                                             )
                                         }
 
@@ -148,7 +148,19 @@ export default function Header(){
                                         </Dropdown.Trigger>
 
                                         <Dropdown.Content>
-                                            <Dropdown.Link href={route('profile.edit')}>Trang quản lý</Dropdown.Link>
+                                            {
+                                                auth.role !== null && auth.role.find(item => item.id === ADMIN) !== undefined && (
+                                                    <Dropdown.Link href={route('admin.dashboard')}>Trang quản lý</Dropdown.Link>
+                                                )
+                                            }
+
+                                            {
+                                                auth.role !== null && auth.role.find(item => item.id === WORKER) !== undefined && (
+                                                    <Dropdown.Link href={route('worker.home')}>Danh sách việc</Dropdown.Link>
+                                                )
+                                            }
+
+                                            <Dropdown.Link href={route('profile.edit')}>Thông tin cá nhân</Dropdown.Link>
                                             <Dropdown.Link href={route('logout')} method="post" as="button">
                                                 Đăng xuất
                                             </Dropdown.Link>
