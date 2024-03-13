@@ -9,6 +9,7 @@ import {
     CheckCircleIcon,
     ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon,
     FunnelIcon,
+    HandRaisedIcon,
     PencilIcon,
     TrashIcon
 } from "@heroicons/react/24/outline";
@@ -20,12 +21,14 @@ import {
 } from "@heroicons/react/24/outline/index.js";
 import { vi } from "date-fns/locale";
 import DropDownList from "@/Components/DropDownList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import '../../../css/home.css'
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 import Pagination from "@mui/material/Pagination";
 import Dropdown from "@/Components/Dropdown";
 import { useLongPress } from "@uidotdev/usehooks";
+import { CheckBox } from "@mui/icons-material";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 const getDateFormatted = (date, plusDay = 0, plusMonth = 0, plusYear = 0) =>{
     const fullYear = date.getFullYear() + plusYear;
@@ -108,7 +111,8 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
     const [openFacilitiesMenu, setOpenFacilitiesMenu] = useState(false);
     const [openStatusMenu, setOpenStatusMenu] = useState(false);
     const [openCheckBox, setOpenCheckBox] = useState(false);
-
+    const [longPressHandled, setLongPressHandled] = useState(false);
+    const [checkOnPage, setCheckOnPage] = useState(false)
 
 
     // console.log(datePicker.from, datePicker.to)
@@ -166,10 +170,62 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
 
     const openReport = (e, id) => {
         console.log("Open report: " ,e)
-        // router.get(route('admin.report') + '/' + id);
+        console.log(e._reactName)
+        if(!longPressHandled){
+            if(e.target.localName !== 'input'){
+                if(!openCheckBox){
+                    router.get(route('admin.report') + '/' + id);
+                }else{
+                    setOpenCheckBox(false);
+                }
+            }
+        }{
+            console.log("Đã xử lý sự kiện long press")
+            setLongPressHandled(false);
+        }    
     }
 
-    
+    const handleCheckAllReportOnPage = (isChecked) => {
+        
+        setListReport(listReport.map(item => {
+            if(isChecked)
+                item['isChecked'] = true
+            else
+                item['isChecked'] = false   
+            return item
+        }))
+        
+        setCheckOnPage(isChecked);
+
+    }
+
+    const handleIgnoreReports = (typeIgnore)=>{
+        console.log("Ignoring")
+        let listReportId = []
+        if(typeIgnore === 'onPage'){
+            let i = 0;
+            listReport.map((report)=>{
+                if(report['isChecked'] && report['status'] === 'sent'){
+                    listReportId[i++] = report['id'];
+                }
+            })
+        }
+        
+        if(typeIgnore === 'all'){
+            let i = 0;
+            listReport.map((report)=>{
+                if(report['status'] === 'sent'){
+                    listReportId[i++] = report['id'];
+                }
+            })
+        }
+
+        router.post(route('admin.report') + '/ignore', {listReportId: listReportId}, {
+            onSuccess: () => {
+                console.log("hello!");
+            }
+        })
+    }
 
     return <>
         <AdminLayout title="Danh sách báo hỏng">
@@ -256,14 +312,14 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                     <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
                                 </Dropdown.Trigger>
                                 <Dropdown.Content>
-                                    <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={()=>{}} preserveState>
-                                        <TrashIcon className={"h-4 w-4"}/>
-                                        <p>Xóa phòng đã chọn</p>
+                                    <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={()=>handleIgnoreReports('all')} preserveState>
+                                        <HandRaisedIcon className={"h-4 w-4"}/>
+                                        <p>Bỏ qua tất cả</p>
                                     </Dropdown.Link>
-                                    <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"}
+                                    <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={() => handleIgnoreReports('onPage')}
                                                    preserveState>
-                                        <ArrowUpTrayIcon className={"h-4 w-4"}/>
-                                        <p>Nhập file excel</p>
+                                        <HandRaisedIcon className={"h-4 w-4"}/>
+                                        <p>Bỏ qua báo cáo đã chọn</p>
                                     </Dropdown.Link>
                                     <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"}
                                                    preserveState>
@@ -274,11 +330,22 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                             </Dropdown>
                         </div>
                     </div>
+                    { openCheckBox && 
+                        <div className="flex justify-start items-center px-2 pt-2">
+                            <Checkbox 
+                                    checked={checkOnPage}
+                                    onChange={e => handleCheckAllReportOnPage(e.target.checked)}
+                                    size="small"
+                            ></Checkbox>                   
+                            <p class="text-xs text-center h-fit">Tất cả trên trang</p>         
+                        </div>
+                    }
                     <div className={"grid grid-cols-1 gap-4 p-4 pt-2 md:grid-cols-2 lg:grid-cols-2 min-h-40"}>
+                        
                         {
                             listReport === undefined ? 'Lỗi! Vui lòng refresh lại trang!' : (listReport.length === 0 ? 'Chưa có báo cáo nào!' :
                             listReport.map((item, index) =>{
-                                return <ReportItem setListReport={setListReport} listReport={listReport} reportParam={item} openCheckBox={openCheckBox} setOpenCheckBox={setOpenCheckBox} openReport={(e) => openReport(e, item.id)} />
+                                return <ReportItem setListReport={setListReport} listReport={listReport} report={item} openCheckBox={openCheckBox} setOpenCheckBox={setOpenCheckBox} openReport={(e) => openReport(e, item.id)} setLongPressHandled={setLongPressHandled} />
                             }))
                         }
                     </div>
@@ -299,7 +366,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                              )
                                          }
                                          <span className="font-semibold text-gray-900 dark:text-white">
-                                            {total} phòng
+                                            {total} báo cáo
                                         </span>
                                     </span>
                         {lastPage > 1 && (
