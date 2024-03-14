@@ -8,9 +8,9 @@ import Swal from "sweetalert2";
 import InputError from '@/Components/InputError';
 import { TextInput } from "@tremor/react";
 import { Textarea } from "@tremor/react";
-import ReportItem from "@/Pages/Admin/Report/ReportItem.jsx";
 import {ArrowUturnLeftIcon} from "@heroicons/react/24/outline/index.js";
 import {Head, Link, useForm, usePage} from "@inertiajs/react";
+import ReportWorkerItem from "@/Pages/Worker/ReportWorkerItem.jsx";
 
 export default function CompletionReportAction({report, qrCode}){
     const inputRef = useRef(null);
@@ -87,7 +87,7 @@ return <>
 
              <div className={"mx-5 mt-5 mb-5"}>
                  <Text color="black" className={"font-medium text-lg mb-2 text-[#4E4E51]"}>Báo hỏng</Text>
-                 <ReportItem report={report} openReport={() => {}}/>
+                 <ReportWorkerItem report={report} openReport={() => {}}/>
              </div>
              <form onSubmit={submit} encType="multipart/form-data" method="post">
                  <div className="space-y-2">
@@ -105,7 +105,7 @@ return <>
                      <Textarea
                          onChange={(e) => setData('content', e.target.value)}
                          id="description"
-                         placeholder="Start typing here..."
+                         placeholder="Nội dung công việc đã thực hiện..."
                      />
                      <InputError message={errors.content} className="mt-2"/>
                  </div>

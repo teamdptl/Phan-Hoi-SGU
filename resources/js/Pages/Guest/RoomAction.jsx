@@ -18,12 +18,13 @@ import {Head, Link, router, usePage} from "@inertiajs/react";
 import {facilityToString} from "@/Utils/facility.js";
 import React, {useEffect, useState} from "react";
 import ReportDetail from "@/Pages/Admin/CURD/ReportDetail.jsx";
-import ReportItem from "@/Pages/Admin/Report/ReportItem.jsx";
 import {Pagination} from "@mui/material";
 import ReviewItem from "@/Pages/Admin/Review/ReviewItem.jsx";
 import ReportInfo from "@/Components/ReportInfo.jsx";
 import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
 import {RiCloseLine} from "react-icons/ri";
+import ReportWorkerItem from "@/Pages/Worker/ReportWorkerItem.jsx";
+import {ADMIN, WORKER} from "@/Utils/role.js";
 
 export default function RoomAction({ roomName, roomFacility, reports, reviews, workers }) {
     const { auth } = usePage().props;
@@ -113,7 +114,12 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                             <div className={"max-w-xl mx-auto px-4"}>
                                 <TabGroup>
                                     <TabList className="mt-4">
-                                        <Tab>Báo hỏng được giao</Tab>
+                                        {auth.role.find(item => item.id === ADMIN) && (
+                                            <Tab>Báo hỏng của phòng</Tab>
+                                        )}
+                                        {auth.role.find(item => item.id === WORKER) && (
+                                            <Tab>Báo hỏng được giao</Tab>
+                                        )}
                                         {/*<Tab>Đánh giá của phòng</Tab>*/}
                                     </TabList>
                                     <TabPanels className={"my-4"}>
@@ -126,7 +132,7 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                                                 </>
                                             )}
                                             {reports.data !== null && reports.data.length > 0 && reports.data.map((item, index) => (
-                                                <ReportItem report={item} openReport={() => openDialog(index)}/>
+                                                <ReportWorkerItem report={item} openReport={() => openDialog(index)}/>
                                             ))}
 
                                             {reports.last_page > 1 && (

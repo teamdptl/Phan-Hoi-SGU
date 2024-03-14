@@ -16,10 +16,10 @@ import {
 } from "@tremor/react";
 import {Head, Link, router, usePage} from "@inertiajs/react";
 import React, {useEffect, useState} from "react";
-import ReportItem from "@/Pages/Admin/Report/ReportItem.jsx";
 import {Pagination} from "@mui/material";
 import ReportInfo from "@/Components/ReportInfo.jsx";
 import {RiCloseLine} from "react-icons/ri";
+import ReportWorkerItem from "@/Pages/Worker/ReportWorkerItem.jsx";
 
 export default function WorkerReportList({processReport, successReport, workers, index }) {
     const { auth } = usePage().props;
@@ -79,7 +79,7 @@ export default function WorkerReportList({processReport, successReport, workers,
                                                 </>
                                             )}
                                             {processReport.data !== null && processReport.data.length > 0 && processReport.data.map((item, index) => (
-                                                <ReportItem report={item} openReport={() => openDialog(item)}/>
+                                                <ReportWorkerItem report={item} openReport={() => openDialog(item)}/>
                                             ))}
 
                                             {processReport.last_page > 1 && (
@@ -100,7 +100,7 @@ export default function WorkerReportList({processReport, successReport, workers,
                                                 </>
                                             )}
                                             {successReport.data !== null && successReport.data.length > 0 && successReport.data.map((item, index) => (
-                                                <ReportItem report={item} openReport={() => openDialog(item)}/>
+                                                <ReportWorkerItem report={item} openReport={() => openDialog(item)}/>
                                             ))}
 
                                             {successReport.last_page > 1 && (
