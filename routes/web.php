@@ -80,6 +80,7 @@ Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class
 Route::post('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index'])->name('room.report');
 Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
+Route::get('/huong-dan', [\App\Http\Controllers\Guest\GuideController::class, 'index'])->name('room.guide');
 
 // Worker
 Route::get('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'index'])->name('room.complete');
