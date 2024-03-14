@@ -71,7 +71,7 @@ Route::get('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailContro
 Route::post('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'assignReport']);
 Route::put('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'undoAssign']);
 Route::delete('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'ignoreReport']);
-Route::post('/admin/report/filters', [\App\Http\Controllers\Admin\ReportController::class, 'filterReports']);
+Route::post('/admin/report/ignore', [\App\Http\Controllers\Admin\ReportController::class, 'ignoreSeriesReport']);
 
 Route::get('/admin/thong-bao', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('admin.notification');
 

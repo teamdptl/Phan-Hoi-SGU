@@ -1,21 +1,21 @@
 import {Badge, Card, Text} from "@tremor/react";
 import {MapPinIcon} from "@heroicons/react/16/solid/index.js";
-import Checkbox from "@/Components/Checkbox";
 import {statusToText} from "@/Utils/status.js";
 import {router, usePage} from "@inertiajs/react";
 import {ADMIN} from "@/Utils/role.js";
 import { useLongPress } from "@uidotdev/usehooks";
 import { useState } from "react";
+import { useEffect } from "react";
+import Checkbox from "@/Components/Checkbox";
 
 const dateCreatedFormat = (date)=>{
     return date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
 }
 
 
-export default function ({listReport, setListReport, reportParam, openReport, openCheckBox ,setOpenCheckBox, longPress}){
+export default function ({listReport, setListReport, report, openReport, openCheckBox ,setOpenCheckBox, setLongPressHandled}){
     const {auth} = usePage().props;
-    const createAt = reportParam.created_at === undefined ? undefined : reportParam.created_at.replace('Z', '')
-    const [report, setReport] = useState(reportParam)
+    const createAt = report.created_at === undefined ? undefined : report.created_at.replace('Z', '')
     
     const getNameEquipString = () => {
         let name = ''
@@ -66,8 +66,8 @@ export default function ({listReport, setListReport, reportParam, openReport, op
 
     const attrs = useLongPress(
         (e) => {
+            setLongPressHandled(true);
             setOpenCheckBox(true);
-            setReport({...report, isChecked : true})
             const newList = listReport.map((item) =>{
                 if(item.id === report.id) {
                     return {...item, isChecked: true};
@@ -77,28 +77,35 @@ export default function ({listReport, setListReport, reportParam, openReport, op
             setListReport(newList)
         },
         {
-          onStart: (event) => console.log("Press started"),
-          onFinish: (event) => console.log("Press Finished"),
-          onCancel: (event) => console.log("Press cancelled"),
+          onStart: (event) => console.log("Press started", event),
+          onFinish: (event) => console.log("Press Finished", event),
+          onCancel: (event) => console.log("Press cancelled", event),
           threshold: 500,
         }
       );
 
-    const handleChangeCheckbox = (event) =>{
-        setReport({...report, isChecked : event.target.checked})
+    
+
+    const handleChangeCheckbox = (value) =>{
         const newList = listReport.map((item) =>{
             if(item.id === report.id) {
-                return {...item, isChecked: event.target.checked};
+                return {...item, isChecked: value};
             }
             return item;
         })
         setListReport(newList)
     }
 
-      console.log(report)
+    useEffect(() => {
+        if(!openCheckBox){
+            handleChangeCheckbox(false)
+        }
+    }, [openCheckBox])
+
+    console.log(report)
 
     return <>
-        <Card className={"flex p-3 gap-4 cursor-pointer" + (report.isChecked ? " opacity-75" : " ")} onClick={e => openReport(e)} {...attrs} >
+        <Card className={"flex p-3 gap-4 cursor-pointer" + (report.isChecked && openCheckBox ? " opacity-75" : " ")} onClick={e => openReport(e)} {...attrs} >
             <div className={"flex-none"}>
                 <img className={"object-cover w-28 h-28 rounded"} alt={"Ảnh báo cáo"} src={report.media[0] !== undefined ? ("/storage/" + report.media[0].path ) : "https://diennuocnhatlong.vn/uploads/nguyen-nhan-quat-tran-hu.jpg"}/>
             </div>
@@ -115,7 +122,7 @@ export default function ({listReport, setListReport, reportParam, openReport, op
                 </div>
             </div>
             { openCheckBox &&
-                <Checkbox className="absolute bottom-3 right-3" checked={report.isChecked} onClick={e => handleChangeCheckbox(e)}></Checkbox>
+                <Checkbox className="absolute bottom-3 right-3" checked={report.isChecked} onChange={e => handleChangeCheckbox(e.target.checked)}></Checkbox>
             }
         </Card>
     </>
