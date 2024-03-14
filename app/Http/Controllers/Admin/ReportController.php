@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ReportStatus;
 use App\Exports\ReportExport;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
@@ -70,52 +71,23 @@ class ReportController extends Controller
         ]);
     }
 
-    public function filterReports(Request $request){
-
-        $searchText = $request->input('searchText');
-        $from = $request->input('from') ?? '1970-01-01';
-        $to = $request->input('to') ?? '';
-        $facility = $request->input('facility');
-        $arrange = $request->input('arrange');
-
-        $reports = Report::with('room', 'equipments', 'media')->where(function($query) use ($searchText){
-                            $query->whereHas('equipments', function ($query) use ($searchText){
-                                $query->where('name', 'like','%'. $searchText .'%');
-                            })
-                            ->orWhere('description', 'like','%'. $searchText .'%')
-                            ->orWhere('other', 'like','%'. $searchText .'%')
-                            ->orWhereHas('room', function ($query) use ($searchText){
-                                $query->where('name', 'like','%'. $searchText.'%');
-                            });
-                        })
-                        ->where('created_at', '>=', $from);
-        if($to != ''){
-            $reports = $reports->where('created_at', '<=', $to);
-        }
-
-        if($facility != 'all'){
-            $reports = $reports->whereHas('room', function ($query) use($facility){
-                $query->where('facility', $facility);
-            });
-        }
-
-
-        if($arrange == 'increase'){
-            $reports = $reports->orderBy('created_at', 'asc');
-        }else{
-            $reports = $reports->orderBy('created_at', 'desc');
-        }
-
-        $reports = $reports->paginate(2);
-
-        // dd($reports);
-        return Inertia::render('Admin/Report', [
-          'reports' => $reports,
-        ]);
-    }
-
     public function export()
     {
         return Excel::download(new ReportExport, 'danh_sach_bao_hong.xlsx');
+    }
+
+    public function ignoreSeriesReport(Request $request){
+        $listReportId = $request->input('listReportId');
+        // dd($listReportId);
+        foreach ($listReportId as $reportId){
+            $report = Report::find($reportId);
+            // dd($report);
+            if($report->status == ReportStatus::SENT->value){
+                $report->status = ReportStatus::IGNORE->value;
+                $report->save();
+            }
+            
+        }
+        return back()->with('message', 'Thao tác thành công!');
     }
 }

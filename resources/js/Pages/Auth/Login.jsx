@@ -8,9 +8,11 @@ import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from "@/Layouts/AppLayout.jsx";
 import {Button, Flex} from "@tremor/react";
+import { loginRedirectURL } from '@/Utils/login';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
+        redirect: loginRedirectURL(),
         email: '',
         password: '',
         remember: true,
@@ -24,8 +26,8 @@ export default function Login({ status, canResetPassword }) {
 
     const submit = (e) => {
         e.preventDefault();
-
-        post(route('login'));
+        console.log(data.redirect)
+        post('/login');
     };
 
     return (

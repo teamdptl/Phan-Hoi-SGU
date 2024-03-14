@@ -1,22 +1,21 @@
 import {Badge, Card, Text} from "@tremor/react";
 import {MapPinIcon} from "@heroicons/react/16/solid/index.js";
+import Checkbox from "@/Components/Checkbox";
 import {statusToText} from "@/Utils/status.js";
 import {router, usePage} from "@inertiajs/react";
 import {ADMIN} from "@/Utils/role.js";
-import { useLongPress } from "@uidotdev/usehooks";
-import { useState } from "react";
-import { useEffect } from "react";
-import Checkbox from "@/Components/Checkbox";
 
 const dateCreatedFormat = (date)=>{
     return date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
 }
 
 
-export default function ({listReport, setListReport, report, openReport, openCheckBox ,setOpenCheckBox, setLongPressHandled}){
+export default function ({report, openReport}){
     const {auth} = usePage().props;
+
     const createAt = report.created_at === undefined ? undefined : report.created_at.replace('Z', '')
-    
+    console.log(createAt)
+
     const getNameEquipString = () => {
         let name = ''
         if(report.other){
@@ -64,50 +63,10 @@ export default function ({listReport, setListReport, report, openReport, openChe
     //     }
     // }
 
-    const attrs = useLongPress(
-        (e) => {
-            setLongPressHandled(true);
-            setOpenCheckBox(true);
-            const newList = listReport.map((item) =>{
-                if(item.id === report.id) {
-                    return {...item, isChecked: true};
-                }
-                return item;
-            })
-            setListReport(newList)
-        },
-        {
-          onStart: (event) => console.log("Press started", event),
-          onFinish: (event) => console.log("Press Finished", event),
-          onCancel: (event) => console.log("Press cancelled", event),
-          threshold: 500,
-        }
-      );
-
-    
-
-    const handleChangeCheckbox = (value) =>{
-        const newList = listReport.map((item) =>{
-            if(item.id === report.id) {
-                return {...item, isChecked: value};
-            }
-            return item;
-        })
-        setListReport(newList)
-    }
-
-    useEffect(() => {
-        if(!openCheckBox){
-            handleChangeCheckbox(false)
-        }
-    }, [openCheckBox])
-
-    console.log(report)
-
     return <>
-        <Card className={"flex p-3 gap-4 cursor-pointer" + (report.isChecked && openCheckBox ? " opacity-75" : " ")} onClick={e => openReport(e)} {...attrs} >
+        <Card className={"flex p-3 gap-4 cursor-pointer"} onClick={openReport}>
             <div className={"flex-none"}>
-                <img className={"object-cover w-28 h-28 rounded"} alt={"Ảnh báo cáo"} src={report.media[0] !== undefined ? ("/storage/" + report.media[0].path ) : "https://diennuocnhatlong.vn/uploads/nguyen-nhan-quat-tran-hu.jpg"}/>
+                <img className={"object-cover w-28 h-28 rounded"} alt={"Ảnh báo cáo"} src={report.media[0] !== undefined ? ("/storage/" + report.media[0].path ) : "/img/banner.jpg"}/>
             </div>
             <div className={"flex flex-col justify-center w-full h-fit"}>
                 <div className={"flex justify-between"}>
@@ -121,9 +80,6 @@ export default function ({listReport, setListReport, report, openReport, openChe
                     <p class="w-full line-clamp-1">{getRoomNameString()}</p>
                 </div>
             </div>
-            { openCheckBox &&
-                <Checkbox className="absolute bottom-3 right-3" checked={report.isChecked} onChange={e => handleChangeCheckbox(e.target.checked)}></Checkbox>
-            }
         </Card>
     </>
 }

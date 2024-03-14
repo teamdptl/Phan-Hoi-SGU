@@ -71,7 +71,7 @@ Route::get('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailContro
 Route::post('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'assignReport']);
 Route::put('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'undoAssign']);
 Route::delete('/admin/report/{id}', [\App\Http\Controllers\Admin\ReportDetailController::class, 'ignoreReport']);
-Route::post('/admin/report/filters', [\App\Http\Controllers\Admin\ReportController::class, 'filterReports']);
+Route::post('/admin/report/ignore', [\App\Http\Controllers\Admin\ReportController::class, 'ignoreSeriesReport']);
 
 Route::get('/admin/thong-bao', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('admin.notification');
 
@@ -79,8 +79,13 @@ Route::get('/admin/thong-bao', [\App\Http\Controllers\Admin\NotificationControll
 Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'index'])->name('room.review');
 Route::post('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index'])->name('room.report');
-Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
+
 Route::get('/huong-dan', [\App\Http\Controllers\Guest\GuideController::class, 'index'])->name('room.guide');
+//Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
+
+Route::middleware('throttle:20,1')->group(function (){
+    Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
+});
 
 // Worker
 Route::get('/gui-phan-hoi-thiet-bi', [\App\Http\Controllers\Worker\CompletionReportController::class, 'index'])->name('room.complete');

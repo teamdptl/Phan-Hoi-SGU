@@ -54,7 +54,7 @@ class ReportCreatedNotification extends Notification
             "link" => route('admin.report') .'/'.$this->report->id,
             "title" => "Báo hỏng mới",
             "type" => "info",
-            'message' => "Có báo hỏng '".$this->report->getTitle()."' ở phòng "
+            'message' => "Có báo hỏng mới ở phòng "
                 .$this->report->room->name." (".$this->report->getFacility().")"
         ];
     }
