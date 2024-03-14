@@ -31,7 +31,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
     const [capturedImages, setCapturedImages] = useState([]);
 
     const [selectedValue, setSelectedValue] = useState(""); //Bật tắt input khác
-   
+
     const { data, setData, post, progress, processing, errors } = useForm({
         photo: null,
         idEquipment: selectedValue,
@@ -109,7 +109,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
                                 <ProgressCircle value={75} size="md" />
                                 </div>
                 )}
-            
+
                 <div className="md:flex xl:px-20 md:px-8 md:py-5" >
                 <div className="relative md:w-7/12 lg:w-2/3">
                 <img className="object-cover h-full brightness-75" src="/img/classroom.jpg"></img>
@@ -119,8 +119,8 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
                             <div class="border-2"></div>
                         </div>
                     </div>
-                   
-                   
+
+
                 </div>
 
                 <div className="xl:pl-20 lg:pl-10 md:pl-0 md:pt-4 md:w-5/12 lg:w-1/3" >
@@ -138,28 +138,28 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
                             <div class="mx-5 mt-5 flex flex-row relative">
                                 <CameraComponent inputRef={inputRef} setCapturedImages={setCapturedImages} className={"shrink-0"} setData={setData}/>
                                 <ListImgHorizontal inputRef={inputRef} capturedImages={capturedImages} setCapturedImages={setCapturedImages} setData={setData}/>
-                            </div> 
+                            </div>
                             <InputError message={errors.photo} className="mt-2 mx-5"/>
 
-                        </div> 
-                       
+                        </div>
+
                         <div className="space-y-2 mx-5 mt-5">
                             <Text color="black" className={"font-medium text-lg text-[#4E4E51]" }>Chọn thiết bị</Text>
                             <DropDownListDevice selectedValue={selectedValue} userEquimentIds={userEquimentIds}  setData={setData} setSelectedValue={setSelectedValue}/>
                             <InputError message={errors.idEquipment} className="mt-2"/>
 
                         </div>
-                     
+
                             {selectedValue == "-1" && (
                                 <div className="space-y-2 mx-5 mt-5">
                                 <Text color="black" className={"font-medium text-lg text-[#4E4E51]"}>Thiết bị khác</Text>
-                                <TextInput 
-                                    placeholder="Nhập..." 
-                                    onChange={e =>{  setData('other', e.target.value); 
+                                <TextInput
+                                    placeholder="Nhập tên thiết bị khác"
+                                    onChange={e =>{  setData('other', e.target.value);
                                 }}
                                 />
                                <InputError message={errors.other} className="mt-2"/>
-                                
+
                                 </div>
                             )}
                         <div className="space-y-2 mx-5 mt-5">
@@ -167,7 +167,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
                             <Textarea
                             onChange={(e) => setData('description',e.target.value)}
                             id="description"
-                            placeholder="Start typing here..."
+                            placeholder="Hãy mô tả cụ thể vị trí thiết bị. VD: Máy lạnh ở dãy bàn cuối"
                             />
                             <InputError message={errors.description} className="mt-2"/>
                         </div>
@@ -181,13 +181,13 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
                         </Flex>
                     </form>
                 </div>
-                    
+
                 </div>
-                
+
 
             </div>
-            
+
         </AppLayout>
     </>
-    
+
 }

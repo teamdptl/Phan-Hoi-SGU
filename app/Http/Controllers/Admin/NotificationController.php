@@ -15,7 +15,7 @@ class NotificationController extends Controller
         $dateEnd =  Carbon::parse($request->input('dateEnd', 'tomorrow'));
 
         $notification = $request->user()->notifications()->where('created_at', '>=', $dateStart)
-            ->where('created_at', '<', $dateEnd)->orderBy('created_at', 'desc')->paginate(50);
+            ->where('created_at', '<', $dateEnd)->orderBy('created_at', 'desc')->paginate(20);
 
         $item = $notification->map(function ($item){
             return [
