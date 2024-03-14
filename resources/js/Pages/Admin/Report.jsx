@@ -199,7 +199,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
 
     }
 
-    const handleIgnoreReports = (typeIgnore)=>{
+    const getListReportId = (typeIgnore)=>{
         console.log("Ignoring")
         let listReportId = []
         if(typeIgnore === 'onPage'){
@@ -220,11 +220,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
             })
         }
 
-        router.post(route('admin.report') + '/ignore', {listReportId: listReportId}, {
-            onSuccess: () => {
-                console.log("hello!");
-            }
-        })
+        return listReportId;
     }
 
     return <>
@@ -312,12 +308,11 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                     <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
                                 </Dropdown.Trigger>
                                 <Dropdown.Content>
-                                    <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={()=>handleIgnoreReports('all')} preserveState>
+                                    <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={()=>getListReportId('all')} preserveState>
                                         <HandRaisedIcon className={"h-4 w-4"}/>
                                         <p>Bỏ qua tất cả</p>
                                     </Dropdown.Link>
-                                    <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={() => handleIgnoreReports('onPage')}
-                                                   preserveState>
+                                    <Dropdown.Link href="/admin/report/ignore" method="post" data={{listReportId : getListReportId("onPage")}} as="button" type="button" className={"flex items-center space-x-2"} preserveState>
                                         <HandRaisedIcon className={"h-4 w-4"}/>
                                         <p>Bỏ qua báo cáo đã chọn</p>
                                     </Dropdown.Link>

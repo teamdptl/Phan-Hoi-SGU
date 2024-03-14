@@ -78,9 +78,10 @@ class ReportController extends Controller
 
     public function ignoreSeriesReport(Request $request){
         $listReportId = $request->input('listReportId');
-        dd($listReportId);
+        // dd($listReportId);
         foreach ($listReportId as $reportId){
             $report = Report::find($reportId);
+            // dd($report);
             if($report->status == ReportStatus::SENT->value){
                 $report->status = ReportStatus::IGNORE->value;
                 $report->save();
