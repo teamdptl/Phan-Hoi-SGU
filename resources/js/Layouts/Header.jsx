@@ -2,6 +2,7 @@ import {useState} from "react";
 import {Link, usePage} from "@inertiajs/react";
 import Dropdown from "@/Components/Dropdown.jsx";
 import {ADMIN, WORKER} from "@/Utils/role.js";
+import { getCurrentUrlRedirect } from "@/Utils/login";
 
 export default function Header(){
     const [navToggle, setNavToggle] = useState(false);
@@ -10,7 +11,6 @@ export default function Header(){
     const toggleNav = () => {
         setNavToggle(!navToggle);
     }
-
     console.log(auth);
 
     return <>
@@ -96,7 +96,7 @@ export default function Header(){
 
                     {auth.user === null && (
                         <>
-                            <Link href="/login" title="" className="items-center justify-center hidden px-4 py-2 ml-10 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md lg:inline-flex hover:bg-blue-700 focus:bg-blue-700" role="button"> Đăng nhập </Link>
+                            <Link href={"/login?redirect=" + getCurrentUrlRedirect()} title="" className="items-center justify-center hidden px-4 py-2 ml-10 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md lg:inline-flex hover:bg-blue-700 focus:bg-blue-700" role="button"> Đăng nhập </Link>
                         </>
                     )}
                 </nav>
@@ -113,7 +113,7 @@ export default function Header(){
 
                         {auth.user === null && (
                             <div className="px-6 mt-6">
-                                <Link href="/login" title=""
+                                <Link href={"/login?redirect=" + getCurrentUrlRedirect()} title=""
                                       className="inline-flex justify-center px-4 py-2 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md tems-center hover:bg-blue-700 focus:bg-blue-700"
                                       role="button"> Đăng nhập </Link>
                             </div>

@@ -3,3 +3,8 @@ export const loginRedirectURL = () => {
     let redirectParam = window.location.search;
     return redirectParam.split('redirect=')[1]
 }
+
+export const getCurrentUrlRedirect = () => {
+    console.log('Current url to redirect: ', window.location.href)
+    return window.location.href
+}
