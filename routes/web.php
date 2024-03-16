@@ -79,6 +79,8 @@ Route::get('/admin/thong-bao', [\App\Http\Controllers\Admin\NotificationControll
 Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'index'])->name('room.review');
 Route::post('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index'])->name('room.report');
+
+Route::get('/huong-dan', [\App\Http\Controllers\Guest\GuideController::class, 'index'])->name('room.guide');
 //Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
 
 Route::middleware('throttle:20,1')->group(function (){
