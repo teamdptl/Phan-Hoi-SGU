@@ -37,7 +37,7 @@ class ReportExport implements FromCollection, WithHeadings, WithMapping
 //                return $this->convertToExcelLink(url('/storage/' . $img->path));
 //            }),
             'status' => $report->status,
-            'worker' => $report->status == ReportStatus::SENT->value ? '' : $report->assignment->worker->name,
+            'worker' => ($report->status == ReportStatus::SENT->value || $report->status == ReportStatus::IGNORE->value) ? '' : $report->assignment->worker->name,
 //            'complete' => $report->status == ReportStatus::COMPLETE->value ? $report->reply->media->map(function ($img){
 //                return $this->convertToExcelLink(url('/storage/' . $img->path));
 //            })->join(", ") : '' ,

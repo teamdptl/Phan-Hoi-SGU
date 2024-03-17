@@ -130,7 +130,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
     }
 
     const filterFacility = (e) => {
-        
+
         e.preventDefault()
         setFacility(e.target.id)
         router.get('', {
@@ -142,7 +142,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
     }
 
     const filterReportStatus = (e) => {
-        
+
         e.preventDefault()
         setActions(e.target.id)
         router.get('', {
@@ -182,19 +182,19 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
         }{
             console.log("Đã xử lý sự kiện long press")
             setLongPressHandled(false);
-        }    
+        }
     }
 
     const handleCheckAllReportOnPage = (isChecked) => {
-        
+
         setListReport(listReport.map(item => {
             if(isChecked)
                 item['isChecked'] = true
             else
-                item['isChecked'] = false   
+                item['isChecked'] = false
             return item
         }))
-        
+
         setCheckOnPage(isChecked);
 
     }
@@ -210,7 +210,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                 }
             })
         }
-        
+
         if(typeIgnore === 'all'){
             let i = 0;
             listReport.map((report)=>{
@@ -252,7 +252,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                     </Button>
                                 </Dropdown.Trigger>
                                 <Dropdown.Content width="56" contentClasses="py-1 bg-white w-56">
-                                    <Dropdown.Link isFocus={false} as="button" type="button" className={"flex items-center space-x-2"} onClick={()=>{setOpenFacilitiesMenu(!openFacilitiesMenu)}} preserveState>
+                                    <Dropdown.Link isFocus={false} as="button" type="button" className={"flex items-center space-x-2"} onClick={(e)=>{e.preventDefault();setOpenFacilitiesMenu(!openFacilitiesMenu)}} preserveState>
                                         <BuildingOfficeIcon className={"h-4 w-4"}/>
                                         <p>Chọn cơ sở ({listFacility.map((item)=>{
                                             return item.optionValue === facility ? item.content : ''
@@ -273,7 +273,7 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                     }
 
 
-                                    <Dropdown.Link isFocus={false} as="button" type="button" className={"flex items-center space-x-2"} onClick={()=>{setOpenStatusMenu(!openStatusMenu)}} preserveState>
+                                    <Dropdown.Link isFocus={false} as="button" type="button" className={"flex items-center space-x-2"} onClick={(e)=>{e.preventDefault();setOpenStatusMenu(!openStatusMenu)}} preserveState>
                                         <ArrowPathIcon className={"h-4 w-4"}/>
                                         <p>Chọn trạng thái ({listReportStatus.map((item)=>{
                                             return item.optionValue === status ? item.content : ''
@@ -316,27 +316,26 @@ export default function ({reports, currentPage, lastPage, first, last, total, se
                                         <HandRaisedIcon className={"h-4 w-4"}/>
                                         <p>Bỏ qua báo cáo đã chọn</p>
                                     </Dropdown.Link>
-                                    <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"}
-                                                   preserveState>
+                                    <Dropdown.Link as="button" type="button" onClick={(e) => {e.preventDefault(); window.open("/admin/report/export")}} className={"flex items-center space-x-2"}>
                                         <ArrowDownTrayIcon className={"h-4 w-4"}/>
-                                        <p>Xuất file excel</p>
+                                        <p className=" mx-2">Xuất excel</p>
                                     </Dropdown.Link>
                                 </Dropdown.Content>
                             </Dropdown>
                         </div>
                     </div>
-                    { openCheckBox && 
+                    { openCheckBox &&
                         <div className="flex justify-start items-center px-2 pt-2">
-                            <Checkbox 
+                            <Checkbox
                                     checked={checkOnPage}
                                     onChange={e => handleCheckAllReportOnPage(e.target.checked)}
                                     size="small"
-                            ></Checkbox>                   
-                            <p class="text-xs text-center h-fit">Tất cả trên trang</p>         
+                            ></Checkbox>
+                            <p class="text-xs text-center h-fit">Tất cả trên trang</p>
                         </div>
                     }
                     <div className={"grid grid-cols-1 gap-4 p-4 pt-2 md:grid-cols-2 lg:grid-cols-2 min-h-40"}>
-                        
+
                         {
                             listReport === undefined ? 'Lỗi! Vui lòng refresh lại trang!' : (listReport.length === 0 ? 'Chưa có báo cáo nào!' :
                             listReport.map((item, index) =>{

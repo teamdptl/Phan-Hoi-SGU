@@ -159,9 +159,9 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
                                             <ArrowUpTrayIcon className={"h-4 w-4"}/>
                                             <p>Nhập file excel</p>
                                         </Dropdown.Link>
-                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"}>
+                                        <Dropdown.Link as="button" type="button" onClick={(e) => {e.preventDefault(); window.open("/admin/equipment/export")}} className={"flex items-center space-x-2"}>
                                             <ArrowDownTrayIcon className={"h-4 w-4"}/>
-                                            <p>Xuất file excel</p>
+                                            <p className=" mx-2">Xuất excel</p>
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
