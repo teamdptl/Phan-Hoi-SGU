@@ -108,7 +108,9 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                             </Card>
                         </Link>
                     </Flex>
-                    <Button className={"mt-12"}>Hướng dẫn sử dụng</Button>
+                    <Link href={route('guide')}  method="get">
+                        <Button className={"mt-12"}>Hướng dẫn sử dụng</Button>
+                    </Link>
                     {
                         auth.user && (
                             <>

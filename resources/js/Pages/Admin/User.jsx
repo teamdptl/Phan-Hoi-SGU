@@ -38,7 +38,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
         { title: 'Tên người dùng', key: 'name' },
         { title: 'Vai trò', key: 'role' },
         { title: 'Email', key: 'email' },
-        { title: 'Status', key: 'status' },
+        // { title: 'Status', key: 'status' },
     ];
 
     const changeSort = (headerKey) => {
@@ -300,9 +300,9 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                                 </th>
                                 <td className="px-4 py-3 truncate">{user.roles.length > 0 ? user.roles[0].name : 'No Role'}</td>
                                 <td className="px-4 py-3 truncate">{user.email}</td>
-                                <td className="px-4 py-3 truncate">
+                                {/* <td className="px-4 py-3 truncate">
                                 {user.status ? 'Hoạt động' : 'Không hoạt động'}
-                                </td>
+                                </td> */}
                                 <td className="px-4 py-3 flex items-center justify-center space-x-4">
                                 <Link href={route('admin.user')+`/update/${user.id}`}>
                                     <Button size={"xs"} icon={PencilIcon} variant={"light"}

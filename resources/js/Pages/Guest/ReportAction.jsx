@@ -103,7 +103,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
             <div className="min-h-64">
                 {progress && ( //Thanh tải file
                 <div className="fixed flex justify-center items-center inset-0 z-50 bg-black bg-opacity-50">
-                                <ProgressCircle value={75} size="md" />
+                                <ProgressCircle value={processing} size="md" />
                                 </div>
                 )}
 
