@@ -2,7 +2,7 @@ import {Button, Flex, TextInput} from "@tremor/react";
 import {Bars3Icon, BellIcon, ChevronDownIcon} from "@heroicons/react/24/outline/index.js";
 import {MagnifyingGlassIcon, UserCircleIcon} from "@heroicons/react/24/solid/index.js";
 import Dropdown from "@/Components/Dropdown.jsx";
-import {router, usePage} from "@inertiajs/react";
+import {Link, router, usePage} from "@inertiajs/react";
 
 export default function({children, openSidebar}){
     const {auth} = usePage().props;
@@ -20,7 +20,10 @@ export default function({children, openSidebar}){
                     <TextInput className={"max-w-64"} icon={MagnifyingGlassIcon} placeholder="Tìm kiếm chức năng"/>
                 </div>
                 <div className={"flex items-center justify-center space-x-4 mr-2"}>
-                    <BellIcon className="h-6 w-6 text-blue-600 cursor-pointer"/>
+                    <Link href={route('admin.notification')}>
+                        <BellIcon className="h-6 w-6 text-blue-600 cursor-pointer"/>
+                    </Link>
+
                     {auth.user !== null && (
                         <Dropdown>
                             <Dropdown.Trigger>

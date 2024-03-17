@@ -149,7 +149,7 @@ export default function ({room, equipments, url}){
                     <TabPanel>
                         <div className="mt-6">
                             <Card>
-                                <h4 className={"font-medium"}>Đánh giá: <span className={"font-normal"}>{parseFloat(room.average_rating).toFixed(2)} ({room.total_ratings} lượt)</span></h4>
+                                <h4 className={"font-medium"}>Đánh giá: <span className={"font-normal"}>{parseFloat(room.average_rating ?? 0).toFixed(2)} ({room.total_ratings} lượt)</span></h4>
                                 <div className={"mt-4 ml-2 space-y-4"}>
                                     {room.reviews.length > 0 && room.reviews.map(review => (
                                         <>

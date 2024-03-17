@@ -26,9 +26,11 @@ import {RiCloseLine} from "react-icons/ri";
 import ReportWorkerItem from "@/Pages/Worker/ReportWorkerItem.jsx";
 import {ADMIN, WORKER} from "@/Utils/role.js";
 import {getCurrentUrlRedirect} from "@/Utils/login.js";
+// import Swal from "sweetalert2";
 
 export default function RoomAction({ roomName, roomFacility, reports, reviews, workers }) {
     const { auth } = usePage().props;
+    // const { flash } = usePage().props;
     const { qrCode } = usePage().props;
 
     const [dialogStatus, setDialogStatus] = useState({
@@ -46,6 +48,24 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
     // useEffect(() => {console.log(roomId)}, [roomId]);
     console.log(reports);
     console.log(workers);
+    console.log(flash);
+
+    // useEffect(() => {
+    //     if (flash.message){
+    //         Swal.fire({
+    //             text: flash.message,
+    //             title: "Thành công",
+    //             icon: "success"
+    //         })
+    //     }
+    //     else if (flash.error){
+    //         Swal.fire({
+    //             text: flash.error,
+    //             title: "Thất bại",
+    //             icon: "error"
+    //         })
+    //     }
+    // }, [flash]);
 
     const redirectToCompleteForm = (reportId) => {
         router.get(route('room.complete', {
@@ -67,6 +87,7 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                 <Divider className={"lg:max-w-5xl my-4 max-w-sm"}/>
                 <Flex justifyContent={"center"} flexDirection={"col"}>
                     <Text>Bạn đang ở phòng</Text>
+                    
                     <Title className={"my-2"}>{roomName}</Title>
                     <Badge>{facilityToString(roomFacility)}</Badge>
                     <Flex justifyContent={"center"} className={"space-x-8 mt-8"} >

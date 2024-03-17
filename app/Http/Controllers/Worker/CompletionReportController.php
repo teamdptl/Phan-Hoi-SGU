@@ -47,7 +47,7 @@ class CompletionReportController extends Controller
             }
         }
 
-        return Inertia::render('Guest/RoomError');
+        return to_route('room.select', ['id' => $room->qr_code]);
     }
 
 
@@ -102,7 +102,7 @@ class CompletionReportController extends Controller
                 if ($request->user()->isAdmin()){
                     return back()->with('message', 'Đã xác nhận hoàn thành báo cáo');
                 }
-                return to_route('room.select', ['id' => $request->get('qrId')]);
+                return to_route('room.select', ['id' => $request->get('qrId')])->with('message', 'Đã xác nhận hoàn thành báo cáo');
             }
         }
         return back()->with('error', 'Có lỗi trong quá trình gửi phản hồi');

@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from "react";
 
 
 export default function ({roles}){
-    const { message, error } = usePage().props.flash;
+    const { flash } = usePage().props;
 
     const { data, setData, post, processing, errors } = useForm({
         name: '',
@@ -24,14 +24,14 @@ export default function ({roles}){
     }
 
     useEffect(() => {
-        if (error){
+        if (flash.error){
             Swal.fire({
-                text: error,
+                text: flash.error,
                 title: "Thất bại",
                 icon: "error"
             })
         }
-    }, [error]);
+    }, [flash.error]);
 
     return <>
         <AdminLayout title={"Thêm người dùng"}>

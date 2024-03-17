@@ -9,7 +9,7 @@ import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
 
 export default function ({report, open, setOpen}){
     const inputRef = useRef(null);
-    const { message, error } = usePage().props.flash;
+    const { flash } = usePage().props;
     const [disable, setDisable] = useState(true) //Dùng để cho phép người dùng có thể click vào button gửi đánh giá
 
     // Mảng chứa hình
@@ -34,15 +34,15 @@ export default function ({report, open, setOpen}){
         }
     },[capturedImages])
 
-    useEffect(()=>{
-        console.log(message);
-        setData({ ...data, errors: {} });
-    },[message])
+    // useEffect(()=>{
+    //     console.log(message);
+    //     setData({ ...data, errors: {} });
+    // },[message])
 
     useEffect(() => {
-        if (message){
+        if (flash.message){
             Swal.fire({
-                text: message,
+                text: flash.message,
                 title: "Thành công",
                 icon: "success"
             }).then(() => {
@@ -50,17 +50,14 @@ export default function ({report, open, setOpen}){
                 window.location.reload();
             });
         }
-    }, [message]);
-
-    useEffect(() => {
-        if (error){
+        else if (flash.error){
             Swal.fire({
-                text: error,
+                text: flash.error,
                 title: "Thất bại",
                 icon: "error"
             })
         }
-    }, [error]);
+    }, [flash]);
 
     return <>
         <Dialog open={open} onClose={(val) => setOpen(val)}>

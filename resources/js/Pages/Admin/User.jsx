@@ -28,7 +28,7 @@ import { Dialog, DialogPanel } from '@tremor/react';
 import Checkbox from "@/Components/Checkbox.jsx";
 
 export default function ({users, from, to, total, lastPage, currentPage, search, sortColumn, sortType}) {
-    const { message, error } = usePage().props.flash;
+    const { flash } = usePage().props;
     const [inputVal, setInputVal] = useState(search);
     const [checkBoxes, setCheckboxes] = useState([]);
     const [allChecked, setAllChecked] = useState(false);
@@ -56,24 +56,21 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
     }
 
     useEffect(() => {
-        if (message){
+        if (flash.message){
             Swal.fire({
-                text: message,
+                text: flash.message,
                 title: "Thành công",
                 icon: "success"
             })
         }
-    }, [message]);
-
-    useEffect(() => {
-        if (error){
+        else if (flash.error){
             Swal.fire({
-                text: error,
+                text: flash.error,
                 title: "Thất bại",
                 icon: "error"
             })
         }
-    }, [error]);
+    }, [flash]);
 
     useEffect(() => {
         // Khắc phục lỗi khi xóa trang có 1 items
@@ -82,16 +79,16 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
         }
     }, [users, currentPage]);
 
-    useEffect(() => {
-        console.log("users", users);
-        console.log("total", total);
-        console.log("from", from);
-        console.log("to", to);
-        console.log("lastPage", lastPage);
-        console.log("currentPage", currentPage);
-        console.log("search", search);
+    // useEffect(() => {
+    //     console.log("users", users);
+    //     console.log("total", total);
+    //     console.log("from", from);
+    //     console.log("to", to);
+    //     console.log("lastPage", lastPage);
+    //     console.log("currentPage", currentPage);
+    //     console.log("search", search);
 
-    }, [users]);
+    // }, [users]);
 
     const changePage = (pageNum) => {
         router.get('', {search: search, page: pageNum});
@@ -166,15 +163,15 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
         post('/admin/user/import', data);
     }
 
-    useEffect(() => {
-        console.log(data.icon);
-        console.log(errors);
-    },[data.icon, errors]);
+    // useEffect(() => {
+    //     console.log(data.icon);
+    //     console.log(errors);
+    // },[data.icon, errors]);
 
-    useEffect(()=>{
-        console.log(message);
-        setData({ ...data, errors: {} });
-    },[message])
+    // useEffect(()=>{
+    //     console.log(message);
+    //     setData({ ...data, errors: {} });
+    // },[message])
 
 
 

@@ -27,7 +27,7 @@ import {facilityToString} from "@/Utils/facility.js";
 export default function Room({rooms, coSo, search, from, to, lastPage, total, currentPage, sortColumn, sortType}){
     const [inputVal, setInputVal] = useState(search);
     const [coSoTruong, setCoSoTruong] = useState(coSo);
-    const { message, error } = usePage().props.flash;
+    const { flash } = usePage().props;
     const [checkBoxes, setCheckboxes] = useState([]);
     const [allChecked, setAllChecked] = useState(false);
 
@@ -40,24 +40,21 @@ export default function Room({rooms, coSo, search, from, to, lastPage, total, cu
     ];
 
     useEffect(() => {
-        if (message){
+        if (flash.message){
             Swal.fire({
-                text: message,
+                text: flash.message,
                 title: "Thành công",
                 icon: "success"
             })
         }
-    }, [message]);
-
-    useEffect(() => {
-        if (error){
+        else if (flash.error){
             Swal.fire({
-                text: error,
+                text: flash.error,
                 title: "Thất bại",
                 icon: "error"
             })
         }
-    }, [error]);
+    }, [flash]);
 
     const searchData = (searchText) => {
         router.get('', {search: searchText , page: 1, sortColumn: '', sortType: ''});

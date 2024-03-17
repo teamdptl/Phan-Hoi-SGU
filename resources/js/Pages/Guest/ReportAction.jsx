@@ -21,7 +21,7 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
 
     const inputRef = useRef(null);
 
-    const { message, error } = usePage().props.flash;
+    const { flash } = usePage().props;
     //Captcha
     const captchaRef = useRef(null)
     const [token, setToken] = useState(null)//Lưu token được trả về từ google recaptcha
@@ -41,14 +41,14 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
         token: token
     })
 
-    useEffect(()=>{
-        setData({ ...data, errors: {} });
-    },[message])
+    // useEffect(()=>{
+    //     setData({ ...data, errors: {} });
+    // },[message])
 
     useEffect(() => {
-        if (message){
+        if (flash.message){
             Swal.fire({
-                text: message,
+                text: flash.message,
                 title: "Thành công",
                 icon: "success"
             }).then(() => {
@@ -56,17 +56,14 @@ export default function ReportAction({userEquimentIds, roomName, roomId, qrCode}
                 window.location.reload();
               });
         }
-    }, [message]);
-
-    useEffect(() => {
-        if (error){
+        else if (flash.error){
             Swal.fire({
-                text: error,
+                text: flash.error,
                 title: "Thất bại",
                 icon: "error"
             })
         }
-    }, [error]);
+    }, [flash]);
 
     function submit(e) {
         e.preventDefault()
