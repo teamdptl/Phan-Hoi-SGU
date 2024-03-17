@@ -137,16 +137,16 @@ class RoomController extends Controller
         $itemIds = $request->input('items');
         $rooms = Room::whereIn('id', $itemIds)->get();
         DB::beginTransaction();
-        foreach ($rooms as $room){
-            try{
+        try{
+            foreach ($rooms as $room){
                 $room->equipments()->detach();
                 $room->delete();
-            } catch (\Exception $e){
-                DB::rollBack();
-                return back()->with('error', 'Không thể xóa phòng do có tồn tại báo hỏng hoặc đánh giá');
             }
+            DB::commit();
+        } catch (\Exception $e){
+            DB::rollBack();
+            return back()->with('error', 'Không thể xóa phòng do có tồn tại báo hỏng hoặc đánh giá');
         }
-        DB::commit();
         return back()->with('message', 'Xóa thành công các phòng');
     }
 

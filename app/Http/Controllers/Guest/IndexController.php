@@ -24,6 +24,11 @@ class IndexController extends Controller
         $reports = null;
         $reviews = null;
         $workers = null;
+
+        if (!$room){
+            return to_route("room.error");
+        }
+
         if ($user){
             $reviews = $room->reviews();
             $workers = Role::find(RoleEnum::WORKER->value)->users;

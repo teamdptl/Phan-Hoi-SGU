@@ -18,9 +18,7 @@ use Inertia\Inertia;
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/huong-dan', function () {
-    dd("Huong dan page");
-})->name('guide');
+Route::get('/huong-dan', [\App\Http\Controllers\Guest\GuideController::class, 'index'])->name('guide');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -80,7 +78,6 @@ Route::get('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class
 Route::post('/gui-danh-gia', [\App\Http\Controllers\Guest\RatingController::class, 'checkWithCaptcha']);
 Route::get('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'index'])->name('room.report');
 
-Route::get('/huong-dan', [\App\Http\Controllers\Guest\GuideController::class, 'index'])->name('room.guide');
 //Route::post('/gui-bao-hong', [\App\Http\Controllers\Guest\SendReportController::class, 'store']);
 
 Route::middleware('throttle:20,1')->group(function (){

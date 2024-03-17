@@ -67,12 +67,12 @@ class Report extends Model
 
     public function equipments(): BelongsToMany
     {
-        return $this->belongsToMany(Equipment::class, 'report_equipments', 'reports_id', 'equipments_id');
+        return $this->belongsToMany(Equipment::class, 'report_equipments', 'reports_id', 'equipments_id')->withTrashed();
     }
 
     public function room(): BelongsTo
     {
-        return $this->belongsTo(Room::class, 'rooms_id', 'id');
+        return $this->belongsTo(Room::class, 'rooms_id', 'id')->withTrashed();
     }
 
     public function logs(): HasMany

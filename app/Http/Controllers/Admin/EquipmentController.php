@@ -10,6 +10,7 @@ use App\Models\Equipment;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
@@ -115,17 +116,31 @@ class EquipmentController extends Controller
     public function removeEquipment(string $id){
         $equip = Equipment::find($id);
         if ($equip){
-            $equip->delete();
-            return back()->with('message', 'Xóa thành công');
+            DB::beginTransaction();
+            try {
+                $equip->delete();
+                DB::commit();
+                return back()->with('message', 'Xóa thành công');
+            } catch (\Exception $e){
+                DB::rollBack();
+                return back()->with('error', 'Xóa thất bại');
+            }
         }
-        return back()->with('error', 'Xóa thất bại');
+        return back()->with('error', 'Không tồn tại thiết bị này');
     }
 
     public function removeListEquipment(Request $request){
-        $itemIds = $request->input('items');
-        Equipment::whereIn('id', $itemIds)->delete();
-        // Redirect or respond as needed
-        return redirect()->back()->with('message', 'Xóa thành công');
+        $itemIds = $request->input('items', []);
+        DB::beginTransaction();
+        try{
+            Equipment::whereIn('id', $itemIds)->delete();
+            DB::commit();
+            return back()->with('message', 'Xóa thành công');
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            return back()->with('error', 'Xóa thất bại');
+        }
     }
 
     public function export(){

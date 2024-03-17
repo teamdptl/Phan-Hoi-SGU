@@ -6,11 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 class Equipment extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
+    protected $dates = ['deleted_at'];
     protected $table = 'equipments';
     protected $fillable = ['name', 'description', 'icon'];
 

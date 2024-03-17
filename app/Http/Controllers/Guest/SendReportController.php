@@ -24,6 +24,9 @@ class SendReportController extends Controller
 
         $room = Room::where('qr_code', $request->get('id'))->first();
 
+        if (!$room){
+            return to_route("room.error");
+        }
 
         $userEquimentIds = $room->equipments()->select(['id', 'name'])->get()->toArray();
 

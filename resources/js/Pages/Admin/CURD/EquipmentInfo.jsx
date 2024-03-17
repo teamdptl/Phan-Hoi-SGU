@@ -56,19 +56,15 @@ export default function ({types, equipment, roomHave}) {
                                     disabled
                                 />
                             </div>
+                            {/*<div className="w-full">*/}
+                            {/*    <label htmlFor="hinhAnh"*/}
+                            {/*           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hình ảnh*/}
+                            {/*        thiết bị</label>*/}
+                            {/*    <img src={equipment.icon} className={"w-auto h-24"} alt={"Icon thiết bị"}/>*/}
+                            {/*</div>*/}
                             <div className="w-full">
-                                <label htmlFor="hinhAnh"
-                                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hình ảnh
-                                    thiết bị</label>
-                                <img src={equipment.icon} className={"w-auto h-24"} alt={"Icon thiết bị"}/>
-                            </div>
-                            <div className="w-full">
-                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ngày
-                                    tạo</label>
-                                <p className={"text-sm"}>{new Date(equipment.created_at).toLocaleTimeString() + " " + new Date(equipment.created_at).toLocaleDateString()}</p>
-                            </div>
-                            <div className="w-full">
-                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phòng có thiết bị này</label>
+                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phòng có
+                                    thiết bị này</label>
                                 {roomHave.length > 0 && (
                                     <p className={"text-sm"}>{roomHave.map((item) => item.name).join(", ")}</p>
                                 )}
@@ -77,6 +73,12 @@ export default function ({types, equipment, roomHave}) {
                                     <p className={"text-sm"}>Chưa có phòng nào</p>
                                 )}
                             </div>
+                            <div className="w-full">
+                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ngày
+                                    tạo</label>
+                                <p className={"text-sm"}>{new Date(equipment.created_at).toLocaleTimeString() + " " + new Date(equipment.created_at).toLocaleDateString()}</p>
+                            </div>
+
                         </div>
                         <Flex justifyContent={"end"} className={"mt-4 lg:mt-16 space-x-4"}>
                             <Link href={"/admin/equipment"}>

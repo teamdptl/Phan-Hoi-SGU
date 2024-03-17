@@ -25,6 +25,7 @@ import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
 import {RiCloseLine} from "react-icons/ri";
 import ReportWorkerItem from "@/Pages/Worker/ReportWorkerItem.jsx";
 import {ADMIN, WORKER} from "@/Utils/role.js";
+import {getCurrentUrlRedirect} from "@/Utils/login.js";
 
 export default function RoomAction({ roomName, roomFacility, reports, reviews, workers }) {
     const { auth } = usePage().props;
@@ -102,7 +103,7 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
                         <>
                             <Flex justifyContent={"center"} alignItems={"center"} className={"mt-4 mb-12 space-x-1"}>
                                 <Text className={"text-[#27272A]"}>Nếu bạn là nhân viên ? </Text>
-                                <Link href={route('login')} className={"text-blue-500 font-medium"}>Đăng nhập</Link>
+                                <Link href={route('login') + "?redirect=" + getCurrentUrlRedirect()} className={"text-blue-500 font-medium"}>Đăng nhập</Link>
                             </Flex>
                         </>
                     )}

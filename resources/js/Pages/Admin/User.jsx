@@ -84,7 +84,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
 
     useEffect(() => {
         console.log("users", users);
-        console.log("total", total); 
+        console.log("total", total);
         console.log("from", from);
         console.log("to", to);
         console.log("lastPage", lastPage);
@@ -101,7 +101,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
     const searchData = (searchText) => {
         router.get('', {search: searchText , page: 1, sortColumn: '', sortType: ''});
     }
-    
+
     const deleteConfirm = (id, header, content) => {
         Swal.fire({
             title: header,
@@ -128,10 +128,11 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
         }
     }
 
-    const deleteMutipleConfirm = () => {
+    const deleteMutipleConfirm = (e) => {
+        e.preventDefault();
         Swal.fire({
-            title: "Xóa thiết bị",
-            text: "Bạn có muốn xóa các thiết bị đã chọn ?",
+            title: "Xóa người dùng",
+            text: "Bạn có muốn xóa các người dùng đã chọn ?",
             icon: "question",
             showDenyButton: true,
             confirmButtonText: "Có",
@@ -140,7 +141,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
             if (result.isConfirmed){
                 if (checkBoxes.length === 0){
                     Swal.fire({
-                        text: "Bạn chưa chọn bất kì thiết bị nào để xóa",
+                        text: "Bạn chưa chọn bất kì người dùng nào để xóa",
                         title: "Không thể thực hiện",
                         icon: "warning"
                     })
@@ -169,7 +170,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
         console.log(data.icon);
         console.log(errors);
     },[data.icon, errors]);
-   
+
     useEffect(()=>{
         console.log(message);
         setData({ ...data, errors: {} });
@@ -205,33 +206,31 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
 
                         </div>
                         <div
-                            className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                            className="w-full md:w-auto flex flex-row space-x-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                             <Link href={"/admin/user/add"} method="get">
-                            <Button size={"xs"} icon={PlusIcon}>Thêm người dùng</Button>
+                                <Button size={"xs"} icon={PlusIcon}>Thêm người dùng</Button>
                             </Link>
                             <div className="flex items-center space-x-1 md:space-x-2 lg:space-x-3 w-full md:w-auto">
-                            <Dropdown>
+                                <Dropdown>
                                     <Dropdown.Trigger>
                                         <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
                                     </Dropdown.Trigger>
                                     <Dropdown.Content>
-                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={deleteMutipleConfirm} preserveState>
+                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={deleteMutipleConfirm}>
                                             <TrashIcon className={"h-4 w-4"}/>
                                             <p>Xóa user đã chọn</p>
                                         </Dropdown.Link>
-                                        <Dropdown.Link as="button" type="button" onClick={() => setIsOpen(true)} className={"flex items-center space-x-2"}  preserveState>
+                                        <Dropdown.Link as="button" type="button" onClick={(e) => {e.preventDefault();setIsOpen(true)}} className={"flex items-center space-x-2"} >
                                             <ArrowUpTrayIcon className={"h-4 w-4"}/>
                                             <p>Nhập excel</p>
                                         </Dropdown.Link>
-                                        <div className="mx-4 mt-1">
-                                        <a  href={"/admin/user/export"} method="get" className={"flex items-center "}  >
+                                        <Dropdown.Link as="button" type="button" onClick={(e) => {e.preventDefault(); window.open("/admin/user/export")}} className={"flex items-center space-x-2"}>
                                             <ArrowDownTrayIcon className={"h-4 w-4 font-[350]"}/>
                                             <p className=" mx-2 font-[350]">Xuất excel</p>
-                                        </a>
-                                        </div>
-                                       
+                                        </Dropdown.Link>
+
                                     </Dropdown.Content>
-                                </Dropdown>
+                            </Dropdown>
                                 {/* <Button size={"xs"} icon={BarsArrowDownIcon} variant={"secondary"}>Sắp xếp</Button> */}
                             </div>
                         </div>
@@ -311,7 +310,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                                 <Link href={route('admin.user')+`/update/${user.id}`}>
                                     <Button size={"xs"} icon={PencilIcon} variant={"light"}
                                             color={"yellow"}>Sửa</Button>
-                                </Link>     
+                                </Link>
                                     <Button  onClick={() => deleteConfirm(user.id, 'Xóa người dùng', 'Bạn có muốn xóa người dùng '+user.name+' ?')} size={"xs"} icon={TrashIcon} color={"red"} variant={"light"}>Xóa</Button>
                                 </td>
                             </tr>
@@ -378,7 +377,7 @@ export default function ({users, from, to, total, lastPage, currentPage, search,
                         Thêm File Excel
                     </Button>
                 </form>
-                
+
             </DialogPanel>
             </Dialog>
 

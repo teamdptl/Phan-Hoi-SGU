@@ -16,6 +16,9 @@ class RatingController extends Controller{
     public function index(Request $request){
         $room = Room::where('qr_code', $request->get('id'))->first();
 
+        if (!$room){
+            return to_route("room.error");
+        }
 
         return Inertia::render('Guest/CreateRating', [
             "roomName" => $room->name,

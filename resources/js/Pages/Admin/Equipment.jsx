@@ -16,30 +16,33 @@ import Dropdown from "@/Components/Dropdown.jsx";
 import Swal from "sweetalert2";
 
 export default function ({equipments, from, to, total, lastPage, currentPage, search}){
-    const { message, error } = usePage().props.flash;
+    const { flash } = usePage().props;
     const [inputVal, setInputVal] = useState(search);
     const [checkBoxes, setCheckboxes] = useState([]);
     const [allChecked, setAllChecked] = useState(false);
 
     useEffect(() => {
-        if (message){
+        if (flash.message){
             Swal.fire({
-                text: message,
+                text: flash.message,
                 title: "Thành công",
                 icon: "success"
             })
         }
-    }, [message]);
-
-    useEffect(() => {
-        if (error){
+        else if (flash.error) {
             Swal.fire({
-                text: error,
+                text: flash.error,
                 title: "Thất bại",
                 icon: "error"
             })
         }
-    }, [error]);
+    }, [flash]);
+
+    // useEffect(() => {
+    //     if (error){
+    //
+    //     }
+    // }, [error]);
 
     useEffect(() => {
         // Khắc phục lỗi khi xóa trang có 1 items
@@ -82,7 +85,8 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
         })
     }
 
-    const deleteMutipleConfirm = () => {
+    const deleteMutipleConfirm = (e) => {
+        e.preventDefault();
         Swal.fire({
             title: "Xóa thiết bị",
             text: "Bạn có muốn xóa các thiết bị đã chọn ?",
@@ -147,15 +151,15 @@ export default function ({equipments, from, to, total, lastPage, currentPage, se
                                         <Button size={"xs"} icon={ChevronDownIcon} variant={"secondary"}>Thao tác</Button>
                                     </Dropdown.Trigger>
                                     <Dropdown.Content>
-                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={deleteMutipleConfirm} preserveState>
+                                            <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} onClick={deleteMutipleConfirm}>
                                             <TrashIcon className={"h-4 w-4"}/>
                                             <p>Xóa thiết bị đã chọn</p>
                                         </Dropdown.Link>
-                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} preserveState>
+                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"}>
                                             <ArrowUpTrayIcon className={"h-4 w-4"}/>
                                             <p>Nhập file excel</p>
                                         </Dropdown.Link>
-                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"} preserveState>
+                                        <Dropdown.Link as="button" type="button" className={"flex items-center space-x-2"}>
                                             <ArrowDownTrayIcon className={"h-4 w-4"}/>
                                             <p>Xuất file excel</p>
                                         </Dropdown.Link>

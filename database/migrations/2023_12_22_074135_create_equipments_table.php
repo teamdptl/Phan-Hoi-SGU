@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("icon")->nullable();
             $table->foreignId('types_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

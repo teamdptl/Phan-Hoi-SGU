@@ -152,7 +152,9 @@ export default function ({room, equipments, url}){
                                 <h4 className={"font-medium"}>Đánh giá: <span className={"font-normal"}>{parseFloat(room.average_rating).toFixed(2)} ({room.total_ratings} lượt)</span></h4>
                                 <div className={"mt-4 ml-2 space-y-4"}>
                                     {room.reviews.length > 0 && room.reviews.map(review => (
-                                        <ReviewItem review={review}/>
+                                        <>
+                                            <ReviewItem review={review}/>
+                                        </>
                                     ))}
                                 </div>
                             </Card>

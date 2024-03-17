@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("icon")->nullable();
             $table->json("extra_data")->nullable(); // Extra data sẽ chứa range của location
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
