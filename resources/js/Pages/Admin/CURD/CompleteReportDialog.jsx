@@ -95,7 +95,7 @@ export default function ({report, open, setOpen}){
                                 <Textarea
                                     onChange={(e) => setData('content', e.target.value)}
                                     id="description"
-                                    placeholder="Start typing here..."
+                                    placeholder="Chi tiết công việc đã thực hiện..."
                                 />
                                 <InputError message={errors.content} className="mt-2"/>
                             </div>
