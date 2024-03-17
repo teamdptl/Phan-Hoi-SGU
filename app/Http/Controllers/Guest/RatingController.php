@@ -33,9 +33,16 @@ class RatingController extends Controller{
         $success = json_decode($response)->success;
         // dd($request->all());
         $rating = false;
+        $room = Room::where('qr_code', $validated['qr_code'])->first();
         if($success){
-            $rating = Room::where('qr_code', $validated['qr_code'])->first()->reviews()->create($validated);
+            $rating = $room->reviews()->create($validated);
+            
         }
-        return Inertia::render('Guest/CreateRating', ['success' => $success, 'insertRating' => $rating]);
+        return Inertia::render('Guest/CreateRating', [
+            'success' => $success, 
+            'insertRating' => $rating,
+            'roomName' => $room->name,
+            'qrCode' => $room->qr_code
+        ]);
     }
 }

@@ -45,7 +45,7 @@ export default function CreateRating({roomName, qrCode}){
     //Xử lý và gửi dữ liệu xuống server
     function submitRating() {
 
-        const url = '/gui-danh-gia'
+        const url = '/gui-danh-gia?id=' + qrCode
         router.post(url, {'token': token, 'rating': value, 'y_kien': text, 'qr_code': qrCode}, {
             onSuccess: (data) => {
                 console.log(data)
@@ -56,15 +56,29 @@ export default function CreateRating({roomName, qrCode}){
                         setDescription("Đã gửi đánh giá của bạn!")
                         setButtons(
                         <>
-                            <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Đã rõ</button>
+                            <button onClick={() => {
+                                setModal(false)
+                                // router.get('/phong?id=' + qrCode)
+                                }
+                            } class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Đã rõ</button>
                         </>)
+
+                        captchaRef.current.reset()
+                        setDisable(true)
+                        setText('')
+                        setValue(5)
                     }else{
                         setIcon(<IoMdCloseCircleOutline class="size-16 text-red-600"/>)
                         setTitleContent("Thất bại!")
                         setDescription("Lỗi server! Không thể lưu đánh giá!")
                         setButtons(
                         <>
-                            <button class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Làm mới trang</button>
+                            <button onClick={
+                                () => {
+                                    setModal(false)
+                                    router.get('/gui-danh-gia?id=' + qrCode)
+                                }
+                            } class="px-10 font-bold hover:opacity-30 text-white bg-blue-600 py-2 rounded-lg">Làm mới trang</button>
                         </>)
                     }
 
