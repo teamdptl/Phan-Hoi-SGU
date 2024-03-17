@@ -26,8 +26,11 @@ class UserController extends Controller
         $sortColumn = $request->filled('sortColumn') ? $request->get('sortColumn') : 'created_at';
         $sortType = $request->filled('sortType') ? $request->get('sortType') : 'asc';
         $paginator = User::with('roles')
-            ->where('name', 'like', '%' . $request->input('search', '') . '%')
-            ->orWhere('email', 'like', '%' . $request->input('search', '') . '%');
+        ->where('status', '=', 1) // Chỉnh sửa điều kiện tìm kiếm ở đây
+        ->where(function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->input('search', '') . '%')
+                  ->orWhere('email', 'like', '%' . $request->input('search', '') . '%');
+        });
 
         // If sorting by role, we need to join the roles table and order by its name
         if ($sortColumn === 'role') {
@@ -37,6 +40,8 @@ class UserController extends Controller
 
         $paginator = $paginator->orderBy($sortColumn === 'role' ? 'user_role.roles_id' : $sortColumn, $sortType)
             ->paginate(10);
+
+        
 
         return Inertia::render(
             'Admin/User',
