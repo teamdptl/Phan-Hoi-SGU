@@ -48,7 +48,7 @@ export default function RoomAction({ roomName, roomFacility, reports, reviews, w
     // useEffect(() => {console.log(roomId)}, [roomId]);
     console.log(reports);
     console.log(workers);
-    console.log(flash);
+    // console.log(flash);
 
     // useEffect(() => {
     //     if (flash.message){
