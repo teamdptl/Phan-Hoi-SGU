@@ -18,7 +18,7 @@ class ReportController extends Controller
         $currentDateTime = date('Y-m-d');
         $currentDateTimeString = date('Y-m-d', strtotime($currentDateTime . '+1 day'));
         $lastMonthDateTimeString = date('Y-m-d',strtotime($currentDateTime .'-1 month'));
-        $searchText = $request->input('searchText') ?? ' ';
+        $searchText = $request->input('searchText') ?? '';
         $from = $request->input('from',$lastMonthDateTimeString);
         $to = $request->input('to', $currentDateTimeString);
 
@@ -86,7 +86,7 @@ class ReportController extends Controller
                 $report->status = ReportStatus::IGNORE->value;
                 $report->save();
             }
-            
+
         }
         return back()->with('message', 'Thao tác thành công!');
     }
