@@ -1,6 +1,7 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://ttcntt.sgu.edu.vn/wp-content/uploads/2018/11/SGU-LOGO.png" width="200" alt="Laravel Logo"></a></p>
 <h3  align="center">Phản hồi SGU</h3>
 
+<p>Phiên bản di động đã phát triển: <a href="https://github.com/teamdptl/ReportBackend"/>Backend</a> <a href="https://github.com/teamdptl/ReportMobile"/>Mobile</a>
 <p>Được xây dựng bằng</p>
 <table>
   <tr>
